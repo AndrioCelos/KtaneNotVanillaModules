@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3D3283C8-05BA-440B-BFEE-C4EE6CE5587B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NotVanillaModulesLib</RootNamespace>
+    <AssemblyName>NotVanillaModulesLib</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+    <!-- Change these variables as needed. -->
+    <UnityInstallPath Condition=" '$(UnityInstallPath)' == '' ">D:/Program Files/Unity/2017.4.36f1</UnityInstallPath>
+    <GameInstallPath Condition=" '$(GameInstallPath)' == '' ">C:/Program Files (x86)/Steam/steamapps/common/Keep Talking and Nobody Explodes</GameInstallPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\NotVanillaModulesLib.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\NotVanillaModulesLib.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Reference Include="UnityEngine">
+      <HintPath>$(UnityInstallPath)/Editor/Data/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(GameInstallPath)\ktane_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(UnityInstallPath)/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(UnityInstallPath)/Editor/Data/Managed/UnityEngine/UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(UnityInstallPath)/Editor/Data/Managed/UnityEngine/UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(UnityInstallPath)/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>$(UnityInstallPath)/Editor/Data/Managed/UnityEngine/UnityEngine.InputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(UnityInstallPath)/Editor/Data/Managed/UnityEngine/UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(UnityInstallPath)/Editor/Data/Managed/UnityEngine/UnityEngine.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="KMFramework">
+      <HintPath>..\Assets\Plugins\Managed\KMFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ButtonColour.cs" />
+    <Compile Include="MazeButtonEventArgs.cs" />
+    <Compile Include="MazeDirection.cs" />
+    <Compile Include="NotMemoryConnector.cs" />
+    <Compile Include="NotKeypadConnector.cs" />
+    <Compile Include="NotMazeConnector.cs" />
+    <Compile Include="NotMorseCodeConnector.cs" />
+    <Compile Include="NotSimonConnector.cs" />
+    <Compile Include="WireEventConnector.cs" />
+    <Compile Include="WireColour.cs" />
+    <Compile Include="NotWiresConnector.cs" />
+    <Compile Include="NotWireSequenceConnector.cs" />
+    <Compile Include="NotWireSequenceWireSpace.cs" />
+    <Compile Include="NotWireSpace.cs" />
+    <Compile Include="SimonButtons.cs" />
+    <Compile Include="TestModel\TestModelButton.cs" />
+    <Compile Include="TestModel\TestModelWireSpace.cs" />
+    <Compile Include="TestModel\TestModelWireSequenceWireSpace.cs" />
+    <Compile Include="TestModel\TestModelSimonButton.cs" />
+    <Compile Include="SimonButtonEventArgs.cs" />
+    <Compile Include="TestModel\TestModelStageIndicator.cs" />
+    <Compile Include="TestModel\TestModelWireSequencePage.cs" />
+    <Compile Include="ComplicatedWireSpace.cs" />
+    <Compile Include="NotComplicatedWiresConnector.cs" />
+    <Compile Include="KeypadEventConnector.cs" />
+    <Compile Include="ButtonEventConnector.cs" />
+    <Compile Include="ButtonLabel.cs" />
+    <Compile Include="ButtonLightColour.cs" />
+    <Compile Include="NotButtonConnector.cs" />
+    <Compile Include="NotCapacitorConnector.cs" />
+    <Compile Include="NotVanillaModuleConnector.cs" />
+    <Compile Include="NotPasswordConnector.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestModelSpinner.cs" />
+    <Compile Include="TwitchExtensions.cs" />
+    <Compile Include="WireCutEventArgs.cs" />
+    <Compile Include="WireSequenceColour.cs" />
+    <Compile Include="NotWireSequencePage.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)"=="Debug" copy "$(TargetPath)" "$(ProjectDir)\..\Assets\Plugins\Managed"
+if "$(ConfigurationName)"=="Debug" copy "$(TargetDir)\NotVanillaModulesLib.xml" "$(ProjectDir)\..\Assets\Plugins\Managed"
+if "$(ConfigurationName)"=="Release" copy "$(TargetPath)" "$(GameInstallPath)\mods\NotVanillaModules"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

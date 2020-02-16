@@ -1,0 +1,15 @@
+{
+	"Author": "Kusane, Andrio Celos",
+	"Compatibility": "Untested",
+	"DefuserDifficulty": "Easy",
+	"Description": "Follow a roller-coaster of rules to press the correct buttons in this Who's on First lookalike. Tags: 6-buttons, display, words, 5-lights",
+	"ExpertDifficulty": "Hard",
+	"ModuleID": "NotWhosOnFirst",
+	"Name": "Not Who's on First",
+	"Origin": "Mods",
+	"Published": "2020-02-12",
+	"SortKey": "NOTWHOSONFIRST",
+	"SteamID": "0",
+	"Symbol": "Xf",
+	"Type": "Regular"
+}

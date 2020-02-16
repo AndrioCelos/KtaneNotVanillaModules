@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
+  m_Name: ModConfig
+  m_EditorClassIdentifier: 
+  id: NotVanillaModules
+  title: Not Vanilla Modules
+  author: Andrio Celos
+  description: "New modules that look suspiciously similar to the vanilla modules.\r\n\nManuals
+    are available at https://questers-rest.andriocelos.net/ktane/NotVanilla/\nSource
+    code is available at https://github.com/AndrioCelos/KtaneNotVanillaModules"
+  version: 0.0
+  outputFolder: C:\Program Files (x86)\Steam\steamapps\common\Keep Talking and Nobody
+    Explodes\mods
+  previewImage: {fileID: 2800000, guid: e786c418583e7de43924d26ebeb1ef8a, type: 3}

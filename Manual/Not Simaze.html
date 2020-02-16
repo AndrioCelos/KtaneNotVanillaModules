@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>Not Simaze — Keep Talking and Nobody Explodes Module</title>
+	<meta name="viewport" content="initial-scale=1"/>
+	<link rel="stylesheet" type="text/css" href="css/normalize.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	<link rel="stylesheet" type="text/css" href="css/font.css"/>
+	<script src="js/ktane-utils.js"></script>
+	<style>
+		.colourDiagram { text-align: center; }
+		.colourDiagram img { width: 12em; height: 12em; }
+		figure {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-around;
+		}
+		.maze {
+			width: 17.5em;
+			height: 17.5em;
+			position: relative;
+			margin-bottom: 1em;
+		}
+		.maze img {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			width: 85.7%;
+			height: 85.7%;
+		}
+		table {
+			width: 100%;
+			height: 100%;
+			text-align: center;
+			position: relative;  /* Needed for z-index to work, allowing cells to be highlighted. */
+			z-index: 1;
+		}
+		table, th, td { border: none; }
+		.colour {
+			border-radius: 4px;
+			transform: rotate(45deg) scale(0.7);
+		}
+	</style>
+</head>
+<body>
+	<div id="ManualContent">
+		<div class="section">
+			<div class="page page-bg-01">
+				<div class="page-header">
+					<span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+					<span class="page-header-section-title">Not Simaze</span>
+				</div>
+				<div class="page-content">
+					<img src="img/Component/Simon Says.svg" class="diagram"/>
+					<h2>On the Subject of Not Simaze</h2>
+					<p class="flavour-text">
+						This is like one of those modules you played with as a defuser where you
+						have to distort the pattern that appears, except this one is a knockoff
+						that was probably made by a person with very little common sense.
+					</p>
+
+					<p>The module contains four flashing coloured buttons. If the buttons are not
+						in the arrangement shown below, you are looking at a different module.</p>
+					<p>This is not a Simon module: this is a Maze module.</p>
+					<p>The module will start by flashing five colours.
+						The first colour indicates which of the mazes below you need to use,
+						the next two colours indicate your starting position, and the
+						last two colours indicate your goal.</p>
+					<p>The first colour of a pair represents the column, and the
+						second colour represents the row.</p>
+					<p>Use the buttons as a directional control pad (red is up, green is right,
+						yellow is down, and blue is left) to move from the starting position to the
+						goal without hitting the walls.</p>
+					<p>After a valid first move have been made, the module will continue to flash
+						two colours. Those are your current coordinates, in case you forget.</p>
+
+					<p>* If two colours flash at the same time, mix them together.
+						For example, if both red and yellow flash, that indicates orange.
+						The green button will always flash alone.</p>
+
+					<p class='colourDiagram'>
+						<img src='img/Not Simaze/NotSimazeDiagram.svg' alt='Module diagram' width='300' height='300'/></img>
+					</p>
+				</div>
+				<div class="page-footer relative-footer">Page 1 of 2</div>
+			</div>
+			<div class="page page-bg-02">
+				<div class="page-header">
+					<span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+					<span class="page-header-section-title">Not Simaze</span>
+				</div>
+				<div class="page-content">
+					<figure>
+						<div class='maze'>
+							<img src='img/Not Simaze/Maze0.svg'/>
+							<table>
+								<tr>
+									<th class='colour' style='background-color: red;'></th>
+									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
+								</tr>
+								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>O</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>Y</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>G</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>B</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>P</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+							</table>
+						</div>
+						<div class='maze'>
+							<img src='img/Not Simaze/Maze1.svg'/>
+							<table>
+								<tr>
+									<th class='colour' style='background-color: orange;'></th>
+									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
+								</tr>
+								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>O</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>Y</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>G</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>B</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>P</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+							</table>
+						</div>
+						<div class='maze'>
+							<img src='img/Not Simaze/Maze2.svg'/>
+							<table>
+								<tr>
+									<th class='colour' style='background-color: yellow;'></th>
+									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
+								</tr>
+								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>O</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>Y</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>G</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>B</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>P</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+							</table>
+						</div>
+						<div class='maze'>
+							<img src='img/Not Simaze/Maze3.svg'/>
+							<table>
+								<tr>
+									<th class='colour' style='background-color: lime;'></th>
+									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
+								</tr>
+								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>O</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>Y</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>G</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>B</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>P</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+							</table>
+						</div>
+						<div class='maze'>
+							<img src='img/Not Simaze/Maze4.svg'/>
+							<table>
+								<tr>
+									<th class='colour' style='background-color: blue;'></th>
+									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
+								</tr>
+								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>O</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>Y</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>G</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>B</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>P</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+							</table>
+						</div>
+						<div class='maze'>
+							<img src='img/Not Simaze/Maze5.svg'/>
+							<table>
+								<tr>
+									<th class='colour' style='background-color: magenta;'></th>
+									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
+								</tr>
+								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>O</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>Y</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>G</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>B</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><th>P</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+							</table>
+						</div>
+					</figure>
+				</div>
+				<div class="page-footer relative-footer">Page 2 of 2</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+	"Author": "Kusane, Andrio Celos",
+	"Compatibility": "Untested",
+	"DefuserDifficulty": "VeryEasy",
+	"Description": "Press and release the lever at the right time to discharge this Capacitor Discharge lookalike. Tags: timer, lever, gauge, needy, hazard, warning",
+	"ExpertDifficulty": "Easy",
+	"ModuleID": "NotCapacitorDischarge",
+	"Name": "Not Capacitor Discharge",
+	"Origin": "Mods",
+	"Published": "2020-02-12",
+	"SortKey": "NOTCAPACITORDISCHARGE",
+	"SteamID": "0",
+	"Symbol": "Xd",
+	"Type": "Needy"
+}

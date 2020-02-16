@@ -1,0 +1,15 @@
+{
+	"Author": "Kusane, Andrio Celos",
+	"Compatibility": "Untested",
+	"DefuserDifficulty": "Medium",
+	"Description": "Submit five words encoded in Morse Code in the correct order. Tags: blinking-orange-light, frequency, radio, xt",
+	"ExpertDifficulty": "Easy",
+	"ModuleID": "NotMorseCode",
+	"Name": "Not Morse Code",
+	"Origin": "Mods",
+	"Published": "2020-02-12",
+	"SortKey": "NOTMORSECODE",
+	"SteamID": "0",
+	"Symbol": "Xo",
+	"Type": "Regular"
+}

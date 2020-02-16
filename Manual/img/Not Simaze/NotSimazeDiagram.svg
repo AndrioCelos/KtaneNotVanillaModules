@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" fill="none">
+	<style>text { font: 60px sans-serif; fill: black; text-anchor: middle; }</style>
+	<g stroke='black' stroke-width='2' fill='none'>
+		<rect width='300' height='300'/>
+		<circle cx='270' cy='30' r='15'/>
+		<polygon points='150,50 200,100 150,150 100,100' fill='red'/>
+		<text x='150' y='120'>R</text>
+		<polygon points='100,100 150,150 100,200 50,150' fill='blue'/>
+		<text x='100' y='170'>B</text>
+		<polygon points='200,100 250,150 200,200 150,150' fill='lime'/>
+		<text x='200' y='170'>G</text>
+		<polygon points='150,150 200,200 150,250 100,200' fill='yellow'/>
+		<text x='150' y='220'>Y</text>
+	</g>
+</svg>

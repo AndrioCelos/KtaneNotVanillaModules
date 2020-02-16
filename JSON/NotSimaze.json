@@ -1,0 +1,15 @@
+{
+	"Author": "Kusane, Andrio Celos",
+	"Compatibility": "Untested",
+	"DefuserDifficulty": "Easy",
+	"Description": "Navigate a maze using the flashing buttons in this Simon lookalike. Tags: 4-buttons, blue, red, yellow, green, blinking, tone",
+	"ExpertDifficulty": "Easy",
+	"ModuleID": "NotSimaze",
+	"Name": "Not Simaze",
+	"Origin": "Mods",
+	"Published": "2020-02-12",
+	"SortKey": "NOTSIMAZE",
+	"SteamID": "0",
+	"Symbol": "Xs",
+	"Type": "Regular"
+}
