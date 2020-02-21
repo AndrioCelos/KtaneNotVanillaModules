@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 114252124592098978}
   - component: {fileID: 65198215665468792}
   - component: {fileID: 114249683731977524}
+  - component: {fileID: 114304772648011386}
   - component: {fileID: 82703231796006112}
   m_Layer: 0
   m_Name: Not Capacitor Discharge
@@ -1239,6 +1240,17 @@ MonoBehaviour:
   TestModelLeverPivot: {fileID: 4163447207737716}
   TestModelDeathBarFill: {fileID: 4731352842739988}
   TestModelLight: {fileID: 1068204191134810}
+--- !u!114 &114304772648011386
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1420682148411636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114404846373792558
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -50,6 +50,8 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 		{ 6, 5, 4, 2, 7 }
 	};
 
+	private const string BuzzSound = "CapacitorBuzz";
+
 	public override void Start() {
 		base.Start();
 		this.Connector.KMNeedyModule.OnNeedyActivation = this.KMNeedyModule_OnNeedyActivation;
@@ -62,11 +64,11 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 
 	private void Connector_LeverPressed(object sender, EventArgs e) {
 		this.Down = true;
-		if (this.needyActive) this.Connector.SetLight(true);
 		if (this.PressCondition == null) return;
 
 		var formattedTime = this.GetComponent<KMBombInfo>().GetFormattedTime();
 		if (this.PressCondition.Invoke(this.GetComponent<KMBombInfo>().GetTime(), formattedTime)) {
+			this.Connector.SetLight(true);
 			var bombInfo = this.GetComponent<KMBombInfo>();
 			var j = (this.Number - 1) / 20;
 			if (bombInfo.GetSerialNumberNumbers().Last() % 2 == 0) {
@@ -85,7 +87,7 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 			this.Log(string.Format("The lever was pressed at {0}. That was correct. Release the lever {1}.", formattedTime, this.ReleaseCondition));
 		} else {
 			this.Log(string.Format("The lever was pressed at {0}. That was incorrect.", formattedTime));
-			this.Connector.KMNeedyModule.HandleStrike();
+			this.MistakePenalty();
 			this.PressedIncorrectly = true;
 		}
 	}
@@ -107,9 +109,14 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 			this.KMNeedyModule_OnNeedyDeactivation();
 		} else {
 			this.Log(string.Format("The lever was released at {0}. That was incorrect.", formattedTime));
-			this.Connector.KMNeedyModule.HandleStrike();
+			this.MistakePenalty();
 			this.PressedIncorrectly = true;
 		}
+	}
+
+	private void MistakePenalty() {
+		this.Connector.KMNeedyModule.SetNeedyTimeRemaining(this.Connector.KMNeedyModule.GetNeedyTimeRemaining() * 0.75f);
+		this.GetComponent<KMAudio>().PlaySoundAtTransform(BuzzSound, this.transform);
 	}
 
 	private static bool ContainsAny(string s, params char[] chars) { return chars.Any(s.Contains); }
@@ -206,7 +213,7 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 			this.Connector.TwitchPress();
 			if (this.PressedIncorrectly) {
 				this.Connector.TwitchRelease();
-				yield return "sendtochat The lever was not held due to a strike.";
+				yield return "sendtochat The lever was not held due to a mistake.";
 				yield break;
 			}
 			yield return new WaitForSeconds(0.3f);
@@ -245,7 +252,7 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 			this.Connector.TwitchPress();
 			if (this.PressedIncorrectly) {
 				this.Connector.TwitchRelease();
-				yield return "sendtochat The lever was not held due to a strike.";
+				yield return "sendtochat The lever was not held due to a mistake.";
 			}
 		} else
 			this.Connector.TwitchRelease();

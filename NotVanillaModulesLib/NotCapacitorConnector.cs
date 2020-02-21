@@ -14,20 +14,19 @@ namespace NotVanillaModulesLib {
 		public Transform TestModelDeathBarFill;
 		public GameObject TestModelLight;
 
-#if (DEBUG)
-		private TextMesh displayText;
 		private Transform testHarnessNeedyTimer;
-#else
+		private TextMesh testModelDisplayText;
+#if (!DEBUG)
 		private NeedyComponent needyComponent;
 		private SpringedSwitch springedSwitch;
 		private DeathBar deathBar;
 		private LightBulb lightBulb;
 		private ToneGenerator toneGenerator;
 		private TextMeshPro displayText;
+#endif
 
 		private float MinTone, MaxTone, ToneStartTime;
 		private double baseGain;
-#endif
 
 		public event EventHandler LeverPressed;
 		public event EventHandler LeverReleased;
@@ -56,7 +55,10 @@ namespace NotVanillaModulesLib {
 #endif
 		}
 		protected override void AwakeTest() {
-
+#if (!DEBUG)
+			this.toneGenerator = this.gameObject.AddComponent<ToneGenerator>();
+			this.baseGain = this.toneGenerator.gain;
+#endif
 		}
 		protected override void StartLive() {
 #if (!DEBUG)
@@ -117,27 +119,35 @@ namespace NotVanillaModulesLib {
 #endif
 
 		public void SetDisplay(int number) {
-			if (this.displayText == null) {
-				// Replace the needy timer with our display.
-				if (this.displayText == null) {
-#if (DEBUG)
+			if (this.TestMode) {
+				if (this.testModelDisplayText == null) {
+					// Replace the needy timer with our display.
 					this.testHarnessNeedyTimer = this.transform.Find("NeedyTimer(Clone)");
 					var display = this.testHarnessNeedyTimer.Find("BackingActive/Text");
-					this.displayText = Instantiate(display, display.position, display.rotation, display.parent).GetComponent<TextMesh>();
-#else
-					var display = this.transform.Find("NeedyTimer(Clone)/SevenSegText");
-					this.displayText = Instantiate(display, display.position, display.rotation, display.parent).GetComponent<TextMeshPro>();
-#endif
+					this.testModelDisplayText = Instantiate(display, display.position, display.rotation, display.parent).GetComponent<TextMesh>();
 					display.gameObject.SetActive(false);
 				}
+				this.testModelDisplayText.gameObject.SetActive(true);
+				this.testModelDisplayText.text = number.ToString("D2");
 			}
-			this.displayText.gameObject.SetActive(true);
-			this.displayText.text = number.ToString("D2");
+#if (!DEBUG)
+			else {
+				if (this.displayText == null) {
+					// Replace the needy timer with our display.
+					var display = this.transform.Find("NeedyTimer(Clone)/SevenSegText");
+					this.displayText = Instantiate(display, display.position, display.rotation, display.parent).GetComponent<TextMeshPro>();
+					display.gameObject.SetActive(false);
+				}
+				this.displayText.gameObject.SetActive(true);
+				this.displayText.text = number.ToString("D2");
+			}
+#endif
 		}
 
 		public void ClearDisplay() {
-			this.displayText?.gameObject?.SetActive(false);
+			if (this.TestMode) this.testModelDisplayText?.gameObject?.SetActive(false);
 #if (!DEBUG)
+			else this.displayText?.gameObject?.SetActive(false);
 			this.toneGenerator.gain = 0;
 #endif
 		}
