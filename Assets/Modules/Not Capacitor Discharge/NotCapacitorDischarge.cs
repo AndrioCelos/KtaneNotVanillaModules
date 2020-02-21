@@ -125,10 +125,7 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 		this.needyActive = true;
 		this.Number = UnityEngine.Random.Range(0, 100);
 		this.Connector.SetDisplay(this.Number);
-		if (this.Down) {
-			this.PressedIncorrectly = true;
-			this.Connector.SetLight(true);
-		}
+		if (this.Down) this.PressedIncorrectly = true;
 
 		var bombInfo = this.GetComponent<KMBombInfo>();
 		var j = (this.Number - 1) / 20;
