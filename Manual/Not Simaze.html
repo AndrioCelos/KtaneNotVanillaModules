@@ -10,7 +10,7 @@
 	<script src="js/ktane-utils.js"></script>
 	<style>
 		.colourDiagram { text-align: center; }
-		.colourDiagram img { width: 12em; height: 12em; }
+		.colourDiagram svg { width: 12em; height: 12em; }
 		figure {
 			display: flex;
 			flex-wrap: wrap;
@@ -23,6 +23,7 @@
 			margin-bottom: 1em;
 		}
 		.maze img {
+			background: url('img/Not Maze/grid.svg');
 			position: absolute;
 			bottom: 0;
 			right: 0;
@@ -37,10 +38,19 @@
 			z-index: 1;
 		}
 		table, th, td { border: none; }
+		.colourcell { padding: 0; position: relative; }
 		.colour {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			z-index: -1;
+			border: 2px solid;
 			border-radius: 4px;
 			transform: rotate(45deg) scale(0.7);
 		}
+		.ktane-highlight { z-index: 2; }
 	</style>
 </head>
 <body>
@@ -62,7 +72,7 @@
 
 					<p>The module contains four flashing coloured buttons. If the buttons are not
 						in the arrangement shown below, you are looking at a different module.</p>
-					<p>This is not a Simon module: this is a Maze module.</p>
+					<p>This is not a Simon module; this is a Maze module.</p>
 					<p>The module will start by flashing five colours.
 						The first colour indicates which of the mazes below you need to use,
 						the next two colours indicate your starting position, and the
@@ -80,7 +90,21 @@
 						The green button will always flash alone.</p>
 
 					<p class='colourDiagram'>
-						<img src='img/Not Simaze/NotSimazeDiagram.svg' alt='Module diagram' width='300' height='300'/></img>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" fill="none">
+							<style>text { font: 54px Special Elite, Courier New, monospace; stroke: none; fill: black; text-anchor: middle; }</style>
+							<g stroke='black' stroke-width='2' fill='none'>
+								<rect width='300' height='300'/>
+								<circle cx='270' cy='30' r='15'/>
+								<polygon points='150,50 200,100 150,150 100,100' fill='red'/>
+								<text x='150' y='120'>R</text>
+								<polygon points='100,100 150,150 100,200 50,150' fill='royalblue'/>
+								<text x='100' y='170'>B</text>
+								<polygon points='200,100 250,150 200,200 150,150' fill='lime'/>
+								<text x='200' y='170'>G</text>
+								<polygon points='150,150 200,200 150,250 100,200' fill='yellow'/>
+								<text x='150' y='220'>Y</text>
+							</g>
+						</svg>
 					</p>
 				</div>
 				<div class="page-footer relative-footer">Page 1 of 2</div>
@@ -96,7 +120,7 @@
 							<img src='img/Not Simaze/Maze0.svg'/>
 							<table>
 								<tr>
-									<th class='colour' style='background-color: red;'></th>
+									<th class='colourcell'>R<div class='colour' style='background-color: red;'></div></th>
 									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
 								</tr>
 								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -111,7 +135,7 @@
 							<img src='img/Not Simaze/Maze1.svg'/>
 							<table>
 								<tr>
-									<th class='colour' style='background-color: orange;'></th>
+									<th class='colourcell'>O<div class='colour' style='background-color: orange;'></div></th>
 									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
 								</tr>
 								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -126,7 +150,7 @@
 							<img src='img/Not Simaze/Maze2.svg'/>
 							<table>
 								<tr>
-									<th class='colour' style='background-color: yellow;'></th>
+									<th class='colourcell'>Y<div class='colour' style='background-color: yellow;'></div></th>
 									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
 								</tr>
 								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -141,7 +165,7 @@
 							<img src='img/Not Simaze/Maze3.svg'/>
 							<table>
 								<tr>
-									<th class='colour' style='background-color: lime;'></th>
+									<th class='colourcell'>G<div class='colour' style='background-color: lime;'></div></th>
 									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
 								</tr>
 								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -156,7 +180,7 @@
 							<img src='img/Not Simaze/Maze4.svg'/>
 							<table>
 								<tr>
-									<th class='colour' style='background-color: blue;'></th>
+									<th class='colourcell'>B<div class='colour' style='background-color: royalblue;'></div></th>
 									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
 								</tr>
 								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -171,7 +195,7 @@
 							<img src='img/Not Simaze/Maze5.svg'/>
 							<table>
 								<tr>
-									<th class='colour' style='background-color: magenta;'></th>
+									<th class='colourcell'>P<div class='colour' style='background-color: darkorchid;'></div></th>
 									<th>R</th><th>O</th><th>Y</th><th>G</th><th>B</th><th>P</th>
 								</tr>
 								<tr><th>R</th><td></td><td></td><td></td><td></td><td></td><td></td></tr>
