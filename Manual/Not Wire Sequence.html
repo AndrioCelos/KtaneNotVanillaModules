@@ -11,6 +11,23 @@
 	<style>
 		.first { font-weight: bold; }
 		.last { text-decoration: underline; }
+		.paragraph {
+			display: block;
+			position: relative;
+			padding-left: 2em;
+			margin: 0.5em 0 1em;
+		}
+		.border {
+			writing-mode: vertical-lr;
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 1.25em;
+			bottom: 0;
+			line-height: 1em;
+			font-size: smaller;
+			padding-top: 0.5em;
+		}
 	</style>
 </head>
 <body>
@@ -29,36 +46,41 @@
 						clear, but there must have been an easier way to manage twelve wires.
 					</p>
 
-					<p style='color: black;'>
+					<div class='paragraph' style='border-color: black;'>
+						<div class='border' style='background-color: black; color: white;'>Black</div>
 						<span class='first'>The</span> colour of each wire represents a paragraph
 						within this manual, and each number on the right
 						corresponds to the word at that position into the
 						paragraph, indexing from <span class='last'>zero</span>.
-					</p>
-					<p style='color: red;'>
+					</div>
+					<div class='paragraph' style='border-color: red;'>
+						<div class='border' style='background-color: red;'>Red</div>
 						<span class='first'>There</span> will always be three wires on each panel. For each pair of letter
 						and number connected by a wire, index that many words into the
 						paragraph indicated by the colour of the wire, and if the word located
 						contains the letter connected to the wire, cut it. Otherwise, leave it
 						alone. Repeat the procedure mentioned for all twelve <span class='last'>wires</span>.
-					</p>
-					<p style='color: blue;'>
+					</div>
+					<div class='paragraph' style='border-color: blue;'>
+						<div class='border' style='background-color: blue; color: white;'>Blue</div>
 						<span class='first'>After</span> all wires necessary have been cut, press the down button to move
 						on to the next panel. The module will be disarmed after all four panels
 						have had their required wires cut. Cutting an incorrect wire will
 						register a <span class='last'>strike</span>.
-					</p>
-					<p style='color: #aa0;'>
+					</div>
+					<div class='paragraph' style='border-color: yellow;'>
+						<div class='border' style='background-color: yellow;'>Yellow</div>
 						<span class='first'>The</span> first word of each paragraph will be bolded, and the last word of
 						each paragraph will be underlined. This is to ensure that the
 						boundaries between each body of text are very clearly <span class='last'>established</span>.
-					</p>
-					<p style='color: #0a0;'>
+					</div>
+					<div class='paragraph' style='border-color: lime;'>
+						<div class='border' style='background-color: lime;'>Green</div>
 						<span class='first'>When</span> locating a word from a paragraph, starts from the first word at
 						zero, and count along until you have reached the desired number. If the
 						number given is larger than the amount of words in the paragraph, move
 						back to the first word of the paragraph after you have reached the <span class='last'>end</span>.
-					</p>
+					</div>
 				</div>
 				<div class="page-footer relative-footer">Page 1 of 1</div>
 			</div>
