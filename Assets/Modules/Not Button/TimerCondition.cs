@@ -53,9 +53,6 @@ public class TimerCondition {
 	internal static TimerCondition MinutesIsEven() {
 		return new TimerCondition((t, s) => (int) t % 120 < 60, "when the number of whole minutes on the timer is even");
 	}
-	internal static TimerCondition MinutesIsOdd() {
-		return new TimerCondition((t, s) => (int) t % 120 >= 60, "when the number of whole minutes on the timer is odd");
-	}
 
 	public static TimerCondition SecondsDigitIsPrimeOrZero() {
 		return new TimerCondition((t, s) => IsPrimeOrZero((int) t % 10), "when the right-most seconds digit is prime or zero");

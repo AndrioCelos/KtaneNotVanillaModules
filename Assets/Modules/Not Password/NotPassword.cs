@@ -62,7 +62,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 				break;
 			case 'B':
 				this.SolutionAction = PasswordSolutionAction.Press;
-				this.PressCondition = TimerCondition.MinutesIsOdd();
+				this.PressCondition = TimerCondition.SecondsDigitIsNotPrime();
 				this.SolutionCount = 1;
 				break;
 			case 'C':
