@@ -93,7 +93,7 @@ public class NotSimaze : NotVanillaModule<NotSimonConnector> {
 		} while (this.goalX == this.x && this.goalY == this.y);
 
 		this.Log("Using the {0} maze. The starting position is ({1}, {2}). The goal is ({3}, {4}).",
-			(SimazeColour) this.mazeIndex, (SimazeColour) this.x, (SimazeColour) (5 - this.y), (SimazeColour) this.goalX, (SimazeColour) (5 - this.goalY));
+			(SimazeColour) this.mazeIndex, (SimazeColour) this.x, (SimazeColour) this.y, (SimazeColour) this.goalX, (SimazeColour) this.goalY);
 	}
 
 	private void Connector_ButtonPressed(object sender, SimonButtonEventArgs e) {
@@ -149,17 +149,17 @@ public class NotSimaze : NotVanillaModule<NotSimonConnector> {
 			if (this.firstMoveMade) {
 				this.Flash((SimazeColour) this.x);
 				yield return new WaitForSeconds(0.7f);
-				this.Flash((SimazeColour) (5 - this.y));
+				this.Flash((SimazeColour) this.y);
 			} else {
 				this.Flash((SimazeColour) this.mazeIndex);
 				yield return new WaitForSeconds(0.7f);
 				this.Flash((SimazeColour) this.x);
 				yield return new WaitForSeconds(0.7f);
-				this.Flash((SimazeColour) (5 - this.y));
+				this.Flash((SimazeColour) this.y);
 				yield return new WaitForSeconds(0.7f);
 				this.Flash((SimazeColour) this.goalX);
 				yield return new WaitForSeconds(0.7f);
-				this.Flash((SimazeColour) (5 - this.goalY));
+				this.Flash((SimazeColour) this.goalY);
 			}
 			yield return new WaitForSeconds(2);
 		}
