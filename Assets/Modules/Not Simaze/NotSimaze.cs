@@ -73,7 +73,7 @@ public class NotSimaze : NotVanillaModule<NotSimonConnector> {
 			{ N , N , z , N , E , E  },
 			{ z , E , z , E , EN, E  },
 			{ EN, E , E , N , N , E  },
-			{ z , N , z , E , z , EN },
+			{ z , N , N , E , z , EN },
 			{ E , z , N , EN, z , E  },
 			{ EN, N , N , EN, EN, EN }
 		}

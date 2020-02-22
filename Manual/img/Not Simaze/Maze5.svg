@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6 6" fill="none">
 	<g stroke='black' stroke-width='0.04' fill='none'>
 		<rect width='6' height='6' stroke-width='0.08'/>
-		<polyline points='1,0 1,2 2,2'/>
+		<polyline points='1,0 1,2 3,2'/>
 		<polyline points='4,0 4,3'/>
 		<polyline points='5,0 5,1'/>
 		<polyline points='2,1 4,1'/>
