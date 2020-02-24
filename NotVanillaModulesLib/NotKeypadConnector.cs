@@ -12,6 +12,7 @@ namespace NotVanillaModulesLib {
 		public TestModelButton[] TestModelButtons;
 		public Renderer[] LightRenderers;
 		public Light[] Lights;
+		private readonly Symbol[] symbols = new Symbol[4];
 
 		public event EventHandler<KeypadButtonEventArgs> ButtonPressed;
 
@@ -57,6 +58,7 @@ namespace NotVanillaModulesLib {
 		}
 
 		public void SetSymbol(int index, Symbol symbol) {
+			this.symbols[index] = symbol;
 			if (this.TestMode) {
 				this.TestModelButtons[index].TextMesh.text = GetSymbolChar(symbol).ToString();
 			} else {
@@ -67,6 +69,8 @@ namespace NotVanillaModulesLib {
 #endif
 			}
 		}
+
+		public Symbol GetSymbol(int index) => this.symbols[index];
 
 		public void SetLightColour(int index, LightColour colour) {
 			var rgb = this.Colors[(int) colour];
