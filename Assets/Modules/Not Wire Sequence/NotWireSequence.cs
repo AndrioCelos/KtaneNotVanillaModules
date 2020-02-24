@@ -24,7 +24,7 @@ public class NotWireSequence : NotVanillaModule<NotWireSequenceConnector> {
 		new[] { "The", "first", "word", "of", "each", "paragraph", "will", "be", "bolded", "and", "the", "last", "word", "of",
 			"each", "paragraph", "will", "be", "underlined", "This", "is", "to", "ensure", "that", "the",
 			"boundaries", "between", "each", "body", "of", "text", "are", "very", "clearly", "established" },
-		new[] { "When", "locating", "a", "word", "from", "a", "paragraph", "starts", "from", "the", "first", "word", "at",
+		new[] { "When", "locating", "a", "word", "from", "a", "paragraph", "start", "from", "the", "first", "word", "at",
 			"zero", "and", "count", "along", "until", "you", "have", "reached", "the", "desired", "number", "If", "the",
 			"number", "given", "is", "larger", "than", "the", "amount", "of", "words", "in", "the", "paragraph", "move",
 			"back", "to", "the", "first", "word", "of", "the", "paragraph", "after", "you", "have", "reached", "the", "end" }
