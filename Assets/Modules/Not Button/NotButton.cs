@@ -86,7 +86,7 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 			/* WY */ TimerCondition.Contains((char) ('0' + Math.Min(9, this.bombInfo.GetBatteryCount()))),
 			/* WG */ TimerCondition.SecondsDigitsMatch(),
 			/* WB */ TimerCondition.SecondsDigitIsNot(7),
-			/* RY */ TimerCondition.Contains((char) ('0' + this.bombInfo.GetSerialNumberNumbers().Last())),
+			/* RY */ TimerCondition.Contains((char) ('0' + this.bombInfo.GetSerialNumberNumbers().LastOrDefault())),
 			/* RG */ TimerCondition.SecondsDigitIsPrimeOrZero(),
 			/* RB */ TimerCondition.SecondsDigitMatchesLeftDigit(),
 			/* YG */ TimerCondition.SecondsDigitsDifferBy(4),
@@ -106,8 +106,9 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 			var b = this.bombInfo.GetPorts().Distinct().Count();
 			var c = this.bombInfo.GetSolvableModuleNames().Count;
 			var d = this.bombInfo.GetIndicators().Count();
-			var e = this.bombInfo.GetSerialNumberNumbers().Last();
-			var f = this.bombInfo.GetSerialNumberLetters().ElementAt(1) - 'A';
+			var e = this.bombInfo.GetSerialNumberNumbers().LastOrDefault();
+			var f = this.bombInfo.GetSerialNumberLetters().ElementAtOrDefault(1) - ('A' - 1);
+			if (f < 0) f = 0;  // Fewer than two letters; never happens in vanilla.
 			var g = this.Label.ToString().Length;
 			this.SolutionMashCount = defaultMashCountFormulas[(int) this.Colour](a, b, c, d, e, f, g);
 			// If the result is outside the range 10~99, subtract or add 7 until it's within the range.
@@ -118,6 +119,7 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 				var rem = this.SolutionMashCount % 7;
 				this.SolutionMashCount = rem + (rem >= 2 ? 91 : 98);
 			}
+			this.Log(string.Format("Pronumerals: a = {0}; b = {1}; c = {2}; d = {3}; e = {4}; f = {5}; g = {6}", a, b, c, d, e, f, g));
 			this.Log(string.Format("The button should be pressed {0} times.", this.SolutionMashCount));
 		}
 
@@ -233,7 +235,8 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 		this.Holding = true;
 		this.SetLightColour((ButtonLightColour) (Random.Range(0, 15) + 1));
 		this.SolutionTimerCondition = this.defaultTimerConditions[(int) this.LightColour - 1];
-		this.Log(string.Format("The button is being held. The light is {0}. The button should be released {1}.", this.LightColour, this.SolutionTimerCondition.Description));
+		this.Log(string.Format(this.SolutionAction == ButtonAction.Hold ? "The button is being held. The light is {0}. The button should be released {1}." :
+			"The button is being held. The light is {0}.", this.LightColour, this.SolutionTimerCondition.Description));
 	}
 
 	private void SetLightColour(ButtonLightColour colour) {

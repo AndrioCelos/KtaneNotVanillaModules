@@ -153,7 +153,7 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 					case 1: this.PressCondition = TimerCondition.SecondsDigitIsPrimeOrZero(); break;
 					case 2: this.PressCondition = TimerCondition.SecondsDigitIsEven(); break;
 					case 3: this.PressCondition = TimerCondition.SecondsDigitIsOdd(); break;
-					case 4: this.PressCondition = TimerCondition.SecondsDigitIs(bombInfo.GetSerialNumber().First(char.IsDigit) - '0'); break;
+					case 4: this.PressCondition = TimerCondition.SecondsDigitIs(bombInfo.GetSerialNumberNumbers().FirstOrDefault()); break;
 				}
 			} else this.PressCondition = TimerCondition.SecondsDigitIs(defaultOddSerialPressDigits[i, j]);
 		}

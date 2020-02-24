@@ -517,6 +517,78 @@ public class TestHarness : MonoBehaviour
         ReplaceBombInfo();
         AddHighlightables();
         AddSelectables();
+
+        List<KMBombModule> modules = Modules;
+        List<KMNeedyModule> needyModules = NeedyModules;
+        PrepareBomb(modules, needyModules, ref fakeInfo.widgets);
+
+        fakeInfo.TimerModule = _timer;
+        fakeInfo.needyModules = needyModules.ToList();
+        UpdateRoot(GetComponent<TestSelectable>());
+        for (int i = 0; i < modules.Count; i++)
+        {
+            KMBombModule mod = modules[i];
+            StatusLight statuslight = CreateStatusLight(mod.transform);
+
+            fakeInfo.modules.Add(new KeyValuePair<KMBombModule, bool>(modules[i], false));
+            modules[i].OnPass = delegate ()
+            {
+                KeyValuePair<KMBombModule, bool> kvp = fakeInfo.modules.First(t => t.Key.Equals(mod));
+                if (kvp.Value) return false;
+
+                Debug.Log("Module Passed");
+                if (statuslight != null) statuslight.SetPass();
+
+                fakeInfo.modules.Remove(kvp);
+                fakeInfo.modules.Add(new KeyValuePair<KMBombModule, bool>(mod, true));
+
+                if (fakeInfo.modules.All(x => x.Value)) fakeInfo.Solved();
+                return false;
+            };
+
+            int j = i;
+            modules[i].OnStrike = delegate ()
+            {
+                Debug.Log("Strike");
+                if (statuslight != null) statuslight.FlashStrike();
+                fakeInfo.HandleStrike(modules[j].ModuleDisplayName);
+                return false;
+            };
+        }
+
+        for (int i = 0; i < needyModules.Count; i++)
+        {
+            KMNeedyModule needyModule = needyModules[i];
+
+            StatusLight statusLight = CreateStatusLight(needyModule.transform);
+            NeedyTimer needyTimer = Instantiate(NeedyTimerPrefab);
+            needyTimer.transform.localPosition = Vector3.zero;
+            needyTimer.transform.localRotation = Quaternion.identity;
+            needyTimer.transform.localScale = Vector3.one;
+            needyTimer.ParentComponent = needyModule;
+
+            needyModule.OnPass = delegate ()
+            {
+                Debug.Log("Module Passed");
+                needyTimer.StopTimer();
+                return false;
+            };
+            needyModule.OnStrike = delegate ()
+            {
+                Debug.Log("Strike");
+                if (statusLight != null) statusLight.FlashStrike();
+                fakeInfo.HandleStrike(needyModule.ModuleDisplayName);
+                return false;
+            };
+
+            needyTimer.TotalTime = needyModule.CountdownTime;
+            needyModule.GetNeedyTimeRemainingHandler += needyTimer.GetTimeRemaining;
+            needyModule.SetNeedyTimeRemainingHandler += needyTimer.SetTimeRemaining;
+
+            needyTimer.transform.SetParent(needyTimer.ParentComponent.transform, false);
+            needyTimer.transform.gameObject.SetActive(true);
+
+        }
     }
 
     void LogErrorAtTransform(Transform obj, string unassigned)
@@ -1012,77 +1084,6 @@ public class TestHarness : MonoBehaviour
     {
         currentSelectable = GetComponent<TestSelectable>();
 
-        List<KMBombModule> modules = Modules;
-        List<KMNeedyModule> needyModules = NeedyModules;
-        PrepareBomb(modules, needyModules, ref fakeInfo.widgets);
-
-        fakeInfo.TimerModule = _timer;
-        fakeInfo.needyModules = needyModules.ToList();
-        UpdateRoot(GetComponent<TestSelectable>());
-        for (int i = 0; i < modules.Count; i++)
-        {
-            KMBombModule mod = modules[i];
-            StatusLight statuslight = CreateStatusLight(mod.transform);
-
-            fakeInfo.modules.Add(new KeyValuePair<KMBombModule, bool>(modules[i], false));
-            modules[i].OnPass = delegate ()
-            {
-                KeyValuePair<KMBombModule, bool> kvp = fakeInfo.modules.First(t => t.Key.Equals(mod));
-                if (kvp.Value) return false;
-
-                Debug.Log("Module Passed");
-                if (statuslight != null) statuslight.SetPass();
-
-                fakeInfo.modules.Remove(kvp);
-                fakeInfo.modules.Add(new KeyValuePair<KMBombModule, bool>(mod, true));
-
-                if (fakeInfo.modules.All(x => x.Value)) fakeInfo.Solved();
-                return false;
-            };
-
-            int j = i;
-            modules[i].OnStrike = delegate ()
-            {
-                Debug.Log("Strike");
-                if (statuslight != null) statuslight.FlashStrike();
-                fakeInfo.HandleStrike(modules[j].ModuleDisplayName);
-                return false;
-            };
-        }
-
-        for (int i = 0; i < needyModules.Count; i++)
-        {
-            KMNeedyModule needyModule = needyModules[i];
-
-            StatusLight statusLight = CreateStatusLight(needyModule.transform);
-            NeedyTimer needyTimer = Instantiate(NeedyTimerPrefab);
-            needyTimer.transform.localPosition = Vector3.zero;
-            needyTimer.transform.localRotation = Quaternion.identity;
-            needyTimer.transform.localScale = Vector3.one;
-            needyTimer.ParentComponent = needyModule;
-
-            needyModule.OnPass = delegate ()
-            {
-                Debug.Log("Module Passed");
-                needyTimer.StopTimer();
-                return false;
-            };
-            needyModule.OnStrike = delegate ()
-            {
-                Debug.Log("Strike");
-                if (statusLight != null) statusLight.FlashStrike();
-                fakeInfo.HandleStrike(needyModule.ModuleDisplayName);
-                return false;
-            };
-
-            needyTimer.TotalTime = needyModule.CountdownTime;
-            needyModule.GetNeedyTimeRemainingHandler += needyTimer.GetTimeRemaining;
-            needyModule.SetNeedyTimeRemainingHandler += needyTimer.SetTimeRemaining;
-
-            needyTimer.transform.SetParent(needyTimer.ParentComponent.transform, false);
-            needyTimer.transform.gameObject.SetActive(true);
-
-        }
 
         currentSelectable.ActivateChildSelectableAreas();
 

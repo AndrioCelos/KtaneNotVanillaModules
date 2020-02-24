@@ -224,7 +224,7 @@
 				<div class="page-content">
 					<h3>Not Releasing a Held Button</h3>
 					<p>
-						If you start holding the button down, a colored strip will light up on
+						If you start holding the button down, a coloured strip will light up on
 						the left side of the module. It may or may not be striped. Based on its
 						colour(s) you must release the button when the bomb's countdown timer meets
 						a specific condition.
@@ -279,7 +279,7 @@
 						<tr>
 							<td>
 								<div class="releasingColour striped" style='--colour1: red; --colour2: yellow;'>&nbsp;</div>
-								<div class="rule">Contains the last digit of the serial number</div>
+								<div class="rule">Contains the last digit of the serial number*</div>
 							</td>
 							<td>
 								<div class="releasingColour striped" style='--colour1: yellow; --colour2: blue;'>&nbsp;</div>
@@ -307,6 +307,7 @@
 							</td>
 						</tr>
 					</table>
+					<p>* If the serial number contains no digits, use 0.</p>
 				</div>
 				<div class="page-footer relative-footer">Page 2 of 3</div>
 			</div>
@@ -340,12 +341,14 @@
 					<ul>
 						<li>a = number of batteries on the bomb</li>
 						<li>b = number of unique port types on the bomb</li>
-						<li>c = number of solvable modules on the bomb</li>
+						<li>c = number of solvable modules on the bomb, including this module</li>
 						<li>d = number of indicators on the bomb</li>
-						<li>e = last digit of the serial number</li>
-						<li>f = alphanumeric position of the second letter of the serial number</li>
+						<li>e = last digit of the serial number*</li>
+						<li>f = alphabetic position of the second letter of the serial number*</li>
 						<li>g = number of letters in the word on the button</li>
 					</ul>
+					<p>* If the serial number contains no digits or fewer than two letters,
+						use 0 for the relevant values.</p>
 				</div>
 				<div class="page-footer relative-footer">Page 3 of 3</div>
 			</div>
