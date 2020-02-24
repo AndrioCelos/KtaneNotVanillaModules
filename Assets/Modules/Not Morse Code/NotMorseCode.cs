@@ -45,7 +45,7 @@ public class NotMorseCode : NotVanillaModule<NotMorseCodeConnector> {
 		new[] { "pet", "pounds", "possum", "honey", "eggplant", "hive", "brother" },
 		new[] { "hive", "query", "sister", "ying", "pit", "guidance", "anew" },
 		new[] { "brother", "yeast", "coolant", "beef", "null", "pence", "swine" },
-		new[] { "yang", "twine", "pit", "anew", "yeast", "possum", "shell" },
+		new[] { "yang", "twine", "pit", "anew", "yeast", "shill", "shell" },
 		new[] { "shill", "eggplant", "year", "pet", "coolant", "drive", "possum" },
 		new[] { "guidance", "honey", "swine", "shelf", "shall", "query", "beef" }
 	};
