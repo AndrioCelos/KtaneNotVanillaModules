@@ -14,7 +14,7 @@ MonoBehaviour:
   DisplayName: Not Wire Sequence
   Description: A practice mission featuring Not Wire Sequences.
   GeneratorSetting:
-    TimeLimit: 600
+    TimeLimit: 900
     NumStrikes: 3
     TimeBeforeNeedyActivation: 90
     FrontFaceOnly: 0

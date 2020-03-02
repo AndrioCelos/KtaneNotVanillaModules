@@ -15,7 +15,7 @@ MonoBehaviour:
   Description: In bomb defusing as in electronics, you must be careful not to get
     the components mixed up, or they might just explode.
   GeneratorSetting:
-    TimeLimit: 300
+    TimeLimit: 360
     NumStrikes: 1
     TimeBeforeNeedyActivation: 90
     FrontFaceOnly: 0

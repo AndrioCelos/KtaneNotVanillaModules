@@ -15,7 +15,7 @@ MonoBehaviour:
   Description: The good news is that we've managed to separate the strange modules
     from the others! The bad news is that the bomb is still armed.
   GeneratorSetting:
-    TimeLimit: 600
+    TimeLimit: 1200
     NumStrikes: 3
     TimeBeforeNeedyActivation: 90
     FrontFaceOnly: 0

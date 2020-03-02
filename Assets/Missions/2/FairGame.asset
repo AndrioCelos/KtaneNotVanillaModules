@@ -14,7 +14,7 @@ MonoBehaviour:
   DisplayName: Fair Game
   Description: There are more tricks with this one. Study the manuals carefully.
   GeneratorSetting:
-    TimeLimit: 360
+    TimeLimit: 480
     NumStrikes: 3
     TimeBeforeNeedyActivation: 90
     FrontFaceOnly: 0
