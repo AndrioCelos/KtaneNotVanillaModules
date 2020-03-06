@@ -23,19 +23,24 @@ namespace NotVanillaModulesLib {
 
 		public GameObject TestModel;
 
-		private static readonly Dictionary<Type, int> moduleIndices = new Dictionary<Type, int>();
+		private static readonly Dictionary<string, int> moduleIndices = new Dictionary<string, int>();
 
 		public void Awake() {
-			moduleIndices.TryGetValue(this.GetType(), out var id);
-			this.ModuleID = ++id;
-			moduleIndices[this.GetType()] = id;
-
+			string moduleType;
 			this.KMBombModule = this.GetComponent<KMBombModule>();
-			if (this.KMBombModule == null) {
+			if (this.KMBombModule != null) moduleType = this.KMBombModule.ModuleType;
+			else {
 				this.KMNeedyModule = this.GetComponent<KMNeedyModule>();
-				if (this.KMNeedyModule == null)
-					Debug.LogError($"[{this.GetType().Name} #{this.ModuleID}] Module is missing a KMBombModule or KMNeedyModule component.");
+				if (this.KMNeedyModule != null) moduleType = this.KMNeedyModule.ModuleType;
+				else {
+					moduleType = this.gameObject.name;
+					Debug.LogError($"[{moduleType}] Module is missing a KMBombModule or KMNeedyModule component.");
+				}
 			}
+
+			moduleIndices.TryGetValue(moduleType, out var id);
+			this.ModuleID = ++id;
+			moduleIndices[moduleType] = id;
 
 #if (DEBUG)
 			this.Log("Assembly was compiled in debug mode. Activating test model.");

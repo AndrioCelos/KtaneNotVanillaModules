@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using NotVanillaModulesLib;
 using UnityEngine;
@@ -102,6 +103,7 @@ public class NotWhosOnFirst : NotVanillaModule<NotMemoryConnector> {
 	private void Connector_ButtonPressed(object sender, KeypadButtonEventArgs e) {
 		if (this.Solved || !this.Connector.InputValid) return;
 		if (this.correctButtons.Contains(e.ButtonIndex)) {
+			this.Log("You pressed {0} ('{1}') in stage {2}. That was correct.", DescribeButton(e.ButtonIndex), this.buttonLabels[e.ButtonIndex], this.Connector.Stage + 1);
 			this.Connector.Stage = ++this.StagesCompleted;
 			if (this.StagesCompleted >= 5) this.Disarm();
 			else {
@@ -112,6 +114,7 @@ public class NotWhosOnFirst : NotVanillaModule<NotMemoryConnector> {
 				this.Connector.AnimateButtons();
 			}
 		} else {
+			this.Log("You pressed {0} ('{1}') in stage {2}. That was incorrect.", DescribeButton(e.ButtonIndex), this.buttonLabels[e.ButtonIndex], this.Connector.Stage + 1);
 			this.Connector.KMBombModule.HandleStrike();
 			this.Connector.Stage = this.StagesCompleted = 0;
 			this.Connector.AnimateButtons();
@@ -164,38 +167,44 @@ public class NotWhosOnFirst : NotVanillaModule<NotMemoryConnector> {
 				this.rememberedLabels[4] = this.buttonLabels[buttonIndex];
 				this.rememberedPositions[4] = buttonIndex;
 				var description = this.Stage3Check(buttonIndex);
-				this.Log("Stage 3: display is '{0}'. The reference button is {1}. The correct button is {2}.",
-					this.Connector.DisplayText, DescribeButton(buttonIndex), description);
+				this.Log("Stage 3: display is '{0}'. The reference button is {1} ('{2}'). The correct button is {3}.",
+					this.Connector.DisplayText, DescribeButton(buttonIndex), this.buttonLabels[buttonIndex], description);
 				break;
 			case 4:
 				var visitedButtons = new HashSet<int>();
-				var pos = this.rememberedPositions[4];
+				buttonIndex = this.rememberedPositions[4];
 				do {
-					switch (this.buttonLabels[pos]) {
+					switch (this.buttonLabels[buttonIndex]) {
 						case "WHAT?": case "PRESS": case "YOU": case "LEFT": case "WAIT": case "OKAY": case "NO":  // Up
-							pos -= 2; if (pos < 0) pos += 6; break;
+							buttonIndex -= 2; if (buttonIndex < 0) buttonIndex += 6; break;
 						case "WHAT": case "UH HUH": case "UR": case "NEXT": case "NOTHING": case "FIRST": case "YOU ARE":  // Left
 						case "BLANK": case "RIGHT": case "SURE": case "YOU'RE": case "READY": case "U": case "UH UH":  // Right
-							pos ^= 1; break;
+							buttonIndex ^= 1; break;
 						default:  // Down
-							pos += 2; if (pos >= 6) pos -= 6; break;
+							buttonIndex += 2; if (buttonIndex >= 6) buttonIndex -= 6; break;
 					}
-				} while (visitedButtons.Add(pos));
-				this.rememberedLabels[5] = this.buttonLabels[pos];
-				this.rememberedPositions[5] = pos;
-				description = this.Stage3Check(pos);
-				this.Log("Stage 4: display is '{0}'. The reference button is {1}. The correct button is {2}.",
-					this.Connector.DisplayText, DescribeButton(pos), description);
+				} while (visitedButtons.Add(buttonIndex));
+				this.rememberedLabels[5] = this.buttonLabels[buttonIndex];
+				this.rememberedPositions[5] = buttonIndex;
+				description = this.Stage3Check(buttonIndex);
+				this.Log("Stage 4: display is '{0}'. The reference button is {1} ('{2}'). The correct button is {3}.",
+					this.Connector.DisplayText, DescribeButton(buttonIndex), this.buttonLabels[buttonIndex], description);
 				break;
 			case 5:
 				var sum = this.stage2Sum;
-				for (int i = 0; i < 6; ++i)
-					sum += this.defaultStage5Table[this.rememberedLabels[i]][this.rememberedPositions[i]];
+				var sumDescription = new StringBuilder();
+				for (int i = 0; i < 6; ++i) {
+					var n = this.defaultStage5Table[this.rememberedLabels[i]][this.rememberedPositions[i]];
+					sum += n;
+					sumDescription.Append(n);
+					sumDescription.Append(" + ");
+				}
+				sumDescription.Append(this.stage2Sum);
 				sum = sum % 60 + 1;
 				correctButton = Stage2Check(sum);
 				this.correctButtons.Add(correctButton);
-				this.Log("Stage 5: display is '{0}'. The correct button is {1} ('{2}').",
-					this.Connector.DisplayText, DescribeButton(correctButton), this.buttonLabels[correctButton]);
+				this.Log("Stage 5: display is '{0}'. The final sum is {1} (from ({2}) % 60 + 1). The correct button is {3} ('{4}').",
+					this.Connector.DisplayText, sum, sumDescription, DescribeButton(correctButton), this.buttonLabels[correctButton]);
 				break;
 			default: throw new ArgumentOutOfRangeException("stage");
 		}
