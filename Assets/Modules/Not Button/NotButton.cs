@@ -312,6 +312,8 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 	public static readonly string TwitchHelpMessage = "!{0} tap | !{0} hold | !{0} release 1:13 1:23 | !{0} mash 50";
 	[NonSerialized]
 	public bool ZenModeActive;
+	[NonSerialized]
+	public bool TwitchShouldCancelCommand;
 
 	public IEnumerator ProcessTwitchCommand(string command) {
 		var tokens = command.Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -359,9 +361,21 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 				if (tokens.Length == 2) int.TryParse(tokens[1], out count);  // Sets count to 0 on error.
 				else count = tokens.Length == 1 && !tokens[0].Equals("mash", StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
 				if (count > 0 && count < 100) {
+					if (count <= this.MashCount) {
+						yield return "sendtochaterror Please wait for the previous command to be submitted.";
+						yield break;
+					}
 					yield return null;
-					if (count > 60) yield return "waiting music";
-					for (; count > 0; --count) {
+					if (count - this.MashCount > 60) yield return "waiting music";
+					while (this.MashCount < count) {
+						if (this.TwitchShouldCancelCommand) {
+							// Undo the input if the command is cancelled, to prevent sabotage.
+							this.MashCount = 0;
+							this.DisplayText.gameObject.SetActive(false);
+							yield return "sendtochat The mash command was not completed due to a request to cancel.";
+							yield return "cancelled";
+							yield break;
+						}
 						this.Connector.TwitchPress();
 						yield return new WaitForSeconds(1 / 12f);
 						this.Connector.TwitchRelease();

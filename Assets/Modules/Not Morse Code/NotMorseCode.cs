@@ -168,10 +168,10 @@ public class NotMorseCode : NotVanillaModule<NotMorseCodeConnector> {
 
 	// Twitch Plays support
 	public static readonly string TwitchHelpMessage
-		= "!{0} down | !{0} up 2 | !{0} tune 3 - moves to the 3rd lowest frequency | !{0} submit 3.573 | !{0} xt 573 - submits 3.573 MHz | !{0} submit 2 - submits the 2nd lowest frequency";
+		= "!{0} down | !{0} up 2 | !{0} tune 3 - moves to the 3rd lowest frequency | !{0} submit 3.573 | !{0} xt 573 - submits 3.573 MHz | !{0} submit 2 - submits the 2nd lowest frequency | !{0} submit 573 600 505 542 555";
 	public IEnumerator ProcessTwitchCommand(string command) {
 		var tokens = command.Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
-		if (tokens.Length == 0 || tokens.Length > 3 || (tokens.Length == 3 && !tokens[2].EqualsIgnoreCase("MHz"))) yield break;
+		if (tokens.Length == 0) yield break;
 		switch (tokens[0].ToLowerInvariant()) {
 			case "down": case "left":
 				int n = 1;
@@ -199,26 +199,35 @@ public class NotMorseCode : NotVanillaModule<NotMorseCodeConnector> {
 				if (tokens.Length != 2) yield break;
 				if (!int.TryParse(tokens[1], out n) || n < 1 || n > 5) yield break;
 				yield return null;
-				foreach (var o in this.TwitchTuneTo(n)) yield return o;
+				foreach (var o in this.TwitchTuneTo(n - 1)) yield return o;
 				break;
 			case "submit": case "transmit": case "trans": case "tx": case "xt":
 				if (tokens.Length > 1) {
-					if (tokens[1].StartsWith("3.") || tokens[1].StartsWith("3,")) tokens[1] = tokens[1].Substring(2);
-					if (!int.TryParse(tokens[1], out n)) yield break;
-					if (n <= 5) {
-						if (n < 1) yield break;
-						yield return null;
-						foreach (var o in this.TwitchTuneTo(n)) yield return o;
-						this.Connector.TwitchSubmit();
-					} else {
-						var index = Array.IndexOf(this.frequencies, n);
-						if (index < 0)
-							yield return string.Format("sendtochaterror 3.{0} MHz is not an available channel.", n);
-						else {
-							yield return null;
-							foreach (var o in this.TwitchTuneTo(index + 1)) yield return o;
-							this.Connector.TwitchSubmit();
+					var channels = new List<int>();
+					foreach (var token in tokens.Skip(1)) {
+						if (token.EqualsIgnoreCase("MHz")) continue;
+						var freq = token;
+						if (freq.StartsWith("3.")) freq = freq.Substring(2);
+						if (!int.TryParse(freq, out n)) yield break;
+						if (n <= 5) {
+							--n;
+							if (n < 0) yield break;
+							if (channels.Contains(n)) yield break;
+							channels.Add(n);
+						} else {
+							var index = Array.IndexOf(this.frequencies, n);
+							if (index < 0) {
+								yield return string.Format("sendtochaterror 3.{0} MHz is not an available channel.", n);
+								yield break;
+							}
+							if (channels.Contains(index)) yield break;
+							channels.Add(index);
 						}
+					}
+					foreach (var index in channels) {
+						foreach (var o in this.TwitchTuneTo(index)) yield return o;
+						this.Connector.TwitchSubmit();
+						yield return "trywaitcancel 0.1";
 					}
 				} else {
 					yield return null;
@@ -228,24 +237,23 @@ public class NotMorseCode : NotVanillaModule<NotMorseCodeConnector> {
 		}
 	}
 
-	private IEnumerable<object> TwitchTuneTo(int userNumber) {
-		--userNumber;
-		if (this.channelIndex < userNumber) {
+	private IEnumerable<object> TwitchTuneTo(int channelIndex) {
+		if (this.channelIndex < channelIndex) {
 			do {
 				this.Connector.TwitchMoveUp();
 				yield return "trywaitcancel 0.1";
-			} while (this.channelIndex < userNumber);
-		} else if (this.channelIndex > userNumber) {
+			} while (this.channelIndex < channelIndex);
+		} else if (this.channelIndex > channelIndex) {
 			do {
 				this.Connector.TwitchMoveDown();
 				yield return "trywaitcancel 0.1";
-			} while (this.channelIndex > userNumber);
+			} while (this.channelIndex > channelIndex);
 		}
 	}
 
 	public IEnumerator TwitchHandleForcedSolve() {
 		while (!this.Solved) {
-			foreach (var o in this.TwitchTuneTo(Array.IndexOf(this.words, this.correctChannels[this.WordsCorrectlySubmitted]) + 1)) yield return o;
+			foreach (var o in this.TwitchTuneTo(this.correctChannels[this.WordsCorrectlySubmitted])) yield return o;
 			this.Connector.TwitchSubmit();
 			yield return new WaitForSeconds(0.1f);
 		}

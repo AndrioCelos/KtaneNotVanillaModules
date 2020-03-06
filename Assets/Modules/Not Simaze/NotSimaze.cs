@@ -199,15 +199,12 @@ public class NotSimaze : NotVanillaModule<NotSimonConnector> {
 
 	// Twitch Plays support
 	public static readonly string TwitchHelpMessage
-		= "!{0} press red green blue yellow | !{0} rgby | !{0} press up right left down - may not be abbreviated";
+		= "!{0} press red green blue yellow | !{0} rgby | !{0} press up right left down | !{0} press urld | !{0} press news";
 	public IEnumerator ProcessTwitchCommand(string command) {
-		var tokens = command.Split(new[] { ' ', '\t', ',' }, 2, StringSplitOptions.RemoveEmptyEntries);
+		var tokens = command.Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
 		if (tokens.Length == 0) yield break;
 
-		IEnumerable<string> enumerable;
-		if (tokens[0].EqualsIgnoreCase("press") || tokens[0].EqualsIgnoreCase("move")) enumerable = tokens.Skip(1);
-		else enumerable = tokens;
-
+		var enumerable = tokens[0].EqualsIgnoreCase("press") || tokens[0].EqualsIgnoreCase("move") ? tokens.Skip(1) : tokens;
 		var buttons = new List<SimonButtons>();
 		if (!TryParseCharDirections(enumerable, buttons)) {
 			buttons.Clear();
@@ -224,26 +221,55 @@ public class NotSimaze : NotVanillaModule<NotSimonConnector> {
 		}
 	}
 
-	private static bool TryParseCharDirections(IEnumerable<string> fields, IList<SimonButtons> list) {
-		foreach (var token in fields) {
+	private static bool TryParseCharDirections(IEnumerable<string> tokens, IList<SimonButtons> list) {
+		int mode = 0;
+		// Disambiguate 'r'.
+		foreach (var c in tokens.SelectMany(t => t)) {
+			switch (c) {
+				case 'y': case 'Y': case 'g': case 'G': case 'b': case 'B': mode = 1; break;
+				case 'u': case 'U': case 'd': case 'D': case 'l': case 'L': mode = 2; break;
+				case 'n': case 'N': case 's': case 'S': case 'e': case 'E': case 'w': case 'W': mode = 3; break;
+			}
+		}
+		if (mode == 0) return false;  // `move r` is ambiguous and thus not allowed.
+
+		foreach (var token in tokens) {
 			foreach (var c in token) {
-				switch (c) {
-					case 'r': case 'R': list.Add(SimonButtons.Red); break;
-					case 'y': case 'Y': list.Add(SimonButtons.Yellow); break;
-					case 'g': case 'G': list.Add(SimonButtons.Green); break;
-					case 'b': case 'B': list.Add(SimonButtons.Blue); break;
-					case 's': case 'S': list.Add(SimonButtons.Yellow); break;
-					case 'n': case 'N': list.Add(SimonButtons.Red); break;
-					case 'w': case 'W': list.Add(SimonButtons.Blue); break;
-					case 'e': case 'E': list.Add(SimonButtons.Green); break;
-					default: return false;
+				switch (mode) {
+					case 1:
+						switch (c) {
+							case 'r': case 'R': list.Add(SimonButtons.Red); break;
+							case 'y': case 'Y': list.Add(SimonButtons.Yellow); break;
+							case 'g': case 'G': list.Add(SimonButtons.Green); break;
+							case 'b': case 'B': list.Add(SimonButtons.Blue); break;
+							default: return false;
+						}
+						break;
+					case 2:
+						switch (c) {
+							case 'u': case 'U': list.Add(SimonButtons.Red); break;
+							case 'd': case 'D': list.Add(SimonButtons.Yellow); break;
+							case 'r': case 'R': list.Add(SimonButtons.Green); break;
+							case 'l': case 'L': list.Add(SimonButtons.Blue); break;
+							default: return false;
+						}
+						break;
+					case 3:
+						switch (c) {
+							case 'n': case 'N': list.Add(SimonButtons.Red); break;
+							case 's': case 'S': list.Add(SimonButtons.Yellow); break;
+							case 'e': case 'E': list.Add(SimonButtons.Green); break;
+							case 'w': case 'W': list.Add(SimonButtons.Blue); break;
+							default: return false;
+						}
+						break;
 				}
 			}
 		}
 		return true;
 	}
-	private static bool TryParseWordDirections(IEnumerable<string> fields, IList<SimonButtons> list) {
-		foreach (var token in fields) {
+	private static bool TryParseWordDirections(IEnumerable<string> tokens, IList<SimonButtons> list) {
+		foreach (var token in tokens) {
 			switch (token.ToLowerInvariant()) {
 				case "up": case "north": case "red": list.Add(SimonButtons.Red); break;
 				case "down": case "south": case "yellow": list.Add(SimonButtons.Yellow); break;

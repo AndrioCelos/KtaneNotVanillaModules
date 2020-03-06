@@ -207,10 +207,10 @@ public class NotMaze : NotVanillaModule<NotMazeConnector> {
 		foreach (var token in fields) {
 			foreach (var c in token) {
 				switch (c) {
-					case 'u': case 'U': list.Add(MazeDirection.Up); break;
-					case 'd': case 'D': list.Add(MazeDirection.Down); break;
-					case 'l': case 'L': list.Add(MazeDirection.Left); break;
-					case 'r': case 'R': list.Add(MazeDirection.Right); break;
+					case 'u': case 'U': case 'n': case 'N': list.Add(MazeDirection.Up); break;
+					case 'd': case 'D': case 's': case 'S': list.Add(MazeDirection.Down); break;
+					case 'l': case 'L': case 'w': case 'W': list.Add(MazeDirection.Left); break;
+					case 'r': case 'R': case 'e': case 'E': list.Add(MazeDirection.Right); break;
 					default: return false;
 				}
 			}
@@ -220,10 +220,10 @@ public class NotMaze : NotVanillaModule<NotMazeConnector> {
 	private static bool TryParseWordDirections(IEnumerable<string> fields, IList<MazeDirection> list) {
 		foreach (var token in fields) {
 			switch (token.ToLowerInvariant()) {
-				case "up": list.Add(MazeDirection.Up); break;
-				case "down": list.Add(MazeDirection.Down); break;
-				case "left": list.Add(MazeDirection.Left); break;
-				case "right": list.Add(MazeDirection.Right); break;
+				case "up": case "north": list.Add(MazeDirection.Up); break;
+				case "down": case "south": list.Add(MazeDirection.Down); break;
+				case "left": case "west": list.Add(MazeDirection.Left); break;
+				case "right": case "east": list.Add(MazeDirection.Right); break;
 				default: return false;
 			}
 		}

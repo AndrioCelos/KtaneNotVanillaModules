@@ -459,20 +459,21 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 							if (this.ZenModeActive ? (j <= i) : (j >= i)) yield break;
 							if (this.ZenModeActive ? i <= (int) bombInfo.GetTime() : i >= (int) bombInfo.GetTime())
 								yield return "sendtochaterror The specified time has already passed.";
+							else {
+								yield return null;
+								while ((int) bombInfo.GetTime() != i)
+									yield return "trycancel The button was not pressed due to a request to cancel.";
+								yield return "strikemessage pressing submit incorrectly";
+								this.Connector.TwitchPressSubmit();
+								//yield return new WaitForSeconds(0.1f);
+								if (!this.twitchStruck) yield return "strikemessage releasing submit incorrectly";
+								this.Connector.TwitchReleaseSubmit();
+								yield return new WaitForSeconds(0.2f);
 
-							yield return null;
-							while ((int) bombInfo.GetTime() != i)
-								yield return "trycancel The button was not pressed due to a request to cancel.";
-							yield return "strikemessage pressing submit incorrectly";
-							this.Connector.TwitchPressSubmit();
-							//yield return new WaitForSeconds(0.1f);
-							if (!this.twitchStruck) yield return "strikemessage releasing submit incorrectly";
-							this.Connector.TwitchReleaseSubmit();
-							yield return new WaitForSeconds(0.2f);
-
-							while ((int) bombInfo.GetTime() != j)
-								yield return "trycancel The button was not pressed due to a request to cancel.";
-							goto case 1;
+								while ((int) bombInfo.GetTime() != j)
+									yield return "trycancel The button was not pressed due to a request to cancel.";
+								goto case 1;
+							}
 						}
 						break;
 				}
