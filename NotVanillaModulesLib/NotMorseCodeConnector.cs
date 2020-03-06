@@ -18,6 +18,7 @@ namespace NotVanillaModulesLib {
 		public event EventHandler DownPressed;
 		public event EventHandler UpPressed;
 		public event EventHandler SubmitPressed;
+		public event EventHandler SubmitReleased;
 
 		private float freqMarkerCurrent;
 #pragma warning disable IDE0044 // Add readonly modifier
@@ -76,6 +77,7 @@ namespace NotVanillaModulesLib {
 
 			var keypadEventConnector = new KeypadEventConnector();
 			keypadEventConnector.ButtonPressed += this.KeypadEventConnector_ButtonPressed;
+			keypadEventConnector.ButtonReleased += this.KeypadEventConnector_ButtonReleased;
 			keypadEventConnector.Attach(this.buttons);
 
 			var marker = layout.Find("Freq_Marker").GetComponent<FreqMarker>();
@@ -89,13 +91,17 @@ namespace NotVanillaModulesLib {
 #endif
 		}
 
+
 #if (!DEBUG)
 		private void KeypadEventConnector_ButtonPressed(object sender, KeypadButtonEventArgs e) {
 			switch (e.ButtonIndex) {
 				case 0: this.DownPressed?.Invoke(sender, EventArgs.Empty); break;
 				case 1: this.UpPressed?.Invoke(sender, EventArgs.Empty); break;
-				case 2: this.SubmitPressed?.Invoke(sender, EventArgs.Empty); break;
+				case 2: this.SubmitPressed?.Invoke(sender, EventArgs.Empty); e.SuppressAutomaticRelease = true; break;
 			}
+		}
+		private void KeypadEventConnector_ButtonReleased(object sender, KeypadButtonEventArgs e) {
+			if (e.ButtonIndex == 2) this.SubmitReleased?.Invoke(sender, EventArgs.Empty);
 		}
 #endif
 
@@ -114,6 +120,7 @@ namespace NotVanillaModulesLib {
 			this.TestModelDownButton.OnInteract = () => { this.DownPressed?.Invoke(this, EventArgs.Empty); return false; };
 			this.TestModelUpButton.OnInteract = () => { this.UpPressed?.Invoke(this, EventArgs.Empty); return false; };
 			this.TestModelSubmitButton.OnInteract = () => { this.SubmitPressed?.Invoke(this, EventArgs.Empty); return false; };
+			this.TestModelSubmitButton.OnInteractEnded = () => this.SubmitReleased?.Invoke(this, EventArgs.Empty);
 			this.TestModelTunerDisplay.GetComponent<Renderer>().enabled = false;
 		}
 
@@ -164,6 +171,18 @@ namespace NotVanillaModulesLib {
 			if (this.TestMode) TwitchExtensions.Click(this.TestModelSubmitButton);
 #if (!DEBUG)
 			else TwitchExtensions.Click(this.buttons[2]);
+#endif
+		}
+		public void TwitchPressSubmit() {
+			if (this.TestMode) TwitchExtensions.Press(this.TestModelSubmitButton);
+#if (!DEBUG)
+			else TwitchExtensions.Press(this.buttons[2]);
+#endif
+		}
+		public void TwitchReleaseSubmit() {
+			if (this.TestMode) TwitchExtensions.Release(this.TestModelSubmitButton);
+#if (!DEBUG)
+			else TwitchExtensions.Release(this.buttons[2]);
 #endif
 		}
 	}

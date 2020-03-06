@@ -51,6 +51,8 @@ public class NotMorseCode : NotVanillaModule<NotMorseCodeConnector> {
 	};
 
 	public int WordsCorrectlySubmitted { get; private set; }
+	public bool SubmitDown { get; private set; }
+	public bool Resetting { get; private set; }
 
 	private int[] frequencies;
 	private int channelIndex;
@@ -61,12 +63,15 @@ public class NotMorseCode : NotVanillaModule<NotMorseCodeConnector> {
 
 	private const float DotLength = 0.25f;
 
+	private float holdTime;
+
 	public override void Start () {
 		base.Start();
 		this.Connector.KMBombModule.OnActivate = this.KMBombModule_OnActivate;
 		this.Connector.DownPressed += this.Connector_DownPressed;
 		this.Connector.UpPressed += this.Connector_UpPressed;
 		this.Connector.SubmitPressed += this.Connector_SubmitPressed;
+		this.Connector.SubmitReleased += this.Connector_SubmitReleased;
 
 		var frequencies = new List<int>(possibleFrequencies);
 		this.frequencies = new int[5];
@@ -96,6 +101,18 @@ public class NotMorseCode : NotVanillaModule<NotMorseCodeConnector> {
 		this.ChangeChannel();
 	}
 
+	public void Update() {
+		if (this.SubmitDown && !this.Resetting) {
+			this.holdTime += Time.deltaTime;
+			if (this.holdTime >= 3) {
+				this.Log("Submission reset.");
+				this.GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, this.transform);
+				this.Resetting = true;
+				this.WordsCorrectlySubmitted = 0;
+			}
+		}
+	}
+
 	public override void Disarm() {
 		base.Disarm();
 		if (this.playWordCoroutine != null) {
@@ -106,8 +123,17 @@ public class NotMorseCode : NotVanillaModule<NotMorseCodeConnector> {
 	}
 
 	private void Connector_SubmitPressed(object sender, EventArgs e) {
-		if (this.Solved) return;
+		this.SubmitDown = true;
+	}
 
+	private void Connector_SubmitReleased(object sender, EventArgs e) {
+		this.SubmitDown = false;
+		this.holdTime = 0;
+		if (this.Solved) return;
+		if (this.Resetting) {
+			this.Resetting = false;
+			return;
+		}
 		var word = this.words[this.channelIndex];
 		var correctChannel = this.correctChannels[this.WordsCorrectlySubmitted];
 		if (this.channelIndex == correctChannel) {
@@ -168,7 +194,7 @@ public class NotMorseCode : NotVanillaModule<NotMorseCodeConnector> {
 
 	// Twitch Plays support
 	public static readonly string TwitchHelpMessage
-		= "!{0} down | !{0} up 2 | !{0} tune 3 - moves to the 3rd lowest frequency | !{0} submit 3.573 | !{0} xt 573 - submits 3.573 MHz | !{0} submit 2 - submits the 2nd lowest frequency | !{0} submit 573 600 505 542 555";
+		= "!{0} down | !{0} up 2 | !{0} tune 3 - moves to the 3rd lowest frequency | !{0} submit 3.573 | !{0} xt 573 - submits 3.573 MHz | !{0} submit 2 - submits the 2nd lowest frequency | !{0} submit 573 600 505 542 555 | !{0} reset";
 	public IEnumerator ProcessTwitchCommand(string command) {
 		var tokens = command.Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
 		if (tokens.Length == 0) yield break;
@@ -233,6 +259,12 @@ public class NotMorseCode : NotVanillaModule<NotMorseCodeConnector> {
 					yield return null;
 					this.Connector.TwitchSubmit();
 				}
+				break;
+			case "reset":
+				yield return null;
+				this.Connector.TwitchPressSubmit();
+				yield return new WaitUntil(() => this.Resetting);
+				this.Connector.TwitchReleaseSubmit();
 				break;
 		}
 	}

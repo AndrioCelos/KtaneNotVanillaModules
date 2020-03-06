@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 114968955545960766}
   - component: {fileID: 114446940647854006}
   - component: {fileID: 65150307212722284}
+  - component: {fileID: 114451747319159730}
   m_Layer: 0
   m_Name: Not Morse Code
   m_TagString: Untagged
@@ -1782,6 +1783,17 @@ MonoBehaviour:
   TestModelDownButton: {fileID: 114135152751684836}
   TestModelUpButton: {fileID: 114349517130998402}
   TestModelSubmitButton: {fileID: 114073415536513160}
+--- !u!114 &114451747319159730
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1233924168082550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114465862501580236
 MonoBehaviour:
   m_ObjectHideFlags: 1
