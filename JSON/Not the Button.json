@@ -7,9 +7,14 @@
 	"ModuleID": "NotButton",
 	"Name": "Not the Button",
 	"Origin": "Mods",
-	"Published": "2020-02-12",
+	"Published": "2020-03-06",
 	"SortKey": "NOTBUTTON",
-	"SteamID": "0",
+	"SourceUrl": "https://github.com/AndrioCelos/KtaneNotVanillaModules",
+	"Souvenir": {
+		"Explanation": "Souvenir could ask what colours the light glowed, or how many times the button was pressed.",
+		"Status": "Considered"
+	},
+	"SteamID": "2003251353",
 	"Symbol": "Xt",
 	"Type": "Regular"
 }

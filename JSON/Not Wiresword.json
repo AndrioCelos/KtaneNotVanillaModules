@@ -7,9 +7,11 @@
 	"ModuleID": "NotWiresword",
 	"Name": "Not Wiresword",
 	"Origin": "Mods",
-	"Published": "2020-02-12",
+	"Published": "2020-03-06",
 	"SortKey": "NOTWIRESWORD",
-	"SteamID": "0",
+	"SourceUrl": "https://github.com/AndrioCelos/KtaneNotVanillaModules",
+	"Souvenir": { "Status": "NotACandidate" },
+	"SteamID": "2003251353",
 	"Symbol": "Xe",
 	"Type": "Regular"
 }

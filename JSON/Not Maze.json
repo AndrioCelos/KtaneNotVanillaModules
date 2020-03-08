@@ -7,9 +7,14 @@
 	"ModuleID": "NotMaze",
 	"Name": "Not Maze",
 	"Origin": "Mods",
-	"Published": "2020-02-12",
+	"Published": "2020-03-06",
 	"SortKey": "NOTMAZE",
-	"SteamID": "0",
+	"SourceUrl": "https://github.com/AndrioCelos/KtaneNotVanillaModules",
+	"Souvenir": {
+		"Explanation": "Souvenir could ask about the starting distance.",
+		"Status": "Considered"
+	},
+	"SteamID": "2003251353",
 	"Symbol": "Xa",
 	"Type": "Regular"
 }
