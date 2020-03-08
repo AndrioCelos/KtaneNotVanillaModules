@@ -37,6 +37,8 @@ namespace NotVanillaModulesLib {
 			var keypadEventConnector = new KeypadEventConnector();
 			keypadEventConnector.ButtonPressed += this.KeypadEventConnector_ButtonPressed;
 			keypadEventConnector.Attach(this.buttons);
+
+			foreach (var button in this.buttons) button.SymbolImage.AddComponent<ExcludeFromTexturePack>();
 #endif
 		}
 
