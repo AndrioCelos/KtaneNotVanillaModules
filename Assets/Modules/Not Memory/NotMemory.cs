@@ -170,7 +170,7 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 		public static Condition DisplayIs(int n) { return (m, i) => m.Display == n; }
 		public static Condition ButtonLabelIs(int pos, int label) { return (m, i) => m.Labels[pos] == label; }
 		public static Condition ButtonLabelIsNot(int pos, int label) { return (m, i) => m.Labels[pos] != label; }
-		public static Condition SerialNumberIsOdd() { return (m, i) => i.GetSerialNumberNumbers().Last() % 2 != 0; }
+		public static Condition SerialNumberIsOdd() { return (m, i) => i.GetSerialNumberNumbers().LastOrDefault() % 2 != 0; }
 		public static Condition NoBatteries() { return (m, i) => i.GetBatteryCount() == 0; }
 		public static Condition NoPorts() { return (m, i) => i.GetPortCount() == 0; }
 		public static Condition ButtonLabelMatchesDisplay(int pos) { return (m, i) => m.Labels[pos] == m.Display; }
