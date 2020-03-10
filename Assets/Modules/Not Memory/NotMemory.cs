@@ -23,7 +23,7 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 			new Rule(Conditions.NoBatteries(), Actions.PressLabel(4)),
 			new Rule(Conditions.ButtonLabelIs(2, 1), Actions.PressPosition(0)),
 			new Rule(Conditions.DisplayIs(3), Actions.PressPositionFromLabel(2)),
-			new Rule(Conditions.ButtonLabelMatchesDisplay(1), Actions.PressPosition(2)),
+			new Rule(Conditions.ButtonLabelMatchesDisplay(1), Actions.PressPosition(1)),
 			new Rule(null, Actions.PressLabel(1))
 		},
 		/* 2 */ new[] {
