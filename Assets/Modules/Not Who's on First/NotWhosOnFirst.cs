@@ -122,7 +122,10 @@ public class NotWhosOnFirst : NotVanillaModule<NotMemoryConnector> {
 	}
 
 	private void SetRandomTexts() {
-		this.Connector.DisplayText = displays.PickRandom();
+		// To allow the distinguishing feature of the mirrored display to work, the display in stage 1 will not be 'U'.
+		do {
+			this.Connector.DisplayText = displays.PickRandom();
+		} while (this.StagesCompleted == 0 && this.Connector.DisplayText == "U");
 		var list = UnityEngine.Random.Range(0, 2) == 0 ? labels1 : labels2;
 		list.Shuffle();
 		for (int i = 0; i < 6; ++i) {
@@ -237,7 +240,7 @@ public class NotWhosOnFirst : NotVanillaModule<NotMemoryConnector> {
 	private string Stage3Check(int referenceButtonIndex) {
 		var label = this.buttonLabels[referenceButtonIndex];
 		bool a = referenceButtonIndex % 2 == 0;
-		bool b = label.Length % 2 == 0;
+		bool b = label.Count(char.IsLetter) % 2 == 0;
 		bool c = this.Connector.DisplayText.Count(l => l == 'A' || l == 'E' || l == 'I' || l == 'O' || l == 'U') % 2 != 0;
 		bool d;
 		switch (this.stage2Sum) {
