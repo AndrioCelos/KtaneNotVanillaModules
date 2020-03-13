@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NotVanillaModulesLib;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 	[ReadOnlyWhenPlaying]
@@ -86,11 +87,11 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 			case 'G':
 				this.SolutionAction = PasswordSolutionAction.HoldIndefinitely;
 				this.PressCondition = TimerCondition.Contains('6');
-				this.SolutionDelay = UnityEngine.Random.Range(4, 13);
+				this.SolutionDelay = Random.Range(4, 13);
 				break;
 			case 'H':
 				this.SolutionAction = PasswordSolutionAction.PressTwice;
-				this.SolutionDelay = 4;
+				this.SolutionDelay = 5;
 				break;
 			case 'I':
 				this.SolutionAction = PasswordSolutionAction.Press;
@@ -143,7 +144,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 			case 'T':
 				this.SolutionAction = PasswordSolutionAction.HoldIndefinitely;
 				this.PressCondition = TimerCondition.Contains('3');
-				this.SolutionDelay = UnityEngine.Random.Range(4, 13);
+				this.SolutionDelay = Random.Range(4, 13);
 				break;
 			case 'U':
 				this.SolutionAction = PasswordSolutionAction.PressTwice;
@@ -308,7 +309,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 			switch (this.SolutionAction) {
 				case PasswordSolutionAction.HoldCondition:
 					if (this.ReleaseCondition == null || this.ReleaseCondition.Invoke(bombInfo.GetTime(), bombInfo.GetFormattedTime())) {
-						this.Log("The button was held and released at {0}. That was correct.", bombInfo.GetFormattedTime());
+						this.Log("The button was released at {0}. That was correct.", bombInfo.GetFormattedTime());
 						this.Disarm();
 						break;
 					}
@@ -328,6 +329,15 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 					break;
 			}
 		} else {
+			if (this.SolutionAction == PasswordSolutionAction.HoldCondition) {
+				// For these rules, we won't require the button to be held for any specific length of time.
+				// Tapping it when both conditions are met is enough.
+				if (this.ReleaseCondition == null || this.ReleaseCondition.Invoke(bombInfo.GetTime(), bombInfo.GetFormattedTime())) {
+					this.Log("The button was released at {0}. That was correct.", bombInfo.GetFormattedTime());
+					this.Disarm();
+					return;
+				}
+			}
 			if (this.SolutionAction == PasswordSolutionAction.PressTwice) {
 				if (this.WasPressed) {
 					if (this.InteractionTickCount == this.SolutionDelay) {
