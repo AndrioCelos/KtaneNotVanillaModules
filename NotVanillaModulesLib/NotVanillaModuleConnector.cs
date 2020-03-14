@@ -13,8 +13,9 @@ namespace NotVanillaModulesLib {
 		public bool TestMode { get; protected set; }
 		/// <summary>A <see cref="GameObject"/> containing the test model, which will be hidden outside test mode. May be null.</summary>
 
+		private int moduleID;
 		/// <summary>Returns the sequential numeric ID for this module, unique within the module type and game instance.</summary>
-		public int ModuleID { get; private set; }
+		public int ModuleID => this.moduleID;
 
 		/// <summary>Returns the <see cref="global::KMBombModule"/> component attached to the GameObject. The value returned is not valid during Awake.</summary>
 		public KMBombModule KMBombModule { get; private set; }
@@ -39,7 +40,7 @@ namespace NotVanillaModulesLib {
 			}
 
 			moduleIndices.TryGetValue(moduleType, out var id);
-			this.ModuleID = ++id;
+			this.moduleID = ++id;
 			moduleIndices[moduleType] = id;
 
 #if (DEBUG)
