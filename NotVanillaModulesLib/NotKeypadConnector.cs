@@ -90,6 +90,11 @@ namespace NotVanillaModulesLib {
 			this.Lights[index].color = rgb;
 			this.Lights[index].enabled = colour != LightColour.Black;
 		}
+		public void SetLightColour(int index, Color color) {
+			this.LightRenderers[index].material.color = color;
+			this.Lights[index].color = color;
+			this.Lights[index].enabled = color.maxColorComponent > 0;
+		}
 
 		public void TwitchPress(int buttonIndex) {
 			if (this.TestMode) TwitchExtensions.Click(this.TestModelButtons[buttonIndex]);

@@ -17,6 +17,7 @@ public class NotSimaze : NotVanillaModule<NotSimonConnector> {
 	private bool firstMoveMade;
 	private Coroutine coroutine;
 	private bool tone = false;
+	private readonly List<SimonButtons> lightShowPresses = new List<SimonButtons>();
 
 	// Musical notes
 	private const float Cs5 = 554.365f;
@@ -97,9 +98,14 @@ public class NotSimaze : NotVanillaModule<NotSimonConnector> {
 	}
 
 	private void Connector_ButtonPressed(object sender, SimonButtonEventArgs e) {
-		if (this.Solved) return;
-		this.tone = true;
 		if (this.coroutine != null) this.StopCoroutine(this.coroutine);
+	
+		if (this.Solved) {
+			this.HandleLightShow(e.Colour);
+			return;
+		}
+
+		this.tone = true;
 
 		SimazeColour colour;
 		switch (e.Colour) {
@@ -194,6 +200,107 @@ public class NotSimaze : NotVanillaModule<NotSimonConnector> {
 			case SimonButtons.Green: return G5;
 			case SimonButtons.Yellow: return B5;
 			default: throw new ArgumentOutOfRangeException("colour");
+		}
+	}
+
+	private void HandleLightShow(SimonButtons buttonIndex) {
+		this.lightShowPresses.Remove(buttonIndex);
+		this.lightShowPresses.Add(buttonIndex);
+		switch (this.lightShowPresses.Count) {
+			case 2:
+				if ((buttonIndex ^ (SimonButtons) 3) == this.lightShowPresses[0])
+					this.coroutine = this.StartCoroutine(this.LightShowCoroutine(buttonIndex, this.LightShow2B));
+				else
+					this.coroutine = this.StartCoroutine(this.LightShowCoroutine(buttonIndex, this.LightShow2A));
+				break;
+			case 3:
+				this.coroutine = this.StartCoroutine(this.LightShowCoroutine(buttonIndex, this.LightShow3));
+				break;
+			case 4:
+				this.coroutine = this.StartCoroutine(this.LightShowCoroutine(buttonIndex, this.LightShow4));
+				break;
+			default:
+				this.coroutine = this.StartCoroutine(this.LightShowCoroutine(buttonIndex, this.LightShow1));
+				break;
+		}
+	}
+
+	private IEnumerator LightShowCoroutine(SimonButtons index, Func<IEnumerator> coroutine) {
+		this.Connector.FlashLight(index);
+		yield return new WaitForSeconds(1.5f);
+		var enumerator = coroutine();
+		enumerator.MoveNext();
+		this.lightShowPresses.Clear();
+		this.coroutine = this.StartCoroutine(enumerator);
+	}
+
+	private IEnumerator LightShow1() {
+		var index0 = this.lightShowPresses[0];
+		yield return null;
+		for (int i = 0; i < 4; ++i) {
+			this.Connector.FlashLight(index0);
+			yield return new WaitForSeconds(0.5f);
+			this.Connector.FlashLight(index0 ^ (SimonButtons) 1);
+			this.Connector.FlashLight(index0 ^ (SimonButtons) 2);
+			yield return new WaitForSeconds(0.5f);
+			this.Connector.FlashLight(index0 ^ (SimonButtons) 3);
+			yield return new WaitForSeconds(0.5f);
+			this.Connector.FlashLight(index0 ^ (SimonButtons) 1);
+			this.Connector.FlashLight(index0 ^ (SimonButtons) 2);
+			yield return new WaitForSeconds(0.5f);
+		}
+	}
+
+	private IEnumerator LightShow2A() {
+		var index0 = this.lightShowPresses[0];
+		var index1 = this.lightShowPresses[1];
+		yield return null;
+		for (int i = 0; i < 8; ++i) {
+			this.Connector.FlashLight(index0);
+			this.Connector.FlashLight(index1);
+			yield return new WaitForSeconds(0.5f);
+			this.Connector.FlashLight(index0 ^ (SimonButtons) 3);
+			this.Connector.FlashLight(index1 ^ (SimonButtons) 3);
+			yield return new WaitForSeconds(0.5f);
+		}
+	}
+
+	private IEnumerator LightShow2B() {
+		var index0 = this.lightShowPresses[0];
+		var index1 = this.lightShowPresses[1];
+		yield return null;
+		for (int i = 0; i < 8; ++i) {
+			this.Connector.FlashLight(index0);
+			this.Connector.FlashLight(index1);
+			yield return new WaitForSeconds(0.5f);
+			this.Connector.FlashLight(index0 ^ (SimonButtons) 1);
+			this.Connector.FlashLight(index1 ^ (SimonButtons) 1);
+			yield return new WaitForSeconds(0.5f);
+		}
+	}
+
+	private IEnumerator LightShow3() {
+		var indices = new SimonButtons[4];
+		this.lightShowPresses.CopyTo(indices);
+		indices[3] = (SimonButtons) Enumerable.Range(0, 4).FirstOrDefault(i => !this.lightShowPresses.Contains((SimonButtons) i));
+		yield return null;
+		for (int i = 0; i < 16; ++i) {
+			for (int j = 2; j >= 0; --j) this.Connector.FlashLight(indices[j]);
+			yield return new WaitForSeconds(0.5f);
+			var hold = indices[0];
+			for (int j = 0; j < 3; ++j) indices[j] = indices[j + 1];
+			indices[3] = hold;
+		}
+	}
+
+	private IEnumerator LightShow4() {
+		var indices = this.lightShowPresses.ToArray();
+		yield return null;
+		for (int i = 0; i < 4; ++i) {
+			foreach (var index in indices) {
+				this.Connector.FlashLight(index);
+				yield return new WaitForSeconds(0.5f);
+			}
 		}
 	}
 

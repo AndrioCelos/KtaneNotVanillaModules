@@ -181,6 +181,8 @@ namespace NotVanillaModulesLib {
 
 		public void SetLightColour(ButtonLightColour colour) =>
 			this.LightRenderer.material = this.LightMaterials[(int) colour];
+		public void SetLightBrightness(float brightness) =>
+			this.LightRenderer.material.SetFloat("_Blend", brightness);
 
 		public void TwitchPress() {
 			if (this.TestMode) TwitchExtensions.Press(this.testModelButton);

@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class NotButton : NotVanillaModule<NotButtonConnector> {
 	public delegate int MashCountFormula(int a, int b, int c, int d, int e, int f, int g);
 
+	public Transform DisplayBase;
 	public TextMesh DisplayText;
 	public Light[] Lights;
 	public bool OpenCoverOnSelection;
@@ -58,6 +59,8 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 
 	private KMSelectable button;
 	private KMBombInfo bombInfo;
+	private Coroutine animationCoroutine;
+	private IEnumerator mashAnimationEnumerator;
 
 	private static string SolutionActionPastTense(ButtonAction action) {
 		switch (action) {
@@ -143,13 +146,12 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 			moduleSelectable.OnDefocus = () => this.Connector.CloseCover();
 		}
 
-		this.DisplayText.gameObject.SetActive(false);
+		this.DisplayBase.gameObject.SetActive(false);
 	}
 
 	public void OpenCover() { this.Connector.OpenCover(); }
 
 	public void Update() {
-		if (this.Solved) return;
 		if (this.Down) {
 			if (!this.Holding && this.MashCount == 0) {  // Can't change your mind and start holding the button when you're already mashing...
 				this.InteractionTime += Time.deltaTime;
@@ -160,7 +162,10 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 		} else if (this.MashCount > 0) {
 			this.InteractionTime += Time.deltaTime;
 			if (this.InteractionTime >= (this.MashCount > 1 ? 3 : 0.7f)) {
-				if (this.MashCount == 1) {
+				if (this.Solved) {
+					this.mashAnimationEnumerator = null;
+					this.DisplayBase.localScale = Vector3.one;
+				} else if (this.MashCount == 1) {
 					if (this.SolutionAction == ButtonAction.Press) {
 						this.Log("The button was pressed. That was correct.");
 						this.Disarm();
@@ -183,30 +188,49 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 					}
 				}
 				this.MashCount = 0;
-				this.DisplayText.gameObject.SetActive(false);
+				this.DisplayBase.gameObject.SetActive(false);
 			}
 		}
 	}
 
 	private void Button_Held(object sender, EventArgs e) {
 		this.Down = true;
-		if (this.Solved) return;
 		this.InteractionTime = 0;
 		this.GetComponent<KMSelectable>().AddInteractionPunch(0.5f);
 	}
 
 	private void Button_Released(object sender, EventArgs e) {
+		this.GetComponent<KMSelectable>().AddInteractionPunch(-0.35f);
 		// There's an issue with the test harness whereby pressing Enter to select the module raises this event.
 		if (!this.Down) return;
-
 		this.Down = false;
-		if (this.Solved) return;
-		this.InteractionTime = 0;
-		this.GetComponent<KMSelectable>().AddInteractionPunch(-0.35f);
+		this.SetLightColour(ButtonLightColour.Off);
+		if (this.Solved) {
+			if (this.Holding) {
+				this.Holding = false;
+				this.InteractionTime = 0;
+				if (this.animationCoroutine != null) {
+					this.StopCoroutine(this.animationCoroutine);
+					this.animationCoroutine = null;
+				}
+			} else {
+				++this.MashCount;
+				if (this.MashCount == 1) {
+					this.mashAnimationEnumerator = this.DisplayShowCoroutine();
+					this.DisplayBase.gameObject.SetActive(true);
+				}
+				this.mashAnimationEnumerator.MoveNext();
+			}
+			return;
+		}
 
 		if (this.Holding) {
 			this.Holding = false;
-			this.SetLightColour(ButtonLightColour.Off);
+			this.InteractionTime = 0;
+			if (this.animationCoroutine != null) {
+				this.StopCoroutine(this.animationCoroutine);
+				this.animationCoroutine = null;
+			}
 
 			var timeString = this.GetComponent<KMBombInfo>().GetFormattedTime();
 			if (this.SolutionAction == ButtonAction.Hold) {
@@ -226,17 +250,22 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 			++this.MashCount;
 			if (this.MashCount > 1) {
 				this.DisplayText.text = (this.MashCount % 100).ToString();
-				this.DisplayText.gameObject.SetActive(true);
+				this.DisplayBase.gameObject.SetActive(true);
 			}
 		}
 	}
 
 	private void StartedHolding() {
 		this.Holding = true;
-		this.SetLightColour((ButtonLightColour) (Random.Range(0, 15) + 1));
-		this.SolutionTimerCondition = this.defaultTimerConditions[(int) this.LightColour - 1];
-		this.Log(string.Format(this.SolutionAction == ButtonAction.Hold ? "The button is being held. The light is {0}. The button should be released {1}." :
-			"The button is being held. The light is {0}.", this.LightColour, this.SolutionTimerCondition.Description));
+		if (this.Solved) {
+			this.animationCoroutine = this.StartCoroutine(this.LightShowCoroutine());
+		} else {
+			this.SetLightColour((ButtonLightColour) (Random.Range(0, 15) + 1));
+			this.animationCoroutine = this.StartCoroutine(this.LightAnimationCoroutine());
+			this.SolutionTimerCondition = this.defaultTimerConditions[(int) this.LightColour - 1];
+			this.Log(string.Format(this.SolutionAction == ButtonAction.Hold ? "The button is being held. The light is {0}. The button should be released {1}." :
+				"The button is being held. The light is {0}.", this.LightColour, this.SolutionTimerCondition.Description));
+		}
 	}
 
 	private void SetLightColour(ButtonLightColour colour) {
@@ -308,6 +337,106 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 		}
 	}
 
+	private void SetLightBrightness(float brightness) {
+		this.Connector.SetLightBrightness(brightness);
+		foreach (var light in this.Lights) light.intensity = brightness * 2;
+	}
+
+	private IEnumerator LightAnimationCoroutine() {
+		float time = 0;
+		while (true) {
+			var r = time % 1.4f;
+			this.SetLightBrightness(0.79f + 0.3f * Math.Abs(r - 0.7f));
+			yield return null;
+			time += Time.deltaTime;
+		}
+	}
+
+	private IEnumerator LightShowCoroutine() {
+		var roll = Random.Range(0, 6);
+		ButtonLightColour[] colours;
+		switch (roll) {
+			case 0: colours = new[] { ButtonLightColour.White, ButtonLightColour.Red, ButtonLightColour.Yellow, ButtonLightColour.Green, ButtonLightColour.Blue }; break;
+			case 1: colours = new[] { ButtonLightColour.White, ButtonLightColour.WhiteRed, ButtonLightColour.WhiteYellow, ButtonLightColour.WhiteGreen, ButtonLightColour.WhiteBlue }; break;
+			case 2: colours = new[] { ButtonLightColour.WhiteRed, ButtonLightColour.Red, ButtonLightColour.RedYellow, ButtonLightColour.RedGreen, ButtonLightColour.RedBlue }; break;
+			case 3: colours = new[] { ButtonLightColour.WhiteYellow, ButtonLightColour.RedYellow, ButtonLightColour.Yellow, ButtonLightColour.YellowGreen, ButtonLightColour.YellowBlue }; break;
+			case 4: colours = new[] { ButtonLightColour.WhiteGreen, ButtonLightColour.RedGreen, ButtonLightColour.YellowGreen, ButtonLightColour.Green, ButtonLightColour.GreenBlue }; break;
+			default: colours = new[] { ButtonLightColour.WhiteBlue, ButtonLightColour.RedBlue, ButtonLightColour.YellowBlue, ButtonLightColour.GreenBlue, ButtonLightColour.Blue }; break;
+		}
+		while (true) {
+			var time = this.bombInfo.GetTime();
+			this.SetLightColour(colours[(int) time % 5]);
+			this.SetLightBrightness(this.ZenModeActive ? time - (float) Math.Floor(time) : (float) Math.Ceiling(time) - time);
+			yield return null;
+		}
+	}
+
+	private IEnumerator DisplayShowCoroutine() {
+		var roll = Random.Range(0, 4);
+		switch (roll) {
+			case 0:
+				while (true) {
+					this.DisplayText.text = (this.MashCount % 100).ToString();
+					yield return null;
+				}
+			case 1:
+				while (true) {
+					this.DisplayText.text = "_!"; yield return null;
+					this.DisplayText.text = "_"; yield return null;
+					this.DisplayText.text = "i"; yield return null;
+					this.DisplayBase.localScale = new Vector3(1, -1, 1);
+					this.DisplayText.text = "i"; yield return null;
+					this.DisplayText.text = "_"; yield return null;
+					this.DisplayText.text = "_!"; yield return null;
+					this.DisplayBase.localScale = new Vector3(-1, -1, 1);
+					this.DisplayText.text = "i"; yield return null;
+					this.DisplayBase.localScale = new Vector3(-1, 1, 1);
+					yield return null;
+					this.DisplayBase.localScale = Vector3.one;
+				}
+			case 2:
+				while (true) {
+					this.DisplayText.text = "_!"; yield return null;
+					this.DisplayText.text = "_"; yield return null;
+					this.DisplayText.text = "i"; yield return null;
+					this.DisplayText.text = "-"; yield return null;
+					this.DisplayText.text = "-!"; yield return null;
+					this.DisplayBase.localScale = new Vector3(-1, -1, 1);
+					this.DisplayText.text = "i"; yield return null;
+					this.DisplayText.text = "_"; yield return null;
+					this.DisplayBase.localScale = new Vector3(1, -1, 1);
+					yield return null;
+					this.DisplayText.text = "i"; yield return null;
+					this.DisplayBase.localScale = new Vector3(1, 1, 1);
+					this.DisplayText.text = "-"; yield return null;
+					this.DisplayText.text = "-!"; yield return null;
+					this.DisplayBase.localScale = new Vector3(-1, 1, 1);
+					this.DisplayText.text = "i"; yield return null;
+					this.DisplayBase.localScale = Vector3.one;
+				}
+			default:
+				while (true) {
+					this.DisplayText.text = "o";
+					for (int i = 0; i < 2; ++i) {
+						this.DisplayBase.localScale = Vector3.one; yield return null;
+						this.DisplayBase.localScale = new Vector3(-1, 1, 1); yield return null;
+						this.DisplayBase.localScale = new Vector3(-1, -1, 1); yield return null;
+						this.DisplayBase.localScale = new Vector3(1, -1, 1); yield return null;
+					}
+					this.DisplayText.text = "oo";
+					for (int i = 0; i < 4; ++i) {
+						this.DisplayBase.localScale = Vector3.one; yield return null;
+						this.DisplayBase.localScale = new Vector3(1, -1, 1); yield return null;
+					}
+					this.DisplayBase.localScale = Vector3.one;
+					for (int i = 0; i < 4; ++i) {
+						this.DisplayText.text = "8"; yield return null;
+						this.DisplayText.text = "8!"; yield return null;
+					}
+				}
+		}
+	}
+
 	// Twitch Plays support
 	public static readonly string TwitchHelpMessage = "!{0} tap | !{0} hold | !{0} release 1:13 1:23 | !{0} mash 50";
 	[NonSerialized]
@@ -371,7 +500,7 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 						if (this.TwitchShouldCancelCommand) {
 							// Undo the input if the command is cancelled, to prevent sabotage.
 							this.MashCount = 0;
-							this.DisplayText.gameObject.SetActive(false);
+							this.DisplayBase.gameObject.SetActive(false);
 							yield return "sendtochat The mash command was not completed due to a request to cancel.";
 							yield return "cancelled";
 							yield break;
