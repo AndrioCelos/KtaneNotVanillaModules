@@ -176,6 +176,7 @@ public class NotWhosOnFirst : NotVanillaModule<NotMemoryConnector> {
 			case 4:
 				var visitedButtons = new HashSet<int>();
 				buttonIndex = this.rememberedPositions[4];
+				visitedButtons.Add(buttonIndex);
 				do {
 					switch (this.buttonLabels[buttonIndex]) {
 						case "WHAT?": case "PRESS": case "YOU": case "LEFT": case "WAIT": case "OKAY": case "NO":  // Up
