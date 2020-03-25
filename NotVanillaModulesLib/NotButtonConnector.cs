@@ -32,7 +32,7 @@ namespace NotVanillaModulesLib {
 		protected override void AwakeLive() {
 #if (!DEBUG)
 			var buttonComponentPrefab = GetComponentPrefab<ButtonComponent>();
-			this.ShouldOpenCoverOnSelection = buttonComponentPrefab.LidBehaviour == 0;
+			this.ShouldOpenCoverOnSelection = buttonComponentPrefab.LidBehaviour == 0 || KTInputManager.Instance.IsMotionControlMode();
 			var buttonPrefab = buttonComponentPrefab.transform.Find("Button").GetComponent<PressableButton>();
 			this.button = Instantiate(buttonPrefab, this.transform);
 			this.lidAnimator = this.button.transform.Find("Opening_LID").GetComponent<Animator>();
