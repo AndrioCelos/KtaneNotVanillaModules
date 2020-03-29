@@ -152,7 +152,7 @@ public class NotMaze : NotVanillaModule<NotMazeConnector> {
 
 		var correctMazeDirection = this.GetCorrectDirection();
 		if (direction == correctMazeDirection) {
-			if (this.SolveProgress == 0) this.resetTime = 10;
+			this.resetTime = 10;
 			++this.SolveProgress;
 			if (this.SolveProgress >= defaultSolutionTable.GetLength(2)) {
 				this.Log("The correct sequence was entered ({0}).",
