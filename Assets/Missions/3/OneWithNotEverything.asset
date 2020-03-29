@@ -87,4 +87,4 @@ MonoBehaviour:
       SpecialComponentType: 0
       ModTypes:
       - NotWiresword
-  PacingEventsEnabled: 0
+  PacingEventsEnabled: 1

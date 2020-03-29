@@ -37,4 +37,4 @@ MonoBehaviour:
       - NotMemory
       - NotSimaze
       - NotWiresword
-  PacingEventsEnabled: 0
+  PacingEventsEnabled: 1
