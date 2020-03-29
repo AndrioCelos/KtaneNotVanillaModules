@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using NotVanillaModulesLib.TestModel;
 using UnityEngine;
 #if (!DEBUG)
@@ -25,8 +24,6 @@ namespace NotVanillaModulesLib {
 #if (!DEBUG)
 		private IList<KeypadButton> buttons;
 		private Texture[] symbolTextures;
-
-		private static readonly FieldInfo keypadButtonHeightField = typeof(KeypadButton).GetField("buttonHeight", BindingFlags.NonPublic | BindingFlags.Instance);
 #endif
 
 		protected override void AwakeLive() {
@@ -45,10 +42,8 @@ namespace NotVanillaModulesLib {
 				var button = this.buttons[i];
 				button.SymbolImage.AddComponent<ExcludeFromTexturePack>();
 				this.LightRenderers[i].transform.SetParent(button.transform);
-
-				// Fix animations.
-				if (button.ButtonHeightOverride == 0) button.ButtonHeightOverride = (float) keypadButtonHeightField.GetValue(button);
 			}
+			FixKeypadButtons(this.buttons);
 #endif
 		}
 
