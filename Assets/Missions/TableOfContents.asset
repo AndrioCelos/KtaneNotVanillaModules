@@ -10,7 +10,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: -434690030, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: TableOfContents
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   Title: Not Vanilla Missions
   Sections:
   - Title: Practice
@@ -24,6 +24,7 @@ MonoBehaviour:
     - PracticeMorseCode
     - PracticePassword
     - PracticeSimaze
+    - PracticeVentingGas
     - PracticeWhosOnFirst
     - PracticeWireSequence
     - PracticeWiresword
@@ -36,7 +37,9 @@ MonoBehaviour:
   - Title: Devilishly Devious
     MissionIDs:
     - BiggerWrinkle
+    - RTFM
     - CapacitorJumble
+    - NotComputerHacking
     - MorseMarathon
     - HomeRun
     - OneWithNotEverything

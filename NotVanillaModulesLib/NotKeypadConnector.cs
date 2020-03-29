@@ -26,7 +26,7 @@ namespace NotVanillaModulesLib {
 		private IList<KeypadButton> buttons;
 		private Texture[] symbolTextures;
 
-		private static readonly FieldInfo keypadButtonHeightField = typeof(KeypadButton).GetField("buttonHeight", BindingFlags.NonPublic | BindingFlags.Instance);
+		internal static readonly FieldInfo keypadButtonHeightField = typeof(KeypadButton).GetField("buttonHeight", BindingFlags.NonPublic | BindingFlags.Instance);
 #endif
 
 		protected override void AwakeLive() {
