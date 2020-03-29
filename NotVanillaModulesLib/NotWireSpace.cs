@@ -61,8 +61,16 @@ namespace NotVanillaModulesLib {
 							InstanceDestroyer.AddObjectToDestroy(this.module.gameObject, renderer.material);
 							renderer.material.mainTexture = texture;
 
-							foreach (Transform transform in this.wire.WireSnippedWhite.transform)
-								transform.GetComponent<Renderer>().material = renderer.material;
+							if (this.WireIndex == 5) {
+								// Half of the sixth wire has materials assigned differently from every other segment.
+								// I don't know why...
+								this.wire.WireSnippedWhite.transform.GetChild(0).GetComponent<Renderer>().material = renderer.material;
+								var renderer2 = this.wire.WireSnippedWhite.transform.GetChild(1).GetComponent<Renderer>();
+								renderer2.materials = new[] { renderer2.materials[0], renderer.material };
+							} else {
+								foreach (Transform transform in this.wire.WireSnippedWhite.transform)
+									transform.GetComponent<Renderer>().material = renderer.material;
+							}
 							break;
 					}
 				}
