@@ -9,8 +9,10 @@
 	<link rel="stylesheet" type="text/css" href="css/font.css"/>
 	<script src="js/ktane-utils.js"></script>
 	<style>
-		table { margin: 0 auto; }
+		table { margin: 0 auto; border: none; }
 		td { text-align: center; }
+		td.blank { border: none; }
+		tr:nth-child(2) th { width: 24pt; padding: 3pt 6pt 2pt; }
 		.no-punctuation {
 			font-size: smaller;
 			font-weight: normal;
@@ -42,26 +44,24 @@
 						the previous value. If the serial number contains no digits, take 0.</p>
 
 					<table>
-						<tr>
-							<th></th><th class='no-punctuation'>No punctuation</th>
-							<th>.</th><th>?</th><th>!</th>
-						</tr>
-						<tr><th>Vent Gas</th><td>5</td><td>8</td><td>4</td><td>9</td></tr>
-						<tr><th>Vent</th><td>1</td><td>1</td><td>4</td><td>6</td></tr>
-						<tr><th>Detonate</th><td>3</td><td>5</td><td>8</td><td>7</td></tr>
-						<tr><th>Defuse</th><td>9</td><td>5</td><td>6</td><td>1</td></tr>
-						<tr><th>Disarm</th><td>6</td><td>2</td><td>6</td><td>6</td></tr>
-						<tr><th>Disable</th><td>8</td><td>8</td><td>0</td><td>3</td></tr>
-						<tr><th>Disassemble</th><td>6</td><td>7</td><td>9</td><td>7</td></tr>
-						<tr><th>Continue</th><td>1</td><td>1</td><td>3</td><td>6</td></tr>
-						<tr><th>Proceed</th><td>6</td><td>5</td><td>1</td><td>8</td></tr>
-						<tr><th>Accept</th><td>7</td><td>2</td><td>7</td><td>3</td></tr>
-						<tr><th>Yes</th><td>0</td><td>8</td><td>6</td><td>8</td></tr>
-						<tr><th>No</th><td>4</td><td>4</td><td>2</td><td>8</td></tr>
-						<tr><th>Activate</th><td>1</td><td>5</td><td>4</td><td>9</td></tr>
-						<tr><th>Deactivate</th><td>0</td><td>3</td><td>0</td><td>1</td></tr>
-						<tr><th>Success</th><td>2</td><td>0</td><td>3</td><td>1</td></tr>
-						<tr><th>Error</th><td>8</td><td>8</td><td>5</td><td>2</td></tr>
+						<tr><td class='blank' rowspan='2'></td><th colspan='4'>Punctuation</th></tr>
+						<tr><th class='no-punctuation'>None</th><th>.</th><th>?</th><th>!</th></tr>
+						<tr><th>‘Vent Gas’</th><td>5</td><td>8</td><td>4</td><td>9</td></tr>
+						<tr><th>‘Vent’</th><td>1</td><td>1</td><td>4</td><td>6</td></tr>
+						<tr><th>‘Detonate’</th><td>3</td><td>5</td><td>8</td><td>7</td></tr>
+						<tr><th>‘Defuse’</th><td>9</td><td>5</td><td>6</td><td>1</td></tr>
+						<tr><th>‘Disarm’</th><td>6</td><td>2</td><td>6</td><td>6</td></tr>
+						<tr><th>‘Disable’</th><td>8</td><td>8</td><td>0</td><td>3</td></tr>
+						<tr><th>‘Disassemble’</th><td>6</td><td>7</td><td>9</td><td>7</td></tr>
+						<tr><th>‘Continue’</th><td>1</td><td>1</td><td>3</td><td>6</td></tr>
+						<tr><th>‘Proceed’</th><td>6</td><td>5</td><td>1</td><td>8</td></tr>
+						<tr><th>‘Accept’</th><td>7</td><td>2</td><td>7</td><td>3</td></tr>
+						<tr><th>‘Yes’</th><td>0</td><td>8</td><td>6</td><td>8</td></tr>
+						<tr><th>‘No’</th><td>4</td><td>4</td><td>2</td><td>8</td></tr>
+						<tr><th>‘Activate’</th><td>1</td><td>5</td><td>4</td><td>9</td></tr>
+						<tr><th>‘Deactivate’</th><td>0</td><td>3</td><td>0</td><td>1</td></tr>
+						<tr><th>‘Success’</th><td>2</td><td>0</td><td>3</td><td>1</td></tr>
+						<tr><th>‘Error’</th><td>8</td><td>8</td><td>5</td><td>2</td></tr>
 					</table>
 				</div>
 				<div class="page-footer relative-footer">Page 1 of 1</div>
