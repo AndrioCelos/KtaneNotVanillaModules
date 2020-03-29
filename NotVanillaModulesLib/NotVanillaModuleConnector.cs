@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -25,6 +26,7 @@ namespace NotVanillaModulesLib {
 		public GameObject TestModel;
 
 		private static readonly Dictionary<string, int> moduleIndices = new Dictionary<string, int>();
+		private static readonly FieldInfo keypadButtonHeightField = typeof(KeypadButton).GetField("buttonHeight", BindingFlags.NonPublic | BindingFlags.Instance);
 
 		public void Awake() {
 			string moduleType;
@@ -94,6 +96,17 @@ namespace NotVanillaModulesLib {
 			InstanceDestroyer.AddObjectToDestroy(this.gameObject, tempParent);
 			tempParent.gameObject.SetActive(false);
 			return new TempComponentWrapper<T>(tempParent, Instantiate(modulePrefab, tempParent, false));
+		}
+
+		/// <summary>Tweaks <see cref="KeypadButton"/>s to allow animations to work properly.</summary>
+		protected static void FixKeypadButtons(params KeypadButton[] buttons) => FixKeypadButtons((IEnumerable<KeypadButton>) buttons);
+		/// <summary>Tweaks <see cref="KeypadButton"/>s to allow animations to work properly.</summary>
+		protected static void FixKeypadButtons(IEnumerable<KeypadButton> buttons) {
+			foreach (var button in buttons) {
+				if (button.ButtonHeightOverride == 0) {
+					button.ButtonHeightOverride = (float) keypadButtonHeightField.GetValue(button);
+				}
+			}
 		}
 #endif
 

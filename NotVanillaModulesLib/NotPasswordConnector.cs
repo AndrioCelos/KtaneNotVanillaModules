@@ -35,6 +35,8 @@ namespace NotVanillaModulesLib {
 			keypadEventConnector.ButtonPressed += this.KeypadEventConnector_ButtonPressed;
 			keypadEventConnector.ButtonReleased += this.KeypadEventConnector_ButtonReleased;
 			keypadEventConnector.Attach(this.submitButton);
+
+			FixKeypadButtons(this.GetComponentsInChildren<KeypadButton>());
 #endif
 		}
 

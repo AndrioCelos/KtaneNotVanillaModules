@@ -91,10 +91,8 @@ namespace NotVanillaModulesLib {
 
 			this.buttons = new[] { wrapper.Component.YesButton, wrapper.Component.NoButton };
 			keypadEventConnector.Attach(this.buttons);
-			// Fix animations.
-			foreach (var button in this.buttons) {
-				if (button.ButtonHeightOverride == 0) button.ButtonHeightOverride = (float) NotKeypadConnector.keypadButtonHeightField.GetValue(button);
-			}
+
+			FixKeypadButtons(this.buttons);
 #endif
 		}
 		protected override void AwakeTest() { }
