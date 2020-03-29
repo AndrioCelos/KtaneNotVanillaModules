@@ -85,6 +85,9 @@
     <Compile Include="NotMazeConnector.cs" />
     <Compile Include="NotMorseCodeConnector.cs" />
     <Compile Include="NotSimonConnector.cs" />
+    <Compile Include="NotVentingGasConnector.cs" />
+    <Compile Include="VentingGasButtonEventArgs.cs" />
+    <Compile Include="VentingGasButton.cs" />
     <Compile Include="WireEventConnector.cs" />
     <Compile Include="WireColour.cs" />
     <Compile Include="NotWiresConnector.cs" />
