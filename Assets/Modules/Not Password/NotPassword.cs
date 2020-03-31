@@ -25,6 +25,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 
 	private int lastBombTime;
 	private bool twitchStruck;
+	private bool twitchHeld;
 
 	public override void Start() {
 		base.Start();
@@ -121,7 +122,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 				break;
 			case 'O':
 				this.SolutionAction = PasswordSolutionAction.HoldIndefinitely;
-				this.SolutionDelay = UnityEngine.Random.Range(4, 13);
+				this.SolutionDelay = Random.Range(4, 13);
 				break;
 			case 'P':
 				this.SolutionAction = PasswordSolutionAction.Press;
@@ -161,7 +162,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 				break;
 			case 'X':
 				this.SolutionAction = PasswordSolutionAction.PressIndefinitely;
-				this.SolutionCount = UnityEngine.Random.Range(10, 25);
+				this.SolutionCount = Random.Range(10, 25);
 				break;
 			case 'Y':
 				this.SolutionAction = PasswordSolutionAction.Press;
@@ -199,6 +200,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 							this.Log("It seems like you are trying to hold the button until the module is disarmed. That was incorrect.");
 							this.Strike();
 							this.PressedIncorrectly = true;
+							if (this.twitchHeld) this.Connector.TwitchReleaseSubmit();
 						}
 					}
 				}
@@ -283,10 +285,14 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 			case PasswordSolutionAction.HoldCondition:
 			case PasswordSolutionAction.HoldIndefinitely:
 			case PasswordSolutionAction.HoldTime:
-				if (this.PressCondition != null && !this.PressCondition.Invoke(bombInfo.GetTime(), bombInfo.GetFormattedTime())) {
-					this.Log("The button was pressed at {0}. That was incorrect.", bombInfo.GetFormattedTime());
-					this.Strike();
-					this.PressedIncorrectly = true;
+				if (this.PressCondition != null && this.MashCount == 0) {
+					if (this.PressCondition.Invoke(bombInfo.GetTime(), bombInfo.GetFormattedTime())) {
+						this.Log("The button was pressed at {0}. That was correct.", bombInfo.GetFormattedTime());
+					} else {
+						this.Log("The button was pressed at {0}. That was incorrect.", bombInfo.GetFormattedTime());
+						this.Strike();
+						this.PressedIncorrectly = true;
+					}
 				}
 				break;
 		}
@@ -294,6 +300,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 
 	private void Connector_SubmitReleased(object sender, EventArgs e) {
 		this.Down = false;
+		this.twitchHeld = false;
 		if (this.Solved) return;
 		this.InteractionTime = 0;
 		var bombInfo = this.GetComponent<KMBombInfo>();
@@ -332,7 +339,8 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 			if (this.SolutionAction == PasswordSolutionAction.HoldCondition) {
 				// For these rules, we won't require the button to be held for any specific length of time.
 				// Tapping it when both conditions are met is enough.
-				if (this.ReleaseCondition == null || this.ReleaseCondition.Invoke(bombInfo.GetTime(), bombInfo.GetFormattedTime())) {
+				if (!this.PressedIncorrectly && this.MashCount == 0 &&
+					(this.ReleaseCondition == null || this.ReleaseCondition.Invoke(bombInfo.GetTime(), bombInfo.GetFormattedTime()))) {
 					this.Log("The button was released at {0}. That was correct.", bombInfo.GetFormattedTime());
 					this.Disarm();
 					return;
@@ -355,6 +363,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 				}
 			}
 			++this.MashCount;
+			this.InteractionTime = 0;
 			if (!this.PressedIncorrectly && this.MashCount >= 30) {
 				this.Log("It seems like you are trying to mash the button until the module is disarmed. That was incorrect.");
 				this.Strike();
@@ -367,7 +376,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 	public static readonly string TwitchHelpMessage
 		= "!{0} cycle 1 3 5 - cycle the letters in columns 1, 3 and 5 | !{0} toggle - move all columns down one letter | " +
 		"!{0} tap - tap once | !{0} tap on 5 - tap when the timer contains a 5 | !{0} tap 5 - tap 5 times | !{0} tap 5:59 | !{0} tap 5:59 then 5:54 | " +
-		"!{0} mash - tap until something happens | !{0} hold | !{0} hold on 5 | !{0} hold for 5 | !{0} release on 2";
+		"!{0} mash - tap until something happens | !{0} hold | !{0} hold on 5 | !{0} hold for 5 | !{0} release | !{0} release on 2";
 	// `!{0} cycle` is deliberately excluded because it takes too long and its use is generally frowned on.
 	[NonSerialized]
 	public bool ZenModeActive;
@@ -382,7 +391,10 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 		if (tokens[0].EqualsIgnoreCase("release")) {
 			if (!this.Down)
 				yield return "sendtochaterror You must start holding the button first.";
-			else if (tokens.Length == 3 && tokens[1].EqualsIgnoreCase("on") && tokens[2].Length == 1 && char.IsDigit(tokens[2][0])) {
+			else if (tokens.Length == 1) {
+				yield return "strikemessage releasing submit incorrectly";
+				this.Connector.TwitchReleaseSubmit();
+			} else if (tokens.Length == 3 && tokens[1].EqualsIgnoreCase("on") && tokens[2].Length == 1 && char.IsDigit(tokens[2][0])) {
 				yield return "strikemessage releasing submit incorrectly";
 				while (!bombInfo.GetFormattedTime().Contains(tokens[2][0]))
 					yield return "trycancel The button was not released due to a request to cancel.";
@@ -420,7 +432,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 						yield return new WaitForSeconds(0.1f);
 					}
 				}
-			} else if (tokens[0].EqualsIgnoreCase("tap")) {
+			} else if (tokens[0].EqualsIgnoreCase("tap") || tokens[0].EqualsIgnoreCase("press")) {
 				int count = 1; int i; float time;
 				switch (tokens.Length) {
 					case 1:
@@ -488,7 +500,12 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 						break;
 				}
 			} else if (tokens[0].EqualsIgnoreCase("mash")) {
-				for (int i = 0; i < 50; ++i) {
+				int count;
+				if (tokens.Length == 1) count = 50;
+				else if (tokens.Length == 2) {
+					if (!(int.TryParse(tokens[1], out count) && count > 0 && count < 100)) yield break;
+				} else yield break;
+				for (; count > 0; --count) {
 					yield return "strikemessage pressing submit incorrectly";
 					this.Connector.TwitchPressSubmit();
 					//yield return new WaitForSeconds(0.1f);
@@ -501,12 +518,16 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 				switch (tokens.Length) {
 					case 1:
 						yield return "strikemessage pressing submit incorrectly";
+						yield return "strike";  // In case the button is never released and this causes a strike.
 						this.Connector.TwitchPressSubmit();
+						this.twitchHeld = true;
 						if (this.twitchStruck) {
 							this.Connector.TwitchReleaseSubmit();
 							yield return "sendtochat The button was not held due to a strike.";
-						} else
+						} else {
 							yield return new WaitForSeconds(1f);
+							yield return "strikemessage holding submit incorrectly";
+						}
 						break;
 					case 3:
 						if (tokens[1].EqualsIgnoreCase("on")) {
@@ -515,12 +536,16 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 								while (!bombInfo.GetFormattedTime().Contains(tokens[2][0]))
 									yield return "trycancel The button was not pressed due to a request to cancel.";
 								yield return "strikemessage pressing submit incorrectly";
+								yield return "strike";
 								this.Connector.TwitchPressSubmit();
+								this.twitchHeld = true;
 								if (this.twitchStruck) {
 									this.Connector.TwitchReleaseSubmit();
 									yield return "sendtochat The button was not held due to a strike.";
-								} else
+								} else {
 									yield return new WaitForSeconds(1f);
+									yield return "strikemessage holding submit incorrectly";
+								}
 							}
 						} else if (tokens[1].EqualsIgnoreCase("for")) {
 							int i;
@@ -529,6 +554,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 								if (i >= 15) yield return "waiting music";
 
 								yield return "strikemessage pressing submit incorrectly";
+								yield return "strike";
 								this.Connector.TwitchPressSubmit();
 								if (this.twitchStruck) {
 									this.Connector.TwitchReleaseSubmit();
@@ -544,6 +570,92 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 						break;
 				}
 			}
+		}
+	}
+
+	public IEnumerator TwitchHandleForcedSolve() {
+		if (this.PressedIncorrectly) {
+			this.Connector.TwitchReleaseSubmit();
+			yield return new WaitForSeconds(1.1f);
+		}
+		var bombInfo = this.GetComponent<KMBombInfo>();
+		switch (this.SolutionAction) {
+			case PasswordSolutionAction.Press:
+				if (this.MashCount >= this.SolutionCount) this.MashCount = this.SolutionCount - 1;
+				if (this.Holding) {
+					this.Holding = false;  // Cheat
+					this.InteractionTime = 0;
+				} else if (!this.Down) {
+					if (this.PressCondition != null) yield return new WaitUntil(() => this.PressCondition.Invoke(bombInfo.GetTime(), bombInfo.GetFormattedTime()));
+					this.Connector.TwitchPressSubmit();
+				}
+				this.Connector.TwitchReleaseSubmit();
+				while (this.MashCount < this.SolutionCount) {
+					yield return new WaitForSeconds(0.2f);
+					this.Connector.TwitchPressSubmit();
+					this.Connector.TwitchReleaseSubmit();
+				}
+				break;
+			case PasswordSolutionAction.HoldCondition:
+				if (!this.Holding) {
+					if (!this.Down) {
+						if (this.PressCondition != null) yield return new WaitUntil(() => this.PressCondition.Invoke(bombInfo.GetTime(), bombInfo.GetFormattedTime()));
+						this.Connector.TwitchPressSubmit();
+					}
+					if (this.PressCondition != null && this.ReleaseCondition != null) {
+						while (!this.Holding) yield return null;
+					}
+				}
+				if (this.ReleaseCondition != null) yield return new WaitUntil(() => this.ReleaseCondition.Invoke(bombInfo.GetTime(), bombInfo.GetFormattedTime()));
+				this.Connector.TwitchReleaseSubmit();
+				break;
+			case PasswordSolutionAction.HoldTime:
+				if (this.Holding && this.InteractionTickCount > this.SolutionDelay) this.InteractionTickCount = this.SolutionDelay;  // Cheat
+				if (!this.Holding) {
+					if (!this.Down) this.Connector.TwitchPressSubmit();
+					while (!this.Holding) yield return null;
+				}
+				while (this.InteractionTickCount < this.SolutionDelay) yield return null;
+				this.Connector.TwitchReleaseSubmit();
+				break;
+			case PasswordSolutionAction.HoldIndefinitely:
+				if (!this.Down) {
+					if (this.PressCondition != null) yield return new WaitUntil(() => this.PressCondition.Invoke(bombInfo.GetTime(), bombInfo.GetFormattedTime()));
+					this.Connector.TwitchPressSubmit();
+				}
+				while (!this.Solved) yield return null;
+				break;
+			case PasswordSolutionAction.PressTwice:
+				if (this.WasPressed && this.InteractionTickCount > this.SolutionDelay) this.InteractionTickCount = this.SolutionDelay;  // Cheat
+				if (this.Holding) { this.Holding = false; this.InteractionTime = 0; }  // Cheat
+				if (!this.WasPressed) {
+					if (!this.Down) this.Connector.TwitchPressSubmit();
+					this.Connector.TwitchReleaseSubmit();
+				}
+				while (this.InteractionTickCount < this.SolutionDelay) yield return null;
+				if (!this.Down) this.Connector.TwitchPressSubmit();
+				this.Connector.TwitchReleaseSubmit();
+				break;
+			case PasswordSolutionAction.PressIndefinitely:
+				if (this.Holding) { this.Holding = false; this.InteractionTime = 0; }  // Cheat
+				while (!this.Solved) {
+					if (!this.Down) this.Connector.TwitchPressSubmit();
+					this.Connector.TwitchReleaseSubmit();
+					yield return new WaitForSeconds(0.2f);
+				}
+				break;
+			default:
+				throw new InvalidOperationException("Invalid solution action?!");
+		}
+	}
+
+	/// <summary>Instantiates a Not Password module for each missing letter, for use in the test harness.</summary>
+	[ContextMenu("Create test suite")]
+	public void CreateTestSuite() {
+		for (var c = 'Z'; c >= 'A'; --c) {
+			var module = Instantiate(this.gameObject, this.transform.parent);
+			module.name = "Not Password " + c;
+			module.GetComponent<NotPassword>().MissingLetter = c;
 		}
 	}
 
