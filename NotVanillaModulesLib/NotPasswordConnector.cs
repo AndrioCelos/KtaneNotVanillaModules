@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NotVanillaModulesLib.TestModel;
 using UnityEngine;
 
 namespace NotVanillaModulesLib {
 	public class NotPasswordConnector : NotVanillaModuleConnector {
 		public TestModelSpinner[] TestModelCharSpinners;
-		public KMSelectable TestModelSubmitButton;
+		public TestModelButton TestModelSubmitButton;
 
 		public event EventHandler SubmitPressed;
 		public event EventHandler SubmitReleased;
@@ -66,8 +67,8 @@ namespace NotVanillaModulesLib {
 #endif
 		}
 		protected override void StartTest() {
-			this.TestModelSubmitButton.OnInteract = () => { this.SubmitPressed?.Invoke(this, EventArgs.Empty); return false; };
-			this.TestModelSubmitButton.OnInteractEnded = () => this.SubmitReleased?.Invoke(this, EventArgs.Empty);
+			this.TestModelSubmitButton.Pressed += (sender, e) => this.SubmitPressed?.Invoke(this, EventArgs.Empty);
+			this.TestModelSubmitButton.Released += (sender, e) => this.SubmitReleased?.Invoke(this, EventArgs.Empty);
 		}
 
 		public void Activate() {

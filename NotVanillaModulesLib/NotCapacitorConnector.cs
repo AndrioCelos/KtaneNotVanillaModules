@@ -14,19 +14,22 @@ namespace NotVanillaModulesLib {
 		public Transform TestModelDeathBarFill;
 		public GameObject TestModelLight;
 
+		public KMAudio KMAudio { get; private set; }
+
+#if (DEBUG)
 		private Transform testHarnessNeedyTimer;
 		private TextMesh testModelDisplayText;
-#if (!DEBUG)
+#else
 		private NeedyComponent needyComponent;
 		private SpringedSwitch springedSwitch;
 		private DeathBar deathBar;
 		private LightBulb lightBulb;
 		private ToneGenerator toneGenerator;
 		private TextMeshPro displayText;
-#endif
 
-		private float MinTone, MaxTone, ToneStartTime;
+		private float MinTone = 300, MaxTone = 450, ToneStartTime = 20;
 		private double baseGain;
+#endif
 
 		public event EventHandler LeverPressed;
 		public event EventHandler LeverReleased;
@@ -37,6 +40,7 @@ namespace NotVanillaModulesLib {
 			this.MinTone = modulePrefab.MinTone;
 			this.MaxTone = modulePrefab.MaxTone;
 			this.ToneStartTime = modulePrefab.ToneStartTime;
+			this.Log($"{this.MinTone} {this.MaxTone} {this.ToneStartTime}");
 			foreach (var child in modulePrefab.transform.Cast<Transform>()) {
 				if (child.name != "Component_Needy_Background" && child.name != "Component_Highlight" &&
 					child.name != "NeedyTimer(Clone)") {
@@ -49,20 +53,20 @@ namespace NotVanillaModulesLib {
 			this.springedSwitch.OnRelease = () => this.LeverReleased?.Invoke(this, EventArgs.Empty);
 
 			this.lightBulb = this.GetComponentInChildren<LightBulb>();
-
-			this.toneGenerator = this.gameObject.AddComponent<ToneGenerator>();
-			this.baseGain = this.toneGenerator.gain;
 #endif
 		}
-		protected override void AwakeTest() {
+		protected override void AwakeTest() { }
+		public override void Start() {
+			base.Start();
+			this.KMAudio = this.GetComponent<KMAudio>();
 #if (!DEBUG)
+			this.needyComponent = this.GetComponent<NeedyComponent>();
 			this.toneGenerator = this.gameObject.AddComponent<ToneGenerator>();
 			this.baseGain = this.toneGenerator.gain;
 #endif
 		}
 		protected override void StartLive() {
 #if (!DEBUG)
-			this.needyComponent = this.GetComponent<NeedyComponent>();
 			// The death bar gets created on DeathBarParent.Awake.
 			this.deathBar = this.transform.Find("DeathBarParent(Clone)/DeathBar(Clone)").GetComponent<DeathBar>();
 			this.deathBar.transform.parent.localPosition = new Vector3(-0.126f, -0.0013f, -0.047f);
@@ -74,8 +78,8 @@ namespace NotVanillaModulesLib {
 #endif
 		}
 		protected override void StartTest() {
-			this.TestModelLever.OnInteract = () => { this.PressLever(); this.LeverPressed?.Invoke(this, EventArgs.Empty); return false; };
-			this.TestModelLever.OnInteractEnded = () => { this.ReleaseLever(); this.LeverReleased?.Invoke(this, EventArgs.Empty); };
+			this.TestModelLever.OnInteract = this.TestModelLever_Interact;
+			this.TestModelLever.OnInteractEnded = this.TestModelLever_InteractEnded;
 		}
 
 #pragma warning disable CA1822 // Mark members as static
@@ -100,7 +104,7 @@ namespace NotVanillaModulesLib {
 #if (DEBUG)
 			this.StartCoroutine(this.TerminateTestCoroutine());
 #else
-			this.GetComponentInChildren<Capacitor>().Explode();
+			this.GetComponentInChildren<Capacitor>()?.Explode();
 			this.toneGenerator.StopTune();
 			this.needyComponent.StopAllCoroutines();
 			typeof(NeedyComponent).GetMethod("ChangeState", BindingFlags.NonPublic | BindingFlags.Instance)
@@ -119,35 +123,33 @@ namespace NotVanillaModulesLib {
 #endif
 
 		public void SetDisplay(int number) {
-			if (this.TestMode) {
-				if (this.testModelDisplayText == null) {
-					// Replace the needy timer with our display.
-					this.testHarnessNeedyTimer = this.transform.Find("NeedyTimer(Clone)");
-					var display = this.testHarnessNeedyTimer.Find("BackingActive/Text");
-					this.testModelDisplayText = Instantiate(display, display.position, display.rotation, display.parent).GetComponent<TextMesh>();
-					display.gameObject.SetActive(false);
-				}
-				this.testModelDisplayText.gameObject.SetActive(true);
-				this.testModelDisplayText.text = number.ToString("D2");
+#if (DEBUG)
+			if (this.testModelDisplayText == null) {
+				// Replace the needy timer with our display.
+				this.testHarnessNeedyTimer = this.transform.Find("NeedyTimer(Clone)");
+				var display = this.testHarnessNeedyTimer.Find("BackingActive/Text");
+				this.testModelDisplayText = Instantiate(display, display.position, display.rotation, display.parent).GetComponent<TextMesh>();
+				display.gameObject.SetActive(false);
 			}
-#if (!DEBUG)
-			else {
-				if (this.displayText == null) {
-					// Replace the needy timer with our display.
-					var display = this.transform.Find("NeedyTimer(Clone)/SevenSegText");
-					this.displayText = Instantiate(display, display.position, display.rotation, display.parent).GetComponent<TextMeshPro>();
-					display.gameObject.SetActive(false);
-				}
-				this.displayText.gameObject.SetActive(true);
-				this.displayText.text = number.ToString("D2");
+			this.testModelDisplayText.gameObject.SetActive(true);
+			this.testModelDisplayText.text = number.ToString("D2");
+#else
+			if (this.displayText == null) {
+				// Replace the needy timer with our display.
+				var display = this.transform.Find("NeedyTimer(Clone)/SevenSegText");
+				this.displayText = Instantiate(display, display.position, display.rotation, display.parent).GetComponent<TextMeshPro>();
+				display.gameObject.SetActive(false);
 			}
+			this.displayText.gameObject.SetActive(true);
+			this.displayText.text = number.ToString("D2");
 #endif
 		}
 
 		public void ClearDisplay() {
-			if (this.TestMode) this.testModelDisplayText?.gameObject?.SetActive(false);
-#if (!DEBUG)
-			else this.displayText?.gameObject?.SetActive(false);
+#if (DEBUG)
+			this.testModelDisplayText?.gameObject?.SetActive(false);
+#else
+			this.displayText?.gameObject?.SetActive(false);
 			this.toneGenerator.gain = 0;
 #endif
 		}
@@ -158,6 +160,22 @@ namespace NotVanillaModulesLib {
 #if (!DEBUG)
 			else this.deathBar.Value = ratio;
 #endif
+		}
+
+		private bool TestModelLever_Interact() {
+			this.PressLever();
+			this.LeverPressed?.Invoke(this, EventArgs.Empty);
+			if (this.TestMode) {
+				this.TestModelLever.AddInteractionPunch(0.75f);
+				this.KMAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, this.TestModelLeverPivot.transform);
+			}
+			return false;
+		}
+
+		private void TestModelLever_InteractEnded() {
+			this.ReleaseLever();
+			this.LeverReleased?.Invoke(this, EventArgs.Empty);
+			if (this.TestMode) this.KMAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonRelease, this.TestModelLeverPivot.transform);
 		}
 
 		private void PressLever() {

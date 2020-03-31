@@ -13,6 +13,8 @@ namespace NotVanillaModulesLib {
 		public Material[] Materials;
 		public Material[] LightMaterials;
 
+		public KMAudio KMAudio { get; private set; }
+		
 		private KMSelectable testModelButton;
 #if (!DEBUG)
 		private PressableButton button;
@@ -58,6 +60,11 @@ namespace NotVanillaModulesLib {
 
 		protected override void AwakeTest() { }
 
+		public override void Start() {
+			base.Start();
+			this.KMAudio = this.GetComponent<KMAudio>();
+		}
+
 		protected override void StartLive() {
 #if (!DEBUG)
 			var selectable = this.GetComponent<ModSelectable>();
@@ -71,10 +78,9 @@ namespace NotVanillaModulesLib {
 
 		protected override void StartTest() {
 			this.testModelButton = this.GetComponent<KMSelectable>().Children[0];
-			this.testModelButton.OnInteract = () => { this.Held?.Invoke(this, EventArgs.Empty); return false; };
-			this.testModelButton.OnInteractEnded = () => this.Released?.Invoke(this, EventArgs.Empty);
+			this.testModelButton.OnInteract = this.TestModelButton_Interact;
+			this.testModelButton.OnInteractEnded = this.TestModelButton_InteractEnded;
 		}
-
 		private void ButtonEventConnector_Held(object sender, EventArgs e) {
 #if (!DEBUG)
 			this.buttonBeingPushed = true;
@@ -83,6 +89,16 @@ namespace NotVanillaModulesLib {
 		}
 
 		private void ButtonEventConnector_Released(object sender, EventArgs e) => this.Released?.Invoke(this, e);
+
+		private bool TestModelButton_Interact() {
+			this.Held?.Invoke(this, EventArgs.Empty);
+			this.KMAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, this.testModelButton.transform);
+			return false;
+		}
+		private void TestModelButton_InteractEnded() {
+			this.Released?.Invoke(this, EventArgs.Empty);
+			this.KMAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, this.testModelButton.transform);
+		}
 
 		public void OpenCover() {
 			if (this.TestMode) {
@@ -153,6 +169,8 @@ namespace NotVanillaModulesLib {
 					default:
 						buttonComponent.SetColor(BombGame.ButtonColor.white);
 						var cap = this.button.transform.Find("ButtonTop").Find("Button_Top_White").GetComponent<MeshRenderer>();
+						material = Instantiate(material);
+						InstanceDestroyer.AddObjectToDestroy(this.gameObject, material);
 						material.mainTexture = cap.material.mainTexture;
 						cap.material = material;
 						buttonComponent.text.color = textColour;

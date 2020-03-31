@@ -391,6 +391,8 @@ GameObject:
   - component: {fileID: 114307176571108774}
   - component: {fileID: 114589474676020002}
   - component: {fileID: 65875012066330880}
+  - component: {fileID: 114982589251127350}
+  - component: {fileID: 114774826777846346}
   m_Layer: 0
   m_Name: Not Maze
   m_TagString: Untagged
@@ -1513,6 +1515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 0}
   Index: 3
+  KMAudio: {fileID: 114982589251127350}
 --- !u!114 &114233668037930622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1526,6 +1529,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 0}
   Index: 1
+  KMAudio: {fileID: 114982589251127350}
 --- !u!114 &114307176571108774
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1578,6 +1582,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 0}
   Index: 0
+  KMAudio: {fileID: 114982589251127350}
 --- !u!114 &114493385943324416
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1664,6 +1669,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 0}
   Index: 2
+  KMAudio: {fileID: 114982589251127350}
 --- !u!114 &114709842826335102
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1677,6 +1683,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 1.5, y: 0.55, z: 1.25}
   OutlineAmount: 0
+--- !u!114 &114774826777846346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1842810066620166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: 
+  SettingsPath: 
 --- !u!114 &114790171644049636
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1814,3 +1833,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
+--- !u!114 &114982589251127350
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1842810066620166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

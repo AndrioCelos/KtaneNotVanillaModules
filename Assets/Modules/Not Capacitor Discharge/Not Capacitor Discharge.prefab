@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: 114249683731977524}
   - component: {fileID: 114304772648011386}
   - component: {fileID: 82703231796006112}
+  - component: {fileID: 114162996371769158}
   m_Layer: 0
   m_Name: Not Capacitor Discharge
   m_TagString: Untagged
@@ -996,7 +997,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.03, y: 0.12, z: 0.1}
+  m_Size: {x: 0.05, y: 0.12, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &82703231796006112
 AudioSource:
@@ -1189,6 +1190,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 1.5, y: 0.5, z: 1.5}
   OutlineAmount: 0
+--- !u!114 &114162996371769158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1420682148411636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: 
+  SettingsPath: 
 --- !u!114 &114223089312439316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1276,7 +1290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Unlit/Color
+  - KT/Blend Unlit
 --- !u!114 &114507698843766790
 MonoBehaviour:
   m_ObjectHideFlags: 1

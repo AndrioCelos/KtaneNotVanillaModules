@@ -1105,7 +1105,9 @@ GameObject:
   - component: {fileID: 114563505626428734}
   - component: {fileID: 114978392954756164}
   - component: {fileID: 65099591117406580}
+  - component: {fileID: 114671582055326508}
   - component: {fileID: 114830537766077400}
+  - component: {fileID: 114933065982489534}
   m_Layer: 0
   m_Name: Not Complicated Wires
   m_TagString: Untagged
@@ -4883,7 +4885,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65099591117406580
 BoxCollider:
@@ -4907,7 +4909,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65166541761662884
 BoxCollider:
@@ -4919,7 +4921,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65713355028622412
 BoxCollider:
@@ -4931,7 +4933,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65726973065438034
 BoxCollider:
@@ -4943,7 +4945,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65865571222496618
 BoxCollider:
@@ -4955,7 +4957,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!102 &102036208288940958
 TextMesh:
@@ -5355,6 +5357,7 @@ MonoBehaviour:
   - {fileID: 23924916911469070}
   - {fileID: 23312808009840706}
   SymbolText: {fileID: 1932869943178984}
+  KMAudio: {fileID: 114671582055326508}
   Index: 3
 --- !u!114 &114050092459125880
 MonoBehaviour:
@@ -5376,6 +5379,7 @@ MonoBehaviour:
   - {fileID: 23997685837648474}
   - {fileID: 23974420182444722}
   SymbolText: {fileID: 1998867509662380}
+  KMAudio: {fileID: 114671582055326508}
   Index: 4
 --- !u!114 &114059845192448428
 MonoBehaviour:
@@ -5575,6 +5579,7 @@ MonoBehaviour:
   - {fileID: 23483751917874718}
   - {fileID: 23209502717551596}
   SymbolText: {fileID: 1174111916263962}
+  KMAudio: {fileID: 114671582055326508}
   Index: 5
 --- !u!114 &114275926051774116
 MonoBehaviour:
@@ -5801,6 +5806,7 @@ MonoBehaviour:
   - {fileID: 23392354452165826}
   - {fileID: 23763726695056156}
   SymbolText: {fileID: 1288809420069212}
+  KMAudio: {fileID: 114671582055326508}
   Index: 1
 --- !u!114 &114415325161069710
 MonoBehaviour:
@@ -6197,6 +6203,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
+--- !u!114 &114671582055326508
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1690050423216552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114674209255619300
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6397,6 +6414,7 @@ MonoBehaviour:
   - {fileID: 23434146877359084}
   - {fileID: 23221909229413716}
   SymbolText: {fileID: 1361277804780100}
+  KMAudio: {fileID: 114671582055326508}
   Index: 2
 --- !u!114 &114854744721319142
 MonoBehaviour:
@@ -6539,6 +6557,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
+--- !u!114 &114933065982489534
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1690050423216552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: 
+  SettingsPath: 
 --- !u!114 &114935580864256058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6585,6 +6616,7 @@ MonoBehaviour:
   - {fileID: 23905086792237256}
   - {fileID: 23931277006664366}
   SymbolText: {fileID: 1794767868748232}
+  KMAudio: {fileID: 114671582055326508}
   Index: 0
 --- !u!114 &114964607069752442
 MonoBehaviour:

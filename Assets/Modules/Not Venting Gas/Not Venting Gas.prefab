@@ -115,7 +115,9 @@ GameObject:
   - component: {fileID: 114858269429997652}
   - component: {fileID: 114324369663849764}
   - component: {fileID: 65198215665468792}
+  - component: {fileID: 114156347099957522}
   - component: {fileID: 114249683731977524}
+  - component: {fileID: 114959102616505046}
   m_Layer: 0
   m_Name: Not Venting Gas
   m_TagString: Untagged
@@ -940,8 +942,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 3, y: 1, z: 1}
+  m_Center: {x: 1, y: 0, z: 0}
 --- !u!65 &65859680307983944
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -952,8 +954,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 3, y: 1, z: 1}
+  m_Center: {x: -1, y: 0, z: 0}
 --- !u!102 &102258464348075444
 TextMesh:
   serializedVersion: 3
@@ -1072,6 +1074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 102258464348075444}
   Index: 1
+  KMAudio: {fileID: 114156347099957522}
 --- !u!114 &114084070159858666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1095,6 +1098,17 @@ MonoBehaviour:
   AllowSelectionWrapY: 0
   ForceSelectionHighlight: 0
   ForceInteractionHighlight: 0
+--- !u!114 &114156347099957522
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1420682148411636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114223089312439316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1344,6 +1358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 102910397621225152}
   Index: 0
+  KMAudio: {fileID: 114156347099957522}
 --- !u!114 &114943834612430680
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1357,6 +1372,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - GUI/KT 3D Text Diffuse
+--- !u!114 &114959102616505046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1420682148411636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: 
+  SettingsPath: 
 --- !u!114 &114984319595220040
 MonoBehaviour:
   m_ObjectHideFlags: 1

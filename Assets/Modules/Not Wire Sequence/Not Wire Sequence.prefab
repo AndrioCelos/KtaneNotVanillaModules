@@ -353,6 +353,7 @@ GameObject:
   - component: {fileID: 114469439744801218}
   - component: {fileID: 65580697689625738}
   - component: {fileID: 114106259479341464}
+  - component: {fileID: 114980512578656808}
   m_Layer: 0
   m_Name: Not Wire Sequence
   m_TagString: Untagged
@@ -4443,6 +4444,7 @@ MonoBehaviour:
   - {fileID: 23490858339433314}
   - {fileID: 23326524456738158}
   SymbolText: {fileID: 0}
+  KMAudio: {fileID: 114106259479341464}
   Index: 1
   WireParent: {fileID: 4174619775790896}
   LetterTextMesh: {fileID: 102164262665159278}
@@ -4648,7 +4650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Unlit/Color
+  - KT/Blend Unlit
 --- !u!114 &114215208058301922
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4752,7 +4754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Unlit/Color
+  - KT/Blend Unlit
 --- !u!114 &114294140972974694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4765,7 +4767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Unlit/Color
+  - KT/Blend Unlit
 --- !u!114 &114304092104106838
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4839,6 +4841,7 @@ MonoBehaviour:
   - {fileID: 23443392485794090}
   - {fileID: 23033783183776278}
   SymbolText: {fileID: 0}
+  KMAudio: {fileID: 114106259479341464}
   Index: 2
   WireParent: {fileID: 4405171407203174}
   LetterTextMesh: {fileID: 102011330869022384}
@@ -5109,6 +5112,7 @@ MonoBehaviour:
   - {fileID: 23579313697138456}
   - {fileID: 23547368992863692}
   SymbolText: {fileID: 0}
+  KMAudio: {fileID: 114106259479341464}
   Index: 0
   WireParent: {fileID: 4093351362509752}
   LetterTextMesh: {fileID: 102030703672875564}
@@ -5337,6 +5341,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 1, y: 1, z: 2}
   OutlineAmount: 0
+--- !u!114 &114980512578656808
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1224836861386436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: 
+  SettingsPath: 
 --- !u!114 &114993499980431840
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5349,7 +5366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Unlit/Color
+  - KT/Blend Unlit
 --- !u!114 &114993760463049786
 MonoBehaviour:
   m_ObjectHideFlags: 1

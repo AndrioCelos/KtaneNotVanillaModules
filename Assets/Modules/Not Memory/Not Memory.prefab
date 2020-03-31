@@ -337,7 +337,9 @@ GameObject:
   - component: {fileID: 114773785733850996}
   - component: {fileID: 114104347982298212}
   - component: {fileID: 65055237547832198}
+  - component: {fileID: 114687583682826028}
   - component: {fileID: 114773577455854158}
+  - component: {fileID: 114281230932034678}
   m_Layer: 0
   m_Name: Not Memory
   m_TagString: Untagged
@@ -2734,6 +2736,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 102260911488244184}
   Index: 2
+  KMAudio: {fileID: 114687583682826028}
 --- !u!114 &114042384799249872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2842,7 +2845,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Unlit/Color
+  - KT/Blend Unlit
 --- !u!114 &114209934201324458
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2902,6 +2905,19 @@ MonoBehaviour:
   AllowSelectionWrapY: 0
   ForceSelectionHighlight: 0
   ForceInteractionHighlight: 0
+--- !u!114 &114281230932034678
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1547390449625158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: 
+  SettingsPath: 
 --- !u!114 &114299257936043362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2928,6 +2944,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 102031201591758556}
   Index: 0
+  KMAudio: {fileID: 114687583682826028}
 --- !u!114 &114329393090664644
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3016,7 +3033,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Unlit/Color
+  - KT/Blend Unlit
 --- !u!114 &114440968684509384
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3131,6 +3148,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 102877561197484004}
   Index: 1
+  KMAudio: {fileID: 114687583682826028}
+--- !u!114 &114687583682826028
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1547390449625158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114704847138834236
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3196,7 +3225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Unlit/Color
+  - KT/Blend Unlit
 --- !u!114 &114754809383411746
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3209,7 +3238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Unlit/Color
+  - KT/Blend Unlit
 --- !u!114 &114769804913845800
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3222,7 +3251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Unlit/Color
+  - KT/Blend Unlit
 --- !u!114 &114773577455854158
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3359,3 +3388,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 102324296635667586}
   Index: 3
+  KMAudio: {fileID: 114687583682826028}

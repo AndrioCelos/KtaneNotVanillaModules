@@ -27,8 +27,6 @@ namespace NotVanillaModulesLib {
 			this.buttons[(int) SimonButtons.Green].ButtonGO.transform.localPosition = positions[(int) SimonButtons.Yellow];
 			this.buttons[(int) SimonButtons.Yellow].ButtonGO.transform.localPosition = positions[(int) SimonButtons.Green];
 
-			this.toneGenerator = this.gameObject.AddComponent<ToneGenerator>();
-
 			var keypadEventConnector = new KeypadEventConnector();
 			keypadEventConnector.ButtonPressed += this.KeypadEventConnector_ButtonPressed;
 			keypadEventConnector.Attach(this.buttons);
@@ -41,6 +39,12 @@ namespace NotVanillaModulesLib {
 			=> this.ButtonPressed?.Invoke(this, new SimonButtonEventArgs((SimonButtons) e.ButtonIndex));
 
 		protected override void AwakeTest() { }
+		public override void Start() {
+			base.Start();
+#if (!DEBUG)
+			this.toneGenerator = this.gameObject.AddComponent<ToneGenerator>();
+#endif
+		}
 		protected override void StartLive() {
 #if (!DEBUG)
 			var selectable = this.GetComponent<ModSelectable>();
@@ -65,11 +69,9 @@ namespace NotVanillaModulesLib {
 
 		public void PlayTones(float duration, params float[] notes) {
 #if (!DEBUG)
-			if (!this.TestMode) {
-				typeof(ToneGenerator).GetField("cutoffTime", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this.toneGenerator, 0f);
-				typeof(ToneGenerator).GetField("noteTime", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this.toneGenerator, duration);
-				this.toneGenerator.PlayTune(notes);
-			}
+			typeof(ToneGenerator).GetField("cutoffTime", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this.toneGenerator, 0f);
+			typeof(ToneGenerator).GetField("noteTime", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this.toneGenerator, duration);
+			this.toneGenerator.PlayTune(notes);
 #endif
 		}
 

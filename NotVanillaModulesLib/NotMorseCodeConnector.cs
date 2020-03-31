@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NotVanillaModulesLib.TestModel;
 using UnityEngine;
 #if (!DEBUG)
 using TMPro;
@@ -11,9 +12,9 @@ namespace NotVanillaModulesLib {
 		public TextMesh TestModelTunerDisplay;
 		public GameObject LightOff;
 		public GameObject LightOn;
-		public KMSelectable TestModelDownButton;
-		public KMSelectable TestModelUpButton;
-		public KMSelectable TestModelSubmitButton;
+		public TestModelButton TestModelDownButton;
+		public TestModelButton TestModelUpButton;
+		public TestModelButton TestModelSubmitButton;
 
 		public event EventHandler DownPressed;
 		public event EventHandler UpPressed;
@@ -22,7 +23,7 @@ namespace NotVanillaModulesLib {
 
 		private float freqMarkerCurrent;
 #pragma warning disable IDE0044 // Add readonly modifier
-		private float freqMarkerSpeed = 4;
+		private float freqMarkerSpeed = 0.25f;
 		private int freqMarkerStartFreq = 500;
 		private int freqMarkerEndFreq = 600;
 #pragma warning restore IDE0044 // Add readonly modifier
@@ -117,10 +118,10 @@ namespace NotVanillaModulesLib {
 #endif
 		}
 		protected override void StartTest() {
-			this.TestModelDownButton.OnInteract = () => { this.DownPressed?.Invoke(this, EventArgs.Empty); return false; };
-			this.TestModelUpButton.OnInteract = () => { this.UpPressed?.Invoke(this, EventArgs.Empty); return false; };
-			this.TestModelSubmitButton.OnInteract = () => { this.SubmitPressed?.Invoke(this, EventArgs.Empty); return false; };
-			this.TestModelSubmitButton.OnInteractEnded = () => this.SubmitReleased?.Invoke(this, EventArgs.Empty);
+			this.TestModelDownButton.Pressed += (sender, e) => this.DownPressed?.Invoke(this, EventArgs.Empty);
+			this.TestModelUpButton.Pressed += (sender, e) => this.UpPressed?.Invoke(this, EventArgs.Empty);
+			this.TestModelSubmitButton.Pressed += (sender, e) => this.SubmitPressed?.Invoke(this, EventArgs.Empty);
+			this.TestModelSubmitButton.Released += (sender, e) => this.SubmitReleased?.Invoke(this, EventArgs.Empty);
 			this.TestModelTunerDisplay.GetComponent<Renderer>().enabled = false;
 		}
 

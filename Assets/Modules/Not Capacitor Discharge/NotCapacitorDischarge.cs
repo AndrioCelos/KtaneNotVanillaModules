@@ -116,7 +116,7 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 
 	private void MistakePenalty() {
 		this.Connector.KMNeedyModule.SetNeedyTimeRemaining(this.Connector.KMNeedyModule.GetNeedyTimeRemaining() * 0.75f);
-		this.GetComponent<KMAudio>().PlaySoundAtTransform(BuzzSound, this.transform);
+		this.Connector.KMAudio.PlaySoundAtTransform(BuzzSound, this.transform);
 	}
 
 	private static bool ContainsAny(string s, params char[] chars) { return chars.Any(s.Contains); }

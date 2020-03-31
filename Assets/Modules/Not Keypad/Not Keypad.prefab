@@ -216,7 +216,9 @@ GameObject:
   - component: {fileID: 114639981774383216}
   - component: {fileID: 114237651650490120}
   - component: {fileID: 114464231749157584}
+  - component: {fileID: 114806942632591462}
   - component: {fileID: 65841384035442960}
+  - component: {fileID: 114138084689207000}
   m_Layer: 0
   m_Name: Not Keypad
   m_TagString: Untagged
@@ -1647,6 +1649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 102092445940211218}
   Index: 0
+  KMAudio: {fileID: 114806942632591462}
 --- !u!114 &114042297964457270
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1733,6 +1736,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 0, y: 0, z: 0}
   OutlineAmount: 0
+--- !u!114 &114138084689207000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1374786704862462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: 
+  SettingsPath: 
 --- !u!114 &114139760577339242
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1769,6 +1785,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 102453834574512128}
   Index: 3
+  KMAudio: {fileID: 114806942632591462}
 --- !u!114 &114237651650490120
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1807,6 +1824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 102793604639240814}
   Index: 2
+  KMAudio: {fileID: 114806942632591462}
 --- !u!114 &114327366164244836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1820,6 +1838,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 102449042892836530}
   Index: 1
+  KMAudio: {fileID: 114806942632591462}
 --- !u!114 &114338280973043700
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2078,6 +2097,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
+--- !u!114 &114806942632591462
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1374786704862462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114821226247241312
 MonoBehaviour:
   m_ObjectHideFlags: 1

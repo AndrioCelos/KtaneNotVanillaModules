@@ -10,7 +10,9 @@ namespace NotVanillaModulesLib.TestModel {
 		public GameObject LightOn;
 		public MeshRenderer[] WireRenderers;
 		public GameObject SymbolText;
+		public KMAudio KMAudio;
 		public int Index;
+		private KMSelectable kmSelectable;
 
 		public event EventHandler<WireCutEventArgs> WireCut;
 
@@ -22,13 +24,18 @@ namespace NotVanillaModulesLib.TestModel {
 			}
 		}
 
-		public void Start() => this.GetComponent<KMSelectable>().OnInteract = this.KMSelectable_OnInteract;
+		public void Start() {
+			this.kmSelectable = this.GetComponent<KMSelectable>();
+			this.kmSelectable.OnInteract = this.KMSelectable_OnInteract;
+		}
 
 		private bool KMSelectable_OnInteract() {
 			if (!this.Cut) {
 				this.IntactWire.SetActive(false);
 				this.CutWire.SetActive(true);
 				this.WireCut?.Invoke(this, new WireCutEventArgs(this.Index));
+				this.KMAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.WireSnip, this.transform);
+				this.kmSelectable.AddInteractionPunch(0.75f);
 			}
 			return false;
 		}

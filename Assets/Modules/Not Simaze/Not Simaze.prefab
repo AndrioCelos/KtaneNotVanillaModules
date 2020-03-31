@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 114469564354474194}
   - component: {fileID: 65807954774810330}
   - component: {fileID: 82832498208599490}
+  - component: {fileID: 114913444396384516}
   m_Layer: 0
   m_Name: Not Simaze
   m_TagString: Untagged
@@ -1081,6 +1082,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 0}
   Index: 1
+  KMAudio: {fileID: 0}
   UnlitMaterial: {fileID: 2100000, guid: 87ebd627d839ac5439aa267e00eac9d8, type: 2}
   LitMaterial: {fileID: 2100000, guid: e52068656f30f8e4a8d41be39d15c2bc, type: 2}
 --- !u!114 &114117393207926022
@@ -1132,6 +1134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 0}
   Index: 3
+  KMAudio: {fileID: 0}
   UnlitMaterial: {fileID: 2100000, guid: c5bde2caa4773ff41bfaec22e2b603b3, type: 2}
   LitMaterial: {fileID: 2100000, guid: 706fc904acf5a0d4a8a7f3cedcb2db80, type: 2}
 --- !u!114 &114167097327691206
@@ -1252,6 +1255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 0}
   Index: 0
+  KMAudio: {fileID: 0}
   UnlitMaterial: {fileID: 2100000, guid: 69e7ace8ec70ba8478b2ea1342659010, type: 2}
   LitMaterial: {fileID: 2100000, guid: 60ecc0f888da401409a4dd5e7f1612fa, type: 2}
 --- !u!114 &114367572628101306
@@ -1297,6 +1301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextMesh: {fileID: 0}
   Index: 2
+  KMAudio: {fileID: 0}
   UnlitMaterial: {fileID: 2100000, guid: 724cc0afccf2c0f44bd564559e70f2a1, type: 2}
   LitMaterial: {fileID: 2100000, guid: 88ea4295241736447b1bf554ef1153ca, type: 2}
 --- !u!114 &114674750420391340
@@ -1388,6 +1393,19 @@ MonoBehaviour:
   m_Script: {fileID: -381104716, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114913444396384516
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1511991982430124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: 
+  SettingsPath: 
 --- !u!114 &114917323595994788
 MonoBehaviour:
   m_ObjectHideFlags: 1

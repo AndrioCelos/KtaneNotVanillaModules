@@ -622,7 +622,9 @@ GameObject:
   - component: {fileID: 114028019567957020}
   - component: {fileID: 114952482340695964}
   - component: {fileID: 65770298980680508}
+  - component: {fileID: 114209490268494320}
   - component: {fileID: 114616427254727092}
+  - component: {fileID: 114624944202237422}
   m_Layer: 0
   m_Name: Not Wiresword
   m_TagString: Untagged
@@ -2459,7 +2461,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65154525161465804
 BoxCollider:
@@ -2471,7 +2473,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65426951439517732
 BoxCollider:
@@ -2483,7 +2485,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65442872203382494
 BoxCollider:
@@ -2495,7 +2497,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65467459894684310
 BoxCollider:
@@ -2507,7 +2509,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65770298980680508
 BoxCollider:
@@ -2531,7 +2533,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 2.5, y: 2, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114028019567957020
 MonoBehaviour:
@@ -2590,6 +2592,7 @@ MonoBehaviour:
   - {fileID: 23958473745058586}
   - {fileID: 23784239387409926}
   SymbolText: {fileID: 0}
+  KMAudio: {fileID: 114209490268494320}
   Index: 1
 --- !u!114 &114164583096063188
 MonoBehaviour:
@@ -2631,6 +2634,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 1, y: 1, z: 1}
   OutlineAmount: 0
+--- !u!114 &114209490268494320
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1788771455146966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114213460282476410
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2681,7 +2695,7 @@ MonoBehaviour:
   m_Script: {fileID: -706292897, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HighlightScale: {x: 2, y: 1, z: 1}
+  HighlightScale: {x: 2, y: 1, z: 2}
   OutlineAmount: 0
 --- !u!114 &114271680412685138
 MonoBehaviour:
@@ -2792,7 +2806,7 @@ MonoBehaviour:
   m_Script: {fileID: -706292897, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HighlightScale: {x: 2, y: 1, z: 1}
+  HighlightScale: {x: 2, y: 1, z: 2}
   OutlineAmount: 0
 --- !u!114 &114459136768709150
 MonoBehaviour:
@@ -2831,7 +2845,7 @@ MonoBehaviour:
   m_Script: {fileID: -706292897, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HighlightScale: {x: 2, y: 1, z: 1}
+  HighlightScale: {x: 2, y: 1, z: 2}
   OutlineAmount: 0
 --- !u!114 &114514895440399848
 MonoBehaviour:
@@ -2853,6 +2867,7 @@ MonoBehaviour:
   - {fileID: 23535527484639022}
   - {fileID: 23915323122121720}
   SymbolText: {fileID: 0}
+  KMAudio: {fileID: 114209490268494320}
   Index: 5
 --- !u!114 &114528714124813166
 MonoBehaviour:
@@ -2878,7 +2893,7 @@ MonoBehaviour:
   m_Script: {fileID: -706292897, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HighlightScale: {x: 2, y: 1, z: 1}
+  HighlightScale: {x: 2, y: 1, z: 2}
   OutlineAmount: 0
 --- !u!114 &114555405371263900
 MonoBehaviour:
@@ -2926,6 +2941,7 @@ MonoBehaviour:
   - {fileID: 23859984586435822}
   - {fileID: 23770051331896314}
   SymbolText: {fileID: 0}
+  KMAudio: {fileID: 114209490268494320}
   Index: 2
 --- !u!114 &114567776549855588
 MonoBehaviour:
@@ -2993,6 +3009,19 @@ MonoBehaviour:
   m_Script: {fileID: 2144496390, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114624944202237422
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1788771455146966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: 
+  SettingsPath: 
 --- !u!114 &114663548291211692
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3013,6 +3042,7 @@ MonoBehaviour:
   - {fileID: 23689559066001150}
   - {fileID: 23903948749543546}
   SymbolText: {fileID: 0}
+  KMAudio: {fileID: 114209490268494320}
   Index: 3
 --- !u!114 &114680910619160914
 MonoBehaviour:
@@ -3100,7 +3130,7 @@ MonoBehaviour:
   m_Script: {fileID: -706292897, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HighlightScale: {x: 2, y: 1, z: 1}
+  HighlightScale: {x: 2, y: 1, z: 2}
   OutlineAmount: 0
 --- !u!114 &114777874522223710
 MonoBehaviour:
@@ -3162,7 +3192,7 @@ MonoBehaviour:
   m_Script: {fileID: -706292897, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HighlightScale: {x: 2, y: 1, z: 1}
+  HighlightScale: {x: 2, y: 1, z: 2}
   OutlineAmount: 0
 --- !u!114 &114795168427108950
 MonoBehaviour:
@@ -3256,6 +3286,7 @@ MonoBehaviour:
   - {fileID: 23027701571585026}
   - {fileID: 23327511791043958}
   SymbolText: {fileID: 0}
+  KMAudio: {fileID: 114209490268494320}
   Index: 0
 --- !u!114 &114909206368384302
 MonoBehaviour:
@@ -3332,6 +3363,7 @@ MonoBehaviour:
   - {fileID: 23292579030321082}
   - {fileID: 23581292677854234}
   SymbolText: {fileID: 0}
+  KMAudio: {fileID: 114209490268494320}
   Index: 4
 --- !u!114 &114991313132112530
 MonoBehaviour:

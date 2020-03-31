@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace NotVanillaModulesLib {
@@ -14,9 +16,11 @@ namespace NotVanillaModulesLib {
 		public bool TestMode { get; protected set; }
 		/// <summary>A <see cref="GameObject"/> containing the test model, which will be hidden outside test mode. May be null.</summary>
 
+#pragma warning disable IDE0032 // Use auto property - it was incompatible with Tweaks that way.
 		private int moduleID;
 		/// <summary>Returns the sequential numeric ID for this module, unique within the module type and game instance.</summary>
 		public int ModuleID => this.moduleID;
+#pragma warning restore IDE0032 // Use auto property
 
 		/// <summary>Returns the <see cref="global::KMBombModule"/> component attached to the GameObject. The value returned is not valid during Awake.</summary>
 		public KMBombModule KMBombModule { get; private set; }
@@ -26,9 +30,36 @@ namespace NotVanillaModulesLib {
 		public GameObject TestModel;
 
 		private static readonly Dictionary<string, int> moduleIndices = new Dictionary<string, int>();
+#if (!DEBUG)
 		private static readonly FieldInfo keypadButtonHeightField = typeof(KeypadButton).GetField("buttonHeight", BindingFlags.NonPublic | BindingFlags.Instance);
+#endif
 
-		public void Awake() {
+		public virtual void Awake() {
+			Config config;
+			var modSettings = this.GetComponent<KMModSettings>();
+			if (!string.IsNullOrEmpty(modSettings.SettingsPath)) {
+				bool rewriteFile;
+				try {
+					using var reader = new StreamReader(modSettings.SettingsPath);
+					config = new JsonSerializer().Deserialize<Config>(new JsonTextReader(reader));
+					if (config == null) {
+						config = new Config();
+						rewriteFile = true;
+					} else
+						rewriteFile = false;
+				} catch (JsonSerializationException ex) {
+					this.LogError("The mod settings file is invalid.");
+					Debug.LogException(ex, this);
+					config = new Config();
+					rewriteFile = true;
+				}
+				if (rewriteFile) {
+					using var writer = new StreamWriter(modSettings.SettingsPath);
+					new JsonSerializer() { Formatting = Formatting.Indented }.Serialize(writer, config);
+				}
+			} else
+				config = new Config();
+
 			string moduleType;
 			this.KMBombModule = this.GetComponent<KMBombModule>();
 			if (this.KMBombModule != null) moduleType = this.KMBombModule.ModuleType;
@@ -37,7 +68,7 @@ namespace NotVanillaModulesLib {
 				if (this.KMNeedyModule != null) moduleType = this.KMNeedyModule.ModuleType;
 				else {
 					moduleType = this.gameObject.name;
-					Debug.LogError($"[{moduleType}] Module is missing a KMBombModule or KMNeedyModule component.");
+					Debug.LogError($"[{moduleType}] Module is missing a KMBombModule or KMNeedyModule component.", this);
 				}
 			}
 
@@ -47,20 +78,25 @@ namespace NotVanillaModulesLib {
 
 #if (DEBUG)
 			this.Log("Assembly was compiled in debug mode. Activating test model.");
+#else
+			var aprilFools = DateTime.Now.Month == 4 && DateTime.Now.Day == 1;  // Yes, the whole day.
+			var chance = aprilFools ? config.AprilFoolsTestModelChance : config.TestModelChance;
+			if (!(chance > 0) || UnityEngine.Random.Range(0f, 1f) >= chance) {
+				try {
+					this.AwakeLive();
+					this.TestModel?.SetActive(false);
+					return;
+				} catch (TypeLoadException) {
+					this.LogError("Can't load BombGenerator. Activating test model.");
+				}
+			} else {
+				if (aprilFools) this.Log("This is a defective module. April Fools! Activating test model.");
+				else this.Log("This is a defective module. Activating test model.");
+			}
+#endif
 			this.TestMode = true;
 			this.TestModel?.SetActive(true);
 			this.AwakeTest();
-#else
-			try {
-				this.AwakeLive();
-				this.TestModel?.SetActive(false);
-			} catch (TypeLoadException) {
-				this.Log("Can't load BombGenerator. Activating test model.");
-				this.TestMode = true;
-				this.TestModel?.SetActive(true);
-				this.AwakeTest();
-			}
-#endif
 		}
 
 		/// <summary>Attempts to instantiate the game's model for this module.</summary>
@@ -119,6 +155,11 @@ namespace NotVanillaModulesLib {
 		/// <seealso cref="string.Format(string, object)"/>
 		[StringFormatMethod("format")]
 		public void Log(string format, params object[] args) => this.Log(string.Format(format, args));
+		/// <summary>Writes the specified error message to the log file with a prefix identifying this module.</summary>
+		public void LogError(string message) {
+			string name = this.KMBombModule?.ModuleDisplayName ?? this.KMNeedyModule?.ModuleDisplayName ?? this.GetType().Name;
+			Debug.LogError($"[{name} #{this.ModuleID}] {message}");
+		}
 
 #if (!DEBUG)
 		/// <summary>

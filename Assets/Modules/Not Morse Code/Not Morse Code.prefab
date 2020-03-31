@@ -59,6 +59,7 @@ GameObject:
   - component: {fileID: 114446940647854006}
   - component: {fileID: 65150307212722284}
   - component: {fileID: 114451747319159730}
+  - component: {fileID: 114401525253181852}
   m_Layer: 0
   m_Name: Not Morse Code
   m_TagString: Untagged
@@ -78,6 +79,7 @@ GameObject:
   - component: {fileID: 23344237798710824}
   - component: {fileID: 114135152751684836}
   - component: {fileID: 65254115800842336}
+  - component: {fileID: 114140929160557944}
   - component: {fileID: 114045772644640662}
   m_Layer: 0
   m_Name: Down Button
@@ -218,6 +220,7 @@ GameObject:
   - component: {fileID: 23201393912862698}
   - component: {fileID: 114349517130998402}
   - component: {fileID: 65315683451404056}
+  - component: {fileID: 114232631310180198}
   - component: {fileID: 114106614079554852}
   m_Layer: 0
   m_Name: Up Button
@@ -274,6 +277,7 @@ GameObject:
   - component: {fileID: 23053035986785450}
   - component: {fileID: 114073415536513160}
   - component: {fileID: 65184299551684556}
+  - component: {fileID: 114284536265949536}
   - component: {fileID: 114649564660002430}
   m_Layer: 0
   m_Name: XT Button
@@ -1381,7 +1385,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 4, y: 1, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65254115800842336
 BoxCollider:
@@ -1393,8 +1397,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5, y: 1, z: 2}
-  m_Center: {x: 2, y: 0, z: 0}
+  m_Size: {x: 7, y: 1, z: 2}
+  m_Center: {x: 3, y: 0, z: 0}
 --- !u!65 &65315683451404056
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -1405,8 +1409,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5, y: 1, z: 2}
-  m_Center: {x: -2, y: 0, z: 0}
+  m_Size: {x: 7, y: 1, z: 2}
+  m_Center: {x: -3, y: 0, z: 0}
 --- !u!102 &102149077333938462
 TextMesh:
   serializedVersion: 3
@@ -1662,6 +1666,20 @@ MonoBehaviour:
   AllowSelectionWrapY: 0
   ForceSelectionHighlight: 0
   ForceInteractionHighlight: 0
+--- !u!114 &114140929160557944
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1258931745659126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 789574602, guid: ca34bbc29bfcc3846bf3c44d37129e35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextMesh: {fileID: 0}
+  Index: 0
+  KMAudio: {fileID: 114451747319159730}
 --- !u!114 &114191372823748260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1675,6 +1693,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
+--- !u!114 &114232631310180198
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1631963377826070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 789574602, guid: ca34bbc29bfcc3846bf3c44d37129e35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextMesh: {fileID: 0}
+  Index: 0
+  KMAudio: {fileID: 114451747319159730}
 --- !u!114 &114235736670782938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1715,6 +1747,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 1.4, y: 0.55, z: 1.2}
   OutlineAmount: 0
+--- !u!114 &114284536265949536
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1788071471777798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 789574602, guid: ca34bbc29bfcc3846bf3c44d37129e35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextMesh: {fileID: 0}
+  Index: 0
+  KMAudio: {fileID: 114451747319159730}
 --- !u!114 &114349517130998402
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1738,6 +1784,19 @@ MonoBehaviour:
   AllowSelectionWrapY: 0
   ForceSelectionHighlight: 0
   ForceInteractionHighlight: 0
+--- !u!114 &114401525253181852
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1233924168082550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -289456416, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Settings: 
+  SettingsPath: 
 --- !u!114 &114426910170949346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1780,9 +1839,9 @@ MonoBehaviour:
   TestModelTunerDisplay: {fileID: 102700058201291748}
   LightOff: {fileID: 1865497378521376}
   LightOn: {fileID: 1595820717177124}
-  TestModelDownButton: {fileID: 114135152751684836}
-  TestModelUpButton: {fileID: 114349517130998402}
-  TestModelSubmitButton: {fileID: 114073415536513160}
+  TestModelDownButton: {fileID: 114140929160557944}
+  TestModelUpButton: {fileID: 114232631310180198}
+  TestModelSubmitButton: {fileID: 114284536265949536}
 --- !u!114 &114451747319159730
 MonoBehaviour:
   m_ObjectHideFlags: 1
