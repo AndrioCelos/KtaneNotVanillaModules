@@ -417,7 +417,7 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 			default:
 				while (true) {
 					this.DisplayText.text = "o";
-					for (int i = 0; i < 2; ++i) {
+					for (int i = 0; i < 4; ++i) {
 						this.DisplayBase.localScale = Vector3.one; yield return null;
 						this.DisplayBase.localScale = new Vector3(-1, 1, 1); yield return null;
 						this.DisplayBase.localScale = new Vector3(-1, -1, 1); yield return null;
