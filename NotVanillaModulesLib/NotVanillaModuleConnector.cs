@@ -39,23 +39,33 @@ namespace NotVanillaModulesLib {
 			var modSettings = this.GetComponent<KMModSettings>();
 			if (!string.IsNullOrEmpty(modSettings.SettingsPath)) {
 				bool rewriteFile;
-				try {
-					using var reader = new StreamReader(modSettings.SettingsPath);
-					config = new JsonSerializer().Deserialize<Config>(new JsonTextReader(reader));
-					if (config == null) {
-						config = new Config();
-						rewriteFile = true;
-					} else
-						rewriteFile = false;
-				} catch (JsonSerializationException ex) {
-					this.LogError("The mod settings file is invalid.");
-					Debug.LogException(ex, this);
+				if (!File.Exists(modSettings.SettingsPath)) {
 					config = new Config();
 					rewriteFile = true;
+				} else {
+					try {
+						using var reader = new StreamReader(modSettings.SettingsPath);
+						config = new JsonSerializer().Deserialize<Config>(new JsonTextReader(reader));
+						if (config == null) {
+							config = new Config();
+							rewriteFile = true;
+						} else
+							rewriteFile = false;
+					} catch (Exception ex) {
+						this.LogError("Could not read the mod settings file.");
+						Debug.LogException(ex, this);
+						config = new Config();
+						rewriteFile = true;
+					}
 				}
 				if (rewriteFile) {
-					using var writer = new StreamWriter(modSettings.SettingsPath);
-					new JsonSerializer() { Formatting = Formatting.Indented }.Serialize(writer, config);
+					try {
+						using var writer = new StreamWriter(modSettings.SettingsPath);
+						new JsonSerializer() { Formatting = Formatting.Indented }.Serialize(writer, config);
+					} catch (Exception ex) {
+						this.LogError("Could not write the mod settings file.");
+						Debug.LogException(ex, this);
+					}
 				}
 			} else
 				config = new Config();
