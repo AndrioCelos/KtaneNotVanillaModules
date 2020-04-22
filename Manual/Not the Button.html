@@ -10,8 +10,11 @@
 	<script src="js/ktane-utils.js"></script>
 	<style>
 		.tableScroller { overflow-x: auto; padding-bottom: 8px; }
+		.tableScroller table { border-collapse: separate; border: none; }
+		.tableScroller tr:not(:first-child) > * { border-top: none; }
+		.tableScroller tr > :not(:first-child) { border-left: none; }
 		.tableScrollerHint { display: none; }
-		th:first-child { position: sticky; left: 0; }
+		th:first-child { position: sticky; left: 0; background-color: white; background-clip: padding-box; }
 		@media screen and (max-width: 40em) {
 			.tableScrollerHint { display: block; }
 		}
