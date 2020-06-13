@@ -243,7 +243,7 @@ public class NotKeypad : NotVanillaModule<NotKeypadConnector> {
 
 	private IEnumerator CorrectFlashCoroutine(int index) {
 		this.ClearAllLights();
-		this.Connector.SetLightColour(index, NotKeypadConnector.LightColour.Green);
+		this.Connector.SetLightColour(index, NotKeypadConnector.LightColour.Green, "O");
 		yield return new WaitForSeconds(5);
 		this.Connector.SetLightColour(index, NotKeypadConnector.LightColour.Black);
 		this.StageProgress = 0;
@@ -251,7 +251,7 @@ public class NotKeypad : NotVanillaModule<NotKeypadConnector> {
 	}
 	private IEnumerator StageCompleteFlashCoroutine(int index) {
 		this.ClearAllLights();
-		this.Connector.SetLightColour(index, NotKeypadConnector.LightColour.Green);
+		this.Connector.SetLightColour(index, NotKeypadConnector.LightColour.Green, "O");
 		yield return new WaitForSeconds(1);
 		this.Connector.SetLightColour(index, NotKeypadConnector.LightColour.Black);
 		if (!this.Solved) {
@@ -261,7 +261,7 @@ public class NotKeypad : NotVanillaModule<NotKeypadConnector> {
 	}
 	private IEnumerator WrongFlashCoroutine(int index) {
 		this.ClearAllLights();
-		this.Connector.SetLightColour(index, NotKeypadConnector.LightColour.Red);
+		this.Connector.SetLightColour(index, NotKeypadConnector.LightColour.Red, "X");
 		yield return new WaitForSeconds(1);
 		this.Connector.SetLightColour(index, NotKeypadConnector.LightColour.Black);
 		yield return new WaitForSeconds(1);
@@ -587,6 +587,8 @@ public class NotKeypad : NotVanillaModule<NotKeypadConnector> {
 	public static readonly string TwitchHelpMessage
 		= "!{0} press 1 3 2 4 - buttons are numbered in reading order | !{0} press TL BL TR BR";
 	public IEnumerator ProcessTwitchCommand(string command) {
+		if (this.TwitchColourblindModeCommand(command)) { yield return null; yield break; }
+
 		var tokens = command.Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
 		if (tokens.Length == 0) yield break;
 

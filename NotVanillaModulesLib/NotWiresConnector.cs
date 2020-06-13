@@ -7,6 +7,7 @@ namespace NotVanillaModulesLib {
 	public class NotWiresConnector : NotVanillaModuleConnector {
 		public TestModelWireSpace[] TestModelWireSpaces;
 		public Material[] Materials;
+		public Material[] ColourblindMaterials;
 
 		public ReadOnlyCollection<NotWireSpace> Wires { get; private set; }
 
@@ -51,6 +52,23 @@ namespace NotVanillaModulesLib {
 #endif
 		}
 		protected override void StartTest() { }
+
+		public override bool ColourblindMode {
+			get => base.ColourblindMode;
+			set {
+				base.ColourblindMode = value;
+				if (value) foreach (var wire in this.Wires) wire.SetColourblindMode();
+			}
+		}
+
+		public void Update() {
+			var log = false;
+			if (Input.GetKeyDown(KeyCode.E)) { log = true; foreach (var material in this.ColourblindMaterials) material.mainTextureScale -= Vector2.up; }
+			if (Input.GetKeyDown(KeyCode.R)) { log = true; foreach (var material in this.ColourblindMaterials) material.mainTextureScale += Vector2.up; }
+			if (Input.GetKeyDown(KeyCode.D)) { log = true; foreach (var material in this.ColourblindMaterials) material.mainTextureOffset -= Vector2.up * 0.1f; }
+			if (Input.GetKeyDown(KeyCode.F)) { log = true; foreach (var material in this.ColourblindMaterials) material.mainTextureOffset += Vector2.up * 0.1f; }
+			if (log) this.Log("{0} {1}", this.ColourblindMaterials[2].mainTextureScale, this.ColourblindMaterials[2].mainTextureOffset);
+		}
 
 		public bool TwitchCut(int spaceIndex) {
 			if (this.Wires[spaceIndex].Cut) return false;

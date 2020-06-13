@@ -109,6 +109,8 @@ public class NotWireSequence : NotVanillaModule<NotWireSequenceConnector> {
 	public static readonly string TwitchHelpMessage
 		= "!{0} cut 1 - cuts the wire at the first letter on the current panel | !{0} cut E - cuts the wire with letter E | !{0} down | !{0} up | | !{0} d | !{0} u | !{0} cut 1 2 3 d";
 	public IEnumerator ProcessTwitchCommand(string command) {
+		if (this.TwitchColourblindModeCommand(command)) { yield return null; yield break; }
+
 		var tokens = command.Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
 		if (tokens.Length == 0) yield break;
 

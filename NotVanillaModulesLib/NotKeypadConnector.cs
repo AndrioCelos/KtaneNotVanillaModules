@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using NotVanillaModulesLib.TestModel;
+
 using UnityEngine;
+
 #if (!DEBUG)
+using TMPro;
 #endif
 
 namespace NotVanillaModulesLib {
 	/// <summary>A <see cref="Behaviour"/> that connects a mod module with the vanilla components for Keypad.</summary>
 	public class NotKeypadConnector : NotVanillaModuleConnector {
 		public TestModelButton[] TestModelButtons;
+		public TextMesh[] TestModelColourblindTexts;
 		public Renderer[] LightRenderers;
 		public Light[] Lights;
 		private readonly Symbol[] symbols = new Symbol[4];
@@ -24,6 +28,7 @@ namespace NotVanillaModulesLib {
 #if (!DEBUG)
 		private IList<KeypadButton> buttons;
 		private Texture[] symbolTextures;
+		private TextMeshPro[] colourblindTexts;
 #endif
 
 		protected override void AwakeLive() {
@@ -41,9 +46,23 @@ namespace NotVanillaModulesLib {
 			for (int i = 0; i < this.buttons.Count; ++i) {
 				var button = this.buttons[i];
 				button.SymbolImage.AddComponent<ExcludeFromTexturePack>();
-				this.LightRenderers[i].transform.SetParent(button.transform);
+				this.LightRenderers[i].transform.parent.SetParent(button.transform);
 			}
 			FixKeypadButtons(this.buttons);
+
+			var textPrefab = GetComponentPrefab<PasswordComponent>().transform.Find("Layout_DEFAULT").GetComponent<PasswordLayout>().Spinners[0].Display;
+			this.colourblindTexts = new TextMeshPro[this.buttons.Count];
+			for (int i = 0; i < this.buttons.Count; ++i) {
+				var text = Instantiate(textPrefab, this.LightRenderers[i].transform.parent, false);
+				this.colourblindTexts[i] = text;
+				text.enableAutoSizing = false;
+				text.transform.localPosition = new Vector3(0, 0.001f, 0.001f);
+				text.transform.localScale = new Vector3(0.005f, 0.005f, 1);
+				text.alignment = TextAlignmentOptions.Center;
+				text.color = new Color(0, 0, 0, 0.8f);
+				text.lineSpacing = -12;
+			}
+			foreach (var text in this.TestModelColourblindTexts) text.gameObject.SetActive(false);
 #endif
 		}
 
@@ -62,6 +81,16 @@ namespace NotVanillaModulesLib {
 		}
 		protected override void StartTest() {
 			foreach (var button in this.TestModelButtons) button.Pressed += (sender, e) => this.ButtonPressed?.Invoke(this, e);
+			foreach (var text in this.TestModelColourblindTexts) text.gameObject.SetActive(false);
+		}
+
+		public override bool ColourblindMode {
+			get => base.ColourblindMode;
+			set {
+				base.ColourblindMode = value;
+				foreach (var cube in this.LightRenderers)
+					cube.transform.localScale = new Vector3(cube.transform.localScale.x, cube.transform.localScale.y, value ? 0.012f : 0.0064f);
+			}
 		}
 
 		public void SetSymbol(int index, Symbol symbol) {
@@ -79,16 +108,44 @@ namespace NotVanillaModulesLib {
 
 		public Symbol GetSymbol(int index) => this.symbols[index];
 
-		public void SetLightColour(int index, LightColour colour) {
+		public void SetLightColour(int index, LightColour colour) => this.SetLightColour(index, colour, null);
+		public void SetLightColour(int index, LightColour colour, string colourblindText) {
 			var rgb = this.Colors[(int) colour];
 			this.LightRenderers[index].material.color = rgb;
 			this.Lights[index].color = rgb;
 			this.Lights[index].enabled = colour != LightColour.Black;
+			if (colour == LightColour.Black) {
+				if (this.TestMode) this.TestModelColourblindTexts[index].gameObject.SetActive(false);
+#if (!DEBUG)
+				else this.colourblindTexts[index].gameObject.SetActive(false);
+#endif
+			} else if (this.ColourblindMode) {
+				var text = colourblindText ?? colour switch {
+					LightColour.Red => "R", LightColour.Orange => "O", LightColour.Yellow => "Y", LightColour.Green => "G",
+					LightColour.Cyan => "C", LightColour.Blue => "B", LightColour.Purple => "P", LightColour.Magenta => "M",
+					LightColour.Pink => "I", LightColour.Brown => "N", LightColour.Grey => "A", LightColour.White => "W",
+					_ => ""
+				};
+				if (this.TestMode) {
+					this.TestModelColourblindTexts[index].gameObject.SetActive(true);
+					this.TestModelColourblindTexts[index].text = text;
+				}
+#if (!DEBUG)
+				else {
+					this.colourblindTexts[index].gameObject.SetActive(true);
+					this.colourblindTexts[index].text = text;
+				}
+#endif
+			}
 		}
 		public void SetLightColour(int index, Color color) {
 			this.LightRenderers[index].material.color = color;
 			this.Lights[index].color = color;
 			this.Lights[index].enabled = color.maxColorComponent > 0;
+			if (this.TestMode) this.TestModelColourblindTexts[index].gameObject.SetActive(false);
+#if (!DEBUG)
+			else this.colourblindTexts[index].gameObject.SetActive(false);
+#endif
 		}
 
 		public void TwitchPress(int buttonIndex) {

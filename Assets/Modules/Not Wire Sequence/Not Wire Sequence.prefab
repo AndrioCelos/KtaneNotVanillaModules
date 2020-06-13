@@ -354,6 +354,7 @@ GameObject:
   - component: {fileID: 65580697689625738}
   - component: {fileID: 114106259479341464}
   - component: {fileID: 114980512578656808}
+  - component: {fileID: 114205138253420410}
   m_Layer: 0
   m_Name: Not Wire Sequence
   m_TagString: Untagged
@@ -4638,6 +4639,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - GUI/KT 3D Text Diffuse
+--- !u!114 &114205138253420410
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1224836861386436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1cfb889a07d5fd4e9baed7960bb397f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorblindMode: 0
 --- !u!114 &114208224681418238
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4955,6 +4968,12 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 10e5922399a4d4f45a776daad0d73875, type: 2}
   - {fileID: 2100000, guid: b7b2a8110f30529449ef972e9e8ccafb, type: 2}
   - {fileID: 2100000, guid: 08f0f1d702f06894ebc2ebbd3889cb64, type: 2}
+  ColourblindMaterials:
+  - {fileID: 2100000, guid: 5b8cf6d129ee26b4598ea7c4bcaa081f, type: 2}
+  - {fileID: 2100000, guid: 8b043d353dc1479408676313ee624e81, type: 2}
+  - {fileID: 2100000, guid: c1d86f77728683b449a9a3bf94ecfd71, type: 2}
+  - {fileID: 2100000, guid: dbab63ab3fc09ba45984fe48c4187de8, type: 2}
+  - {fileID: 2100000, guid: 312cfe838dd624247b04bca8a1c75c22, type: 2}
   TestModelPanel: {fileID: 4211953551152330}
   TestModelLidParts:
   - {fileID: 4100282470025480}

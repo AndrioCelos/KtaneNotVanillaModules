@@ -12,6 +12,7 @@ namespace NotVanillaModulesLib {
 	public abstract class NotWireSequencePage {
 		public abstract ReadOnlyCollection<NotWireSequenceWireSpace> Wires { get; }
 		public abstract bool Active { get; set; }
+		public abstract void SetColourblindMode();
 
 		internal class TestNotWireSequencePage : NotWireSequencePage {
 			private readonly TestModelWireSequencePage page;
@@ -25,6 +26,10 @@ namespace NotVanillaModulesLib {
 			public TestNotWireSequencePage(TestModelWireSequencePage page, int startIndex) {
 				this.page = page ?? throw new ArgumentNullException(nameof(page));
 				this.Wires = page.WireSpaces.Select(w => (NotWireSequenceWireSpace) new NotWireSequenceWireSpace.TestWireSpace(w, startIndex++)).ToList().AsReadOnly();
+			}
+
+			public override void SetColourblindMode() {
+				foreach (var wire in this.Wires) wire.Colour = wire.Colour;  // Resets different materials.
 			}
 		}
 
@@ -60,9 +65,11 @@ namespace NotVanillaModulesLib {
 				for (int i = 0; i < wires.Count; i++) {
 					var wire = (NotWireSequenceWireSpace.LiveWireSpace) wires[i];
 					wire.InitialiseWire(page.Wires[i * 3 + wire.To]);
-					if (wire.Colour == WireSequenceColour.Yellow || wire.Colour == WireSequenceColour.Green) {
-						foreach (var renderer in wire.Wire.GetComponentsInChildren<Renderer>(true))
-							if (renderer.gameObject.tag != "Highlight") renderer.material = this.module.Materials[(int) wire.Colour];
+					if (this.module.ColourblindMode || wire.Colour == WireSequenceColour.Yellow || wire.Colour == WireSequenceColour.Green) {
+						foreach (var renderer in wire.Wire.GetComponentsInChildren<Renderer>(true)) {
+							if (renderer.gameObject.tag != "Highlight")
+								renderer.material = (this.module.ColourblindMode ? this.module.ColourblindMaterials : this.module.Materials)[(int) wire.Colour];
+						}
 					}
 				}
 
@@ -81,8 +88,18 @@ namespace NotVanillaModulesLib {
 					}
 				}
 			}
+
+			public override void SetColourblindMode() {
+				if (this.page == null) return;
+				for (int i = 0; i < this.Wires.Count; i++) {
+					var wire = (NotWireSequenceWireSpace.LiveWireSpace) this.Wires[i];
+					foreach (var renderer in wire.Wire.GetComponentsInChildren<Renderer>(true)) {
+						if (renderer.gameObject.tag != "Highlight")
+							renderer.material = (this.module.ColourblindMode ? this.module.ColourblindMaterials : this.module.Materials)[(int) wire.Colour];
+					}
+				}
+			}
 		}
 #endif
 	}
-
 }

@@ -50,7 +50,13 @@ namespace NotVanillaModulesLib.TestModel {
 			get => this.colour;
 			set {
 				this.colour = value;
-				foreach (var renderer in this.WireRenderers) renderer.material = this.Module.Materials[(int) value];
+				foreach (var renderer in this.WireRenderers) {
+					renderer.material = (this.Module.ColourblindMode ? this.Module.ColourblindMaterials : this.Module.Materials)[(int) value];
+					// Colourblind materials use a high texture scale so that they will appear correctly on the vanilla button model.
+					// This needs to be changed in the test harness.
+					renderer.material.mainTextureScale = new Vector2(1, 5);
+					renderer.material.mainTextureOffset = Vector2.zero;
+				}
 			}
 		}
 	}

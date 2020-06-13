@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+
+#if (!DEBUG)
+using TMPro;
+#endif
+
 using UnityEngine;
 
 namespace NotVanillaModulesLib {
@@ -9,8 +14,10 @@ namespace NotVanillaModulesLib {
 		public MeshRenderer TestModelCap;
 		public TextMesh TestModelText;
 		public MeshRenderer LightRenderer;
+		public TextMesh TestModelColourblindLightText;
 
 		public Material[] Materials;
+		public Material[] ColourblindMaterials;
 		public Material[] LightMaterials;
 
 		public KMAudio KMAudio { get; private set; }
@@ -20,6 +27,7 @@ namespace NotVanillaModulesLib {
 		private PressableButton button;
 		private Animator lidAnimator;
 		private bool buttonBeingPushed;
+		public TextMeshPro ColourblindLightText;
 #endif
 
 		public event EventHandler Held;
@@ -30,6 +38,9 @@ namespace NotVanillaModulesLib {
 
 		/// <summary>Returns a value indicating whether the vanilla Button module will open the cover on selection or focus. The value is not valid during Awake.</summary>
 		public bool ShouldOpenCoverOnSelection { get; private set; }
+
+		private ButtonColour colour;
+		private ButtonLightColour lightColour;
 
 		protected override void AwakeLive() {
 #if (!DEBUG)
@@ -55,6 +66,15 @@ namespace NotVanillaModulesLib {
 			buttonEventConnector.Held += this.ButtonEventConnector_Held;
 			buttonEventConnector.Released += this.ButtonEventConnector_Released;
 			buttonEventConnector.Attach(this.button);
+
+			var text = Instantiate(GetComponentPrefab<PasswordComponent>().transform.Find("Layout_DEFAULT").GetComponent<PasswordLayout>().Spinners[0].Display, this.LightRenderer.transform.parent, false);
+			this.ColourblindLightText = text;
+			text.enableAutoSizing = false;
+			text.transform.localPosition = new Vector3(0, 0.001f, 0);
+			text.transform.localScale = new Vector3(0.005f, 0.005f, 1);
+			text.alignment = TextAlignmentOptions.Center;
+			text.color = new Color(0, 0, 0, 0.8f);
+			text.lineSpacing = -12;
 #endif
 		}
 
@@ -80,7 +100,18 @@ namespace NotVanillaModulesLib {
 			this.testModelButton = this.GetComponent<KMSelectable>().Children[0];
 			this.testModelButton.OnInteract = this.TestModelButton_Interact;
 			this.testModelButton.OnInteractEnded = this.TestModelButton_InteractEnded;
+			this.TestModelColourblindLightText.gameObject.SetActive(false);
 		}
+
+		public override bool ColourblindMode {
+			get => base.ColourblindMode;
+			set {
+				base.ColourblindMode = value;
+				this.SetColour(this.colour);
+				this.SetLightColour(this.lightColour);
+			}
+		}
+
 		private void ButtonEventConnector_Held(object sender, EventArgs e) {
 #if (!DEBUG)
 			this.buttonBeingPushed = true;
@@ -142,48 +173,51 @@ namespace NotVanillaModulesLib {
 		}
 
 		public void SetColour(ButtonColour colour) {
-			var material = this.Materials[(int) colour];
-			var textColour = colour switch {
-				ButtonColour.Yellow => DarkTextColor,
-				ButtonColour.Cyan => DarkTextColor,
-				ButtonColour.Pink => DarkTextColor,
-				ButtonColour.White => DarkTextColor,
-				_ => LightTextColor
+			this.colour = colour;
+			var material = (this.ColourblindMode ? this.ColourblindMaterials : this.Materials)[(int) colour];
+			var lightText = colour switch {
+				ButtonColour.Yellow => false,
+				ButtonColour.Cyan => false,
+				ButtonColour.Pink => false,
+				ButtonColour.White => false,
+				_ => true
 			};
 
 			if (this.TestMode) {
 				this.TestModelCap.material = material;
-				this.TestModelText.color = textColour;
+				this.TestModelText.color = lightText ? LightTextColor : DarkTextColor;
+				// Colourblind materials use a high texture scale so that they will appear correctly on the vanilla button model.
+				// This needs to be changed in the test harness.
+				material.mainTextureScale = Vector2.one;
 			} else {
 #if (!DEBUG)
 				var buttonComponent = this.button.GetComponent<PressableButton>();
-				switch (colour) {
-					case ButtonColour.Red: buttonComponent.SetColor(BombGame.ButtonColor.red); break;
-					case ButtonColour.Yellow: buttonComponent.SetColor(BombGame.ButtonColor.yellow); break;
-					case ButtonColour.Blue: buttonComponent.SetColor(BombGame.ButtonColor.blue); break;
-					case ButtonColour.Green:
-						buttonComponent.SetColor(BombGame.ButtonColor.red);
-						buttonComponent.Button_Top_Red.SetActive(false);
-						buttonComponent.Button_Top_Green.SetActive(true);
-						break;
-					default:
-						buttonComponent.SetColor(BombGame.ButtonColor.white);
-						var cap = this.button.transform.Find("ButtonTop").Find("Button_Top_White").GetComponent<MeshRenderer>();
-						material = Instantiate(material);
-						InstanceDestroyer.AddObjectToDestroy(this.gameObject, material);
-						material.mainTexture = cap.material.mainTexture;
-						cap.material = material;
-						buttonComponent.text.color = textColour;
-						if (textColour == LightTextColor) {
-							/*
-								With light text, hide the text while the lights are off.
-								If we don't do this, the text will appear lit even without the lights.
-								The vanilla PressableButton does the same thing...
-							*/
-							buttonComponent.text.GetComponent<HideOnLightsChange>().enabled = true;
-						}
-						break;
+				if (!this.ColourblindMode) {
+					switch (colour) {
+						case ButtonColour.Red: buttonComponent.SetColor(BombGame.ButtonColor.red); return;
+						case ButtonColour.Yellow: buttonComponent.SetColor(BombGame.ButtonColor.yellow); return;
+						case ButtonColour.Blue: buttonComponent.SetColor(BombGame.ButtonColor.blue); return;
+						case ButtonColour.Green:
+							buttonComponent.SetColor(BombGame.ButtonColor.red);
+							buttonComponent.Button_Top_Red.SetActive(false);
+							buttonComponent.Button_Top_Green.SetActive(true);
+							return;
+					}
 				}
+				buttonComponent.SetColor(BombGame.ButtonColor.white);
+				var cap = this.button.transform.Find("ButtonTop").Find("Button_Top_White").GetComponent<MeshRenderer>();
+				material = Instantiate(material);
+				InstanceDestroyer.AddObjectToDestroy(this.gameObject, material);
+				if (!this.ColourblindMode) material.mainTexture = cap.material.mainTexture;
+				cap.material = material;
+				buttonComponent.text.color = lightText ? LightTextColor : DarkTextColor;
+				/*
+					With light text, hide the text while the lights are off.
+					If we don't do this, the text will appear lit even without the lights.
+					The vanilla PressableButton does the same thing...
+				*/
+				buttonComponent.text.GetComponent<HideOnLightsChange>().enabled = lightText;
+				if (!lightText) buttonComponent.text.GetComponent<Renderer>().enabled = true;
 #endif
 			}
 		}
@@ -197,8 +231,41 @@ namespace NotVanillaModulesLib {
 #endif
 		}
 
-		public void SetLightColour(ButtonLightColour colour) =>
+		public void SetLightColour(ButtonLightColour colour) {
+			this.lightColour = colour;
 			this.LightRenderer.material = this.LightMaterials[(int) colour];
+			if (colour == ButtonLightColour.Off) {
+				if (this.TestMode) this.TestModelColourblindLightText.gameObject.SetActive(false);
+#if (!DEBUG)
+				else this.ColourblindLightText.gameObject.SetActive(false);
+#endif
+			} else {
+				var text = colour switch {
+					ButtonLightColour.White => "W", ButtonLightColour.Red => "R", ButtonLightColour.Yellow => "Y",
+					ButtonLightColour.Green => "G", ButtonLightColour.Blue => "B",
+					ButtonLightColour.WhiteRed => "W\nR\nW\nR", ButtonLightColour.WhiteYellow => "W\nY\nW\nY",
+					ButtonLightColour.WhiteGreen => "W\nG\nW\nG", ButtonLightColour.WhiteBlue => "W\nB\nW\nB",
+					ButtonLightColour.RedYellow => "R\nY\nR\nY", ButtonLightColour.RedGreen => "R\nG\nR\nG", ButtonLightColour.RedBlue => "R\nB\nR\nB",
+					ButtonLightColour.YellowGreen => "Y\nG\nY\nG", ButtonLightColour.YellowBlue => "Y\nB\nY\nB",
+					ButtonLightColour.GreenBlue => "G\nB\nG\nB",
+					_ => ""
+				};
+				if (this.TestMode) {
+					this.TestModelColourblindLightText.text = text;
+					this.TestModelColourblindLightText.gameObject.SetActive(this.ColourblindMode);
+				}
+#if (!DEBUG)
+				else {
+					this.ColourblindLightText.text = text;
+					this.ColourblindLightText.gameObject.SetActive(this.ColourblindMode);
+				}
+#endif
+				if (this.ColourblindMode) {
+					this.LightRenderer.material.mainTextureScale = new Vector2(0.5f, 0.5f);
+					this.LightRenderer.material.mainTextureOffset = new Vector2(0, 0.5f);
+				}
+			}
+		}
 		public void SetLightBrightness(float brightness) =>
 			this.LightRenderer.material.SetFloat("_Blend", brightness);
 

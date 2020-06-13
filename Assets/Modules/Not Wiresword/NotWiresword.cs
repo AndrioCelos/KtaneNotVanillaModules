@@ -128,6 +128,7 @@ public class NotWiresword : NotVanillaModule<NotWiresConnector> {
 			letters[wireIndex] = (char) 1;
 			this.Connector.Wires[wireIndex].Colour = table[word[i]].Where(s => s.Position == wireIndex).First().Colour;
 		}
+		this.Log(this.Connector.Wires.Select(w => w.Colour).Join(" "));
 		this.Log("The password is '{0}'. The wires should be cut in this order: {1} (generated in {2} attempts).", word.ToLowerInvariant(), this.orderToCut.Select(i => i + 1).Join(", "), attempt);
 	}
 
@@ -151,6 +152,8 @@ public class NotWiresword : NotVanillaModule<NotWiresConnector> {
 	public static readonly string TwitchHelpMessage
 		= "!{0} cut 1 2 3 4 5 6 - wires are numbered from top to bottom.";
 	public IEnumerator ProcessTwitchCommand(string command) {
+		if (this.TwitchColourblindModeCommand(command)) { yield return null; yield break; }
+
 		var tokens = command.Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
 		if (tokens.Length == 0) yield break;
 

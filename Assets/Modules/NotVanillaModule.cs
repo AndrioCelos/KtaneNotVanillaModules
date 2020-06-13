@@ -8,11 +8,22 @@ public abstract class NotVanillaModule<TConnector> : MonoBehaviour where TConnec
 
 	public virtual void Start() {
 		this.Connector = this.GetComponent<TConnector>();
+		var colorblindMode = this.GetComponent<KMColorblindMode>();
+		if (colorblindMode != null) this.Connector.ColourblindMode = colorblindMode.ColorblindModeActive;
 	}
 
 	public virtual void Disarm() {
 		this.Solved = true;
 		this.Connector.KMBombModule.HandlePass();
+	}
+
+	protected bool TwitchColourblindModeCommand(string command) {
+		command = command.Trim();
+		if (command.EqualsIgnoreCase("colourblind") || command.EqualsIgnoreCase("colorblind") || command.EqualsIgnoreCase("cb")) {
+			this.Connector.ColourblindMode = true;
+			return true;
+		}
+		return false;
 	}
 
 	public void Log(string message) { this.Connector.Log(message); }

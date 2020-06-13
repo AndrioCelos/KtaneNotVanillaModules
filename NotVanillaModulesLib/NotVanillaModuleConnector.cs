@@ -14,6 +14,7 @@ namespace NotVanillaModulesLib {
 	public abstract class NotVanillaModuleConnector : MonoBehaviour {
 		/// <summary>Returns a value indicating whether the test model is being used. The value returned is not valid during Awake.</summary>
 		public bool TestMode { get; protected set; }
+		public virtual bool ColourblindMode { get; set; }
 		/// <summary>A <see cref="GameObject"/> containing the test model, which will be hidden outside test mode. May be null.</summary>
 
 #pragma warning disable IDE0032 // Use auto property - it was incompatible with Tweaks that way.

@@ -13,6 +13,7 @@ using BombGame;
 namespace NotVanillaModulesLib {
 	public class NotWireSequenceConnector : NotVanillaModuleConnector {
 		public Material[] Materials;
+		public Material[] ColourblindMaterials;
 
 		[Header("Test Model")]
 		public Transform TestModelPanel;
@@ -147,6 +148,14 @@ namespace NotVanillaModulesLib {
 				}
 			}
 #endif
+		}
+
+		public override bool ColourblindMode {
+			get => base.ColourblindMode;
+			set {
+				base.ColourblindMode = value;
+				if (value) foreach (var page in this.Pages) page.SetColourblindMode();
+			}
 		}
 
 		public void UpdateSelectables(int pageIndex) {

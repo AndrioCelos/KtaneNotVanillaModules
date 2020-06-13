@@ -16,7 +16,7 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
     <!-- Change these variables as needed. -->
-    <UnityInstallPath Condition=" '$(UnityInstallPath)' == '' ">D:/Program Files/Unity/2017.4.37f1</UnityInstallPath>
+    <UnityInstallPath Condition=" '$(UnityInstallPath)' == '' ">D:/Program Files/Unity/2017.4.40f1</UnityInstallPath>
     <GameInstallPath Condition=" '$(GameInstallPath)' == '' ">C:/Program Files (x86)/Steam/steamapps/common/Keep Talking and Nobody Explodes</GameInstallPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

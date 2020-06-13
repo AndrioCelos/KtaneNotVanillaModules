@@ -19,6 +19,8 @@
 			.tableScrollerHint { display: block; }
 		}
 		#actionTable { font-size: smaller; text-align: center; }
+		.pattern { width: 2em; padding: 1px; }
+		.pattern svg { width: 2em; height: 2em; display: block; }
 		#releasingTable {
 			border: none;
 			width: 100%;
@@ -76,6 +78,7 @@
 					</p>
 					<p>The module has a big button, and a screen to the left.<br/>
 						Use the first chart to determine what to do with the button.</p>
+					<p>On colourblind-friendly modules, the button may have a pattern that can be used to determine the colour.</p>
 					<p>If you need to hold the button, refer to <strong>‘Not Releasing a Held Button’</strong>.</p>
 					<p>If you need to mash the button, refer to <strong>‘Not Mashing a Button’</strong>.</p>
 
@@ -83,7 +86,7 @@
 					<div class='tableScroller'>
 						<table id='actionTable'>
 							<tr>
-								<th>Button colour</th>
+								<th colspan='2'>Button colour</th>
 								<th>Press</th>
 								<th>Hold</th>
 								<th>Detonate</th>
@@ -95,6 +98,7 @@
 								<th>Mash</th>
 							</tr>
 							<tr>
+								<th class='pattern'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M0 0h1L0 1zM0 2l2-2h1L0 3zM0 4l4-4v1L1 4zM2 4l2-2v1L3 4z"/></svg></th>
 								<th>Red</th>
 								<td>Press</td>
 								<td>Mash</td>
@@ -107,6 +111,7 @@
 								<td>Press</td>
 							</tr>
 							<tr>
+								<th class='pattern'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M0 0h1v1H0zM2 0h1v1H2zM1 1h1v1H1zM3 1h1v1H3zM0 2h1v1H0zM2 2h1v1H2zM1 3h1v1H1zM3 3h1v1H3z"/></svg></th>
 								<th>Orange</th>
 								<td>Mash</td>
 								<td>Press</td>
@@ -119,6 +124,7 @@
 								<td>Mash</td>
 							</tr>
 							<tr>
+								<th class='pattern'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M0 1h4v2H0z"/></svg></th>
 								<th>Yellow</th>
 								<td>Hold</td>
 								<td>Press</td>
@@ -131,6 +137,7 @@
 								<td>Hold</td>
 							</tr>
 							<tr>
+								<th class='pattern'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M0 1h4v1H0zM0 3h4v1H0z"/></svg></th>
 								<th>Green</th>
 								<td>Press</td>
 								<td>Hold</td>
@@ -143,6 +150,7 @@
 								<td>Press</td>
 							</tr>
 							<tr>
+								<th class='pattern'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1 0h1v4H1zM3 0h1v4H3z"/></svg></th>
 								<th>Cyan</th>
 								<td>Hold</td>
 								<td>Mash</td>
@@ -155,6 +163,7 @@
 								<td>Mash</td>
 							</tr>
 							<tr>
+								<th class='pattern'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6 6"><path d="M0 1l1-1 1 1-1 1zM2 1l1-1 1 1-1 1zM4 1l1-1 1 1-1 1zM0 3l1-1 1 1-1 1zM2 3l1-1 1 1-1 1zM4 3l1-1 1 1-1 1zM0 5l1-1 1 1-1 1zM2 5l1-1 1 1-1 1zM4 5l1-1 1 1-1 1z"/></svg></th>
 								<th>Blue</th>
 								<td>Press</td>
 								<td>Hold</td>
@@ -167,6 +176,7 @@
 								<td>Press</td>
 							</tr>
 							<tr>
+								<th class='pattern'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1 0h2v4H1z"/></svg></th>
 								<th>Purple</th>
 								<td>Mash</td>
 								<td>Hold</td>
@@ -179,6 +189,7 @@
 								<td>Hold</td>
 							</tr>
 							<tr>
+								<th class='pattern'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8"><path d="M0 1l1-1 1 1 1-1 1 1 1-1 1 1 1-1 1 1v1L7 1 6 2 5 1 4 2 3 1 2 2 1 1 0 2zM0 3l1-1 1 1 1-1 1 1 1-1 1 1 1-1 1 1v1L7 3 6 4 5 3 4 4 3 3 2 4 1 3 0 4zM0 5l1-1 1 1 1-1 1 1 1-1 1 1 1-1 1 1v1L7 5 6 6 5 5 4 6 3 5 2 6 1 5 0 6zM0 7l1-1 1 1 1-1 1 1 1-1 1 1 1-1 1 1v1L7 7 6 8 5 7 4 8 3 7 2 8 1 7 0 8z"/></svg></th>
 								<th>Pink</th>
 								<td>Mash</td>
 								<td>Press</td>
@@ -191,6 +202,7 @@
 								<td>Mash</td>
 							</tr>
 							<tr>
+								<th class='pattern'></th>
 								<th>White</th>
 								<td>Press</td>
 								<td>Mash</td>
@@ -203,6 +215,7 @@
 								<td>Hold</td>
 							</tr>
 							<tr>
+								<th class='pattern'></th>
 								<th>Black</th>
 								<td>Hold</td>
 								<td>Hold</td>

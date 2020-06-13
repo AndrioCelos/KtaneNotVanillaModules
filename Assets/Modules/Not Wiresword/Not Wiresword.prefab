@@ -625,6 +625,7 @@ GameObject:
   - component: {fileID: 114209490268494320}
   - component: {fileID: 114616427254727092}
   - component: {fileID: 114624944202237422}
+  - component: {fileID: 114125765312356978}
   m_Layer: 0
   m_Name: Not Wiresword
   m_TagString: Untagged
@@ -2572,6 +2573,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/Diffuse
+--- !u!114 &114125765312356978
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1788771455146966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1cfb889a07d5fd4e9baed7960bb397f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorblindMode: 0
 --- !u!114 &114160920578030736
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3340,6 +3353,16 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 08f0f1d702f06894ebc2ebbd3889cb64, type: 2}
   - {fileID: 2100000, guid: 10e5922399a4d4f45a776daad0d73875, type: 2}
   - {fileID: 2100000, guid: a7af2db4f0b4ea8429144c827798f1f6, type: 2}
+  - {fileID: 2100000, guid: 6321d2e5c6e18f84ca2815b1dbf021b7, type: 2}
+  - {fileID: 2100000, guid: bd71c91bd67401c4b84ced8a9c567b07, type: 2}
+  - {fileID: 2100000, guid: 5b8cf6d129ee26b4598ea7c4bcaa081f, type: 2}
+  ColourblindMaterials:
+  - {fileID: 2100000, guid: 0e707bb043001ca45bdfcbc7cfa55232, type: 2}
+  - {fileID: 2100000, guid: 8d715018de9eb0843a29af2e335638b2, type: 2}
+  - {fileID: 2100000, guid: af175bd910249c849a6e222208d6ea3d, type: 2}
+  - {fileID: 2100000, guid: 1deefc9953be93e45bdbb962fee404b2, type: 2}
+  - {fileID: 2100000, guid: f0c24b531ebebfa48ae561742e64b6e7, type: 2}
+  - {fileID: 2100000, guid: e36f97abcf924de44b2a80423752809a, type: 2}
   - {fileID: 2100000, guid: 6321d2e5c6e18f84ca2815b1dbf021b7, type: 2}
   - {fileID: 2100000, guid: bd71c91bd67401c4b84ced8a9c567b07, type: 2}
   - {fileID: 2100000, guid: 5b8cf6d129ee26b4598ea7c4bcaa081f, type: 2}
