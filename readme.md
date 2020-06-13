@@ -2,7 +2,9 @@
 
 This is a mod for the game [_Keep Talking and Nobody Explodes_](https://keeptalkinggame.com/) which adds new modules that look suspiciously similar to the vanilla modules.
 
-A build and manuals are available at https://questers-rest.andriocelos.net/ktane/NotVanilla/.
+A build is available on the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2003251353).
+
+Manuals are available on the [Repository of Manual Pages](https://ktane.timwi.de/).
 
 Based on the [_Keep Talking and Nobody Explodes_ modkit](https://github.com/keeptalkinggame/ktanemodkit/). Thanks to Kusane for the module designs.
 
