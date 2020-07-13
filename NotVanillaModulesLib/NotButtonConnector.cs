@@ -192,11 +192,13 @@ namespace NotVanillaModulesLib {
 			} else {
 #if (!DEBUG)
 				var buttonComponent = this.button.GetComponent<PressableButton>();
+				if (!lightText) buttonComponent.text.GetComponent<Renderer>().enabled = true;
 				if (!this.ColourblindMode) {
 					switch (colour) {
 						case ButtonColour.Red: buttonComponent.SetColor(BombGame.ButtonColor.red); return;
 						case ButtonColour.Yellow: buttonComponent.SetColor(BombGame.ButtonColor.yellow); return;
 						case ButtonColour.Blue: buttonComponent.SetColor(BombGame.ButtonColor.blue); return;
+						case ButtonColour.White: buttonComponent.SetColor(BombGame.ButtonColor.white); return;
 						case ButtonColour.Green:
 							buttonComponent.SetColor(BombGame.ButtonColor.red);
 							buttonComponent.Button_Top_Red.SetActive(false);
@@ -217,7 +219,6 @@ namespace NotVanillaModulesLib {
 					The vanilla PressableButton does the same thing...
 				*/
 				buttonComponent.text.GetComponent<HideOnLightsChange>().enabled = lightText;
-				if (!lightText) buttonComponent.text.GetComponent<Renderer>().enabled = true;
 #endif
 			}
 		}
