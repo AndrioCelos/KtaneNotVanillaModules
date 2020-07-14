@@ -6,8 +6,7 @@ namespace NotVanillaModulesLib.TestModel {
 	public class TestModelWireSpace : MonoBehaviour {
 		public GameObject IntactWire;
 		public GameObject CutWire;
-		public GameObject LightOff;
-		public GameObject LightOn;
+		public TestModelLED LED;
 		public MeshRenderer[] WireRenderers;
 		public GameObject SymbolText;
 		public KMAudio KMAudio;

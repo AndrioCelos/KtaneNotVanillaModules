@@ -40,10 +40,7 @@ namespace NotVanillaModulesLib {
 				get => this.lightOn;
 				set {
 					this.lightOn = value;
-					if (this.active) {
-						this.Model.LightOff.SetActive(!value);
-						this.Model.LightOn.SetActive(value);
-					}
+					if (this.active) this.Model.LED.On = value;
 				}
 			}
 			public override bool HasSymbol {
@@ -68,8 +65,7 @@ namespace NotVanillaModulesLib {
 
 			public override void Activate() {
 				this.active = true;
-				this.Model.LightOff.SetActive(!this.lightOn);
-				this.Model.LightOn.SetActive(this.lightOn);
+				this.Model.LED.On = this.lightOn;
 			}
 		}
 
