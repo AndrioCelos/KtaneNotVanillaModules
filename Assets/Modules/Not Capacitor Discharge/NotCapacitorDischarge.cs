@@ -71,7 +71,7 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 			this.Connector.SetLight(true);
 			var bombInfo = this.GetComponent<KMBombInfo>();
 			var j = (this.Number - 1) / 20;
-			if (bombInfo.GetSerialNumberNumbers().Last() % 2 == 0) {
+			if (bombInfo.GetSerialNumberNumbers().LastOrDefault() % 2 == 0) {
 				var i = bombInfo.GetSolvedModuleNames().Count / 3;
 				this.ReleaseCondition = i > 5 ? TimerCondition.SecondsDigitIs(9) : TimerCondition.SecondsDigitIs(defaultEvenSerialReleaseDigits[i, j]);
 			} else {
@@ -82,7 +82,7 @@ public class NotCapacitorDischarge : NotVanillaModule<NotCapacitorConnector> {
 					ContainsAny(serialNumber, 'X', 'Y', 'K') ? 3 :
 					ContainsAny(serialNumber, 'O', 'A', 'T') ? 4 :
 					ContainsAny(serialNumber, 'D', 'I', 'E') ? 5 : 6;
-				this.ReleaseCondition = i > 5 ? TimerCondition.SecondsDigitIs(9) : TimerCondition.SecondsDigitIs(defaultOddSerialReleaseDigits[i, j]);
+				this.ReleaseCondition = i > 5 ? TimerCondition.SecondsDigitIs(0) : TimerCondition.SecondsDigitIs(defaultOddSerialReleaseDigits[i, j]);
 			}
 			this.Log(string.Format("The lever was pressed at {0}. That was correct. Release the lever {1}.", formattedTime, this.ReleaseCondition));
 		} else {
