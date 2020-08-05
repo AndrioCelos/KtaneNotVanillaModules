@@ -128,6 +128,7 @@ public class NotSimaze : NotVanillaModule<NotSimonConnector> {
 		if (wall) {
 			this.Log("You hit a wall in the {0} maze from ({1}, {2}) moving {3}.", (SimazeColour) this.mazeIndex, (SimazeColour) this.x, (SimazeColour) this.y, direction);
 			this.Connector.KMBombModule.HandleStrike();
+			this.firstMoveMade = false;
 			this.coroutine = this.StartCoroutine(this.FlashCoroutine(2));
 		} else {
 			switch (e.Colour) {
