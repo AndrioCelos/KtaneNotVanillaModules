@@ -66,7 +66,6 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 		this.Connector.KMBombModule.OnActivate = this.KMBombModule_OnActivate;
 		this.Connector.ButtonPressed += this.Connector_ButtonPressed;
 		this.Connector.ButtonsSunk += this.Connector_ButtonsSunk;
-		this.Connector.AnimationFinished += this.Connector_AnimationFinished;
 		this.GeneratePuzzle();
 	}
 
@@ -91,12 +90,12 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 	}
 
 	private void KMBombModule_OnActivate() {
-		this.Connector.DisplayText = this.Display.ToString();
-		this.Connector.Stage = this.LightCount;
+		this.UpdateDisplay();
 		this.Connector.Activate();
 	}
 
-	private void Connector_AnimationFinished(object sender, EventArgs e) {
+	private void UpdateDisplay() {
+		this.Connector.DisplayText = this.Display.ToString();
 		this.Connector.Stage = this.LightCount;
 	}
 
@@ -114,6 +113,7 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 
 	private void Connector_ButtonsSunk(object sender, EventArgs e) {
 		this.GeneratePuzzle();
+		this.UpdateDisplay();
 	}
 
 	private string DescribeButton(int index) {
