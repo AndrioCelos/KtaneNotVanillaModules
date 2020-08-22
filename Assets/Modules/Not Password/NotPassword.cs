@@ -25,7 +25,6 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 
 	private int lastBombTime;
 	private bool twitchStruck;
-	private bool twitchHeld;
 
 	public override void Start() {
 		base.Start();
@@ -196,11 +195,10 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 							this.Disarm();
 						}
 					} else {
-						if (this.InteractionTickCount >= 30) {
+						if (this.InteractionTickCount >= 30 && !this.TwitchPlaysActive) {
 							this.Log("It seems like you are trying to hold the button until the module is disarmed. That was incorrect.");
 							this.Strike();
 							this.PressedIncorrectly = true;
-							if (this.twitchHeld) this.Connector.TwitchReleaseSubmit();
 						}
 					}
 				}
@@ -300,7 +298,6 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 
 	private void Connector_SubmitReleased(object sender, EventArgs e) {
 		this.Down = false;
-		this.twitchHeld = false;
 		if (this.Solved) return;
 		this.InteractionTime = 0;
 		var bombInfo = this.GetComponent<KMBombInfo>();
@@ -379,6 +376,8 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 		"!{0} mash - tap until something happens | !{0} hold | !{0} hold on 5 | !{0} hold for 5 | !{0} release | !{0} release on 2";
 	// `!{0} cycle` is deliberately excluded because it takes too long and its use is generally frowned on.
 	[NonSerialized]
+	public bool TwitchPlaysActive;
+	[NonSerialized]
 	public bool ZenModeActive;
 	public IEnumerator ProcessTwitchCommand(string command) {
 		var tokens = command.Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -387,6 +386,7 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 		this.twitchStruck = false;
 
 		var bombInfo = this.GetComponent<KMBombInfo>();
+		var skipStrikeMessage = false;
 
 		if (tokens[0].EqualsIgnoreCase("release")) {
 			if (!this.Down)
@@ -433,48 +433,41 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 					}
 				}
 			} else if (tokens[0].EqualsIgnoreCase("tap") || tokens[0].EqualsIgnoreCase("press")) {
-				int count = 1; int i; float time;
+				int count; int i; float time;
 				switch (tokens.Length) {
 					case 1:
-						for (; count > 0; --count) {
-							yield return "strikemessage pressing submit incorrectly";
-							this.Connector.TwitchPressSubmit();
-							//yield return new WaitForSeconds(0.1f);
-							if (!this.twitchStruck) yield return "strikemessage releasing submit incorrectly";
-							this.Connector.TwitchReleaseSubmit();
-							yield return new WaitForSeconds(0.2f);
-							yield return "trycancel";
-						}
-						yield return new WaitForSeconds(1);
+						count = 1;
 						break;
 					case 2:
-						if (int.TryParse(tokens[1], out count) && count > 0 && count < 100)
-							goto case 1;
-						else if (tokens[1].Contains(':') && GeneralExtensions.TryParseTime(tokens[1], out time)) {
+						if (int.TryParse(tokens[1], out count) && count > 0 && count < 100) break;
+						if (tokens[1].Contains(':') && GeneralExtensions.TryParseTime(tokens[1], out time)) {
 							count = 1;
-							if (this.ZenModeActive ? time <= bombInfo.GetTime() : time >= bombInfo.GetTime())
+							if (this.ZenModeActive ? time <= bombInfo.GetTime() : time >= bombInfo.GetTime()) {
 								yield return "sendtochaterror The specified time has already passed.";
-							else {
+							} else {
 								yield return null;
 								if (Math.Abs(time - bombInfo.GetTime()) >= 15) yield return "waiting music";
 								i = (int) time;
 								while ((int) bombInfo.GetTime() != i)
 									yield return "trycancel The button was not pressed due to a request to cancel.";
-								goto case 1;
+								break;
 							}
 						}
-						break;
+						yield break;
 					case 3:
 						if (tokens[1].EqualsIgnoreCase("on") && tokens[2].Length == 1 && char.IsDigit(tokens[2][0])) {
-							yield return null;
+							count = 1;
+							yield return "strikemessage pressing submit incorrectly";
+							skipStrikeMessage = true;  // Timing is everything.
 							while (!bombInfo.GetFormattedTime().Contains(tokens[2][0]))
 								yield return "trycancel The button was not pressed due to a request to cancel.";
-							goto case 1;
+							break;
 						}
-						break;
+						yield break;
 					case 4:
 						float time2;
 						if (tokens[2].EqualsIgnoreCase("then") && GeneralExtensions.TryParseTime(tokens[1], out time) && GeneralExtensions.TryParseTime(tokens[3], out time2)) {
+							count = 1;
 							int j;
 							i = (int) time;
 							j = (int) time2;
@@ -487,18 +480,32 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 									yield return "trycancel The button was not pressed due to a request to cancel.";
 								yield return "strikemessage pressing submit incorrectly";
 								this.Connector.TwitchPressSubmit();
-								//yield return new WaitForSeconds(0.1f);
 								if (!this.twitchStruck) yield return "strikemessage releasing submit incorrectly";
 								this.Connector.TwitchReleaseSubmit();
 								yield return new WaitForSeconds(0.2f);
 
 								while ((int) bombInfo.GetTime() != j)
 									yield return "trycancel The button was not pressed due to a request to cancel.";
-								goto case 1;
+								break;
 							}
 						}
-						break;
+						yield break;
+					default:
+						yield break;
 				}
+				for (; count > 0; --count) {
+					// When called by the `tap on n` command, the strike message must be skipped.
+					// Otherwise it causes a one-frame delay which can sometimes cause an incorrect strike.
+					if (skipStrikeMessage) skipStrikeMessage = false;
+					else yield return "strikemessage pressing submit incorrectly";
+
+					this.Connector.TwitchPressSubmit();
+					if (!this.twitchStruck) yield return "strikemessage releasing submit incorrectly";
+					this.Connector.TwitchReleaseSubmit();
+					yield return new WaitForSeconds(0.2f);
+					yield return "trycancel";
+				}
+				yield return new WaitForSeconds(1);
 			} else if (tokens[0].EqualsIgnoreCase("mash")) {
 				int count;
 				if (tokens.Length == 1) count = 50;
@@ -508,7 +515,6 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 				for (; count > 0; --count) {
 					yield return "strikemessage pressing submit incorrectly";
 					this.Connector.TwitchPressSubmit();
-					//yield return new WaitForSeconds(0.1f);
 					if (!this.twitchStruck) yield return "strikemessage releasing submit incorrectly";
 					this.Connector.TwitchReleaseSubmit();
 					yield return new WaitForSeconds(0.2f);
@@ -520,7 +526,6 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 						yield return "strikemessage pressing submit incorrectly";
 						yield return "strike";  // In case the button is never released and this causes a strike.
 						this.Connector.TwitchPressSubmit();
-						this.twitchHeld = true;
 						if (this.twitchStruck) {
 							this.Connector.TwitchReleaseSubmit();
 							yield return "sendtochat The button was not held due to a strike.";
@@ -538,7 +543,6 @@ public class NotPassword : NotVanillaModule<NotPasswordConnector> {
 								yield return "strikemessage pressing submit incorrectly";
 								yield return "strike";
 								this.Connector.TwitchPressSubmit();
-								this.twitchHeld = true;
 								if (this.twitchStruck) {
 									this.Connector.TwitchReleaseSubmit();
 									yield return "sendtochat The button was not held due to a strike.";
