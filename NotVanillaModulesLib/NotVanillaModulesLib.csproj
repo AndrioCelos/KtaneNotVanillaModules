@@ -62,7 +62,7 @@
       <HintPath>$(UnityInstallPath)/Editor/Data/Managed/UnityEngine/UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>$(UnityInstallPath)/Editor/Data/Managed/UnityEngine/UnityEngine.UI.dll</HintPath>
+      <HintPath>$(UnityInstallPath)/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
