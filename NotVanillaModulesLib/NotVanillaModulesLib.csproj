@@ -15,7 +15,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
-    <!-- Change these variables as needed. -->
+    <PreBuildEvent>rem These variables in NotVanillaModulesLib.csproj must be changed to match your Unity and KTaNE installation. See readme.md for more info.
+exit 1</PreBuildEvent>
     <UnityInstallPath Condition=" '$(UnityInstallPath)' == '' ">D:/Program Files/Unity/2017.4.40f1</UnityInstallPath>
     <GameInstallPath Condition=" '$(GameInstallPath)' == '' ">C:/Program Files (x86)/Steam/steamapps/common/Keep Talking and Nobody Explodes</GameInstallPath>
   </PropertyGroup>
@@ -130,8 +131,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)"=="Debug" copy "$(TargetPath)" "$(ProjectDir)\..\Assets\Plugins\Managed"
-if "$(ConfigurationName)"=="Debug" copy "$(TargetDir)\NotVanillaModulesLib.xml" "$(ProjectDir)\..\Assets\Plugins\Managed"
+    <PostBuildEvent>if exist "$(ProjectDir)\..\Assets\BuildError.cs" del "$(ProjectDir)\..\Assets\BuildError.cs"
+if "$(ConfigurationName)"=="Debug" (
+    copy "$(TargetPath)" "$(ProjectDir)\..\Assets\Plugins\Managed"
+    copy "$(TargetDir)\NotVanillaModulesLib.xml" "$(ProjectDir)\..\Assets\Plugins\Managed"
+    if not exist "$(ProjectDir)\..\Assets\Plugins\Managed\NotVanillaModulesLib.dll.meta" (
+        echo NotVanillaModulesLib.dll.meta is missing; automatically checking it out from Git
+        git checkout "$(ProjectDir)\..\Assets\Plugins\Managed\NotVanillaModulesLib.dll.meta"
+    )
+)
 if "$(ConfigurationName)"=="Release" copy "$(TargetPath)" "$(GameInstallPath)\mods\NotVanillaModules"</PostBuildEvent>
   </PropertyGroup>
 </Project>
