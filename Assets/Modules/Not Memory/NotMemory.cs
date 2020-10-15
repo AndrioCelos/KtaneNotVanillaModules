@@ -14,51 +14,51 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 
 	private static readonly Rule[][] defaultRules = new[] {
 		/* 0 */ new[] {
-			new Rule(Conditions.DisplayIs(1), Actions.PressPositionFromLabel(1)),
+			new Rule(Conditions.DisplayIs(1), Actions.PressPositionFromLabel(ButtonPosition.Second)),
 			new Rule(Conditions.ButtonLabelIs(0, 4), Actions.PressLabelMatchingDisplay()),
 			new Rule(Conditions.SerialNumberIsOdd(), Actions.PressLabel(1)),
 			new Rule(null, Actions.PressPositionFromDisplay())
 		},
 		/* 1 */ new[] {
 			new Rule(Conditions.NoBatteries(), Actions.PressLabel(4)),
-			new Rule(Conditions.ButtonLabelIs(2, 1), Actions.PressPosition(0)),
-			new Rule(Conditions.DisplayIs(3), Actions.PressPositionFromLabel(2)),
-			new Rule(Conditions.ButtonLabelMatchesDisplay(1), Actions.PressPosition(1)),
+			new Rule(Conditions.ButtonLabelIs(ButtonPosition.Third, 1), Actions.PressPosition(ButtonPosition.First)),
+			new Rule(Conditions.DisplayIs(3), Actions.PressPositionFromLabel(ButtonPosition.Third)),
+			new Rule(Conditions.ButtonLabelMatchesDisplay(ButtonPosition.Second), Actions.PressPosition(ButtonPosition.Second)),
 			new Rule(null, Actions.PressLabel(1))
 		},
 		/* 2 */ new[] {
 			new Rule(Conditions.DisplayIs(4), Actions.PressLabelMatchingPositionOfLabel(4)),
-			new Rule(Conditions.ButtonLabelIs(1, 3), Actions.PressPosition(0)),
-			new Rule(Conditions.ButtonLabelMatchesDisplay(3), Actions.PressPositionFromDisplay()),
-			new Rule(null, Actions.PressPosition(1))
+			new Rule(Conditions.ButtonLabelIs(ButtonPosition.Second, 3), Actions.PressPosition(ButtonPosition.First)),
+			new Rule(Conditions.ButtonLabelMatchesDisplay(ButtonPosition.Fourth), Actions.PressPositionFromDisplay()),
+			new Rule(null, Actions.PressPosition(ButtonPosition.Second))
 		},
 		/* 3 */ new[] {
-			new Rule(Conditions.PortPresent(Port.Parallel), Actions.PressPosition(0)),
-			new Rule(Conditions.ButtonLabelIs(3, 1), Actions.PressPosition(1)),
+			new Rule(Conditions.PortPresent(Port.Parallel), Actions.PressPosition(ButtonPosition.First)),
+			new Rule(Conditions.ButtonLabelIs(ButtonPosition.Fourth, 1), Actions.PressPosition(ButtonPosition.Second)),
 			new Rule(Conditions.DisplayIs(2), Actions.PressLabelMatchingPositionOfLabel(3)),
-			new Rule(Conditions.ButtonLabelMatchesDisplay(0), Actions.PressPositionFromDisplay()),
+			new Rule(Conditions.ButtonLabelMatchesDisplay(ButtonPosition.First), Actions.PressPositionFromDisplay()),
 			new Rule(null, Actions.PressLabel(2))
 		},
 		/* 4 */ new[] {
-			new Rule(Conditions.DisplayIs(3), Actions.PressPositionFromLabel(1)),
-			new Rule(Conditions.ButtonLabelIs(1, 1), Actions.PressPosition(0)),
-			new Rule(Conditions.ButtonLabelMatchesDisplay(0), Actions.PressPosition(1)),
+			new Rule(Conditions.DisplayIs(3), Actions.PressPositionFromLabel(ButtonPosition.Second)),
+			new Rule(Conditions.ButtonLabelIs(ButtonPosition.Second, 1), Actions.PressPosition(ButtonPosition.First)),
+			new Rule(Conditions.ButtonLabelMatchesDisplay(ButtonPosition.First), Actions.PressPosition(ButtonPosition.Second)),
 			new Rule(Conditions.AtLeastNIndicators(4), Actions.PressLabel(3)),
-			new Rule(Conditions.ButtonLabelIs(3, 4), Actions.PressPosition(3)),
+			new Rule(Conditions.ButtonLabelIs(ButtonPosition.Fourth, 4), Actions.PressPosition(ButtonPosition.Fourth)),
 			new Rule(null, Actions.PressLabel(2))
 		},
 		/* 5 */ new[] {
 			new Rule(Conditions.NoPorts(), Actions.PressLabel(2)),
-			new Rule(Conditions.DisplayIs(4), Actions.PressPositionFromLabel(3)),
-			new Rule(Conditions.ButtonLabelIs(0, 3), Actions.PressPosition(2)),
-			new Rule(Conditions.ButtonLabelMatchesDisplay(2), Actions.PressPositionFromDisplay()),
-			new Rule(Conditions.ButtonLabelIsNot(1, 2), Actions.PressLabel(2)),
-			new Rule(null, Actions.PressPosition(2))
+			new Rule(Conditions.DisplayIs(4), Actions.PressPositionFromLabel(ButtonPosition.Fourth)),
+			new Rule(Conditions.ButtonLabelIs(ButtonPosition.First, 3), Actions.PressPosition(ButtonPosition.Third)),
+			new Rule(Conditions.ButtonLabelMatchesDisplay(ButtonPosition.Third), Actions.PressPositionFromDisplay()),
+			new Rule(Conditions.ButtonLabelIsNot(ButtonPosition.Second, 2), Actions.PressLabel(2)),
+			new Rule(null, Actions.PressPosition(ButtonPosition.Second))
 		}
 	};
 
 	private KMBombInfo bombInfo;
-	private int correctButton;
+	private ButtonPosition correctButton;
 
 	public override void Start() {
 		base.Start();
@@ -101,11 +101,11 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 
 	private void Connector_ButtonPressed(object sender, KeypadButtonEventArgs e) {
 		if (this.Solved || !this.Connector.InputValid) return;
-		if (e.ButtonIndex == this.correctButton) {
-			this.Log("You pressed {0}. That was correct.", this.DescribeButton(e.ButtonIndex));
+		if (e.ButtonIndex == (int) this.correctButton) {
+			this.Log("You pressed {0}. That was correct.", this.DescribeButton(this.correctButton));
 			this.Disarm();
 		} else {
-			this.Log("You pressed {0}. That was incorrect: the correct button is {1}.", this.DescribeButton(e.ButtonIndex), this.DescribeButton(this.correctButton));
+			this.Log("You pressed {0}. That was incorrect: the correct button is {1}.", this.DescribeButton((ButtonPosition) e.ButtonIndex), this.DescribeButton(this.correctButton));
 			this.Connector.KMBombModule.HandleStrike();
 			this.Connector.AnimateButtons();
 		}
@@ -116,16 +116,8 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 		this.UpdateDisplay();
 	}
 
-	private string DescribeButton(int index) {
-		string ordinal;
-		switch (index) {
-			case 0: ordinal = "first"; break;
-			case 1: ordinal = "second"; break;
-			case 2: ordinal = "third"; break;
-			case 3: ordinal = "fourth"; break;
-			default: ordinal = index.ToString(); break;
-		}
-		return string.Format("the {0} button (labelled '{1}')", ordinal, this.Labels[index]);
+	private string DescribeButton(ButtonPosition index) {
+		return string.Format("the {0} button (labelled '{1}')", index.ToString().ToLowerInvariant(), this.Labels[(int) index]);
 	}
 
 	// Twitch Plays support
@@ -149,12 +141,12 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 
 	public IEnumerator TwitchHandleForcedSolve() {
 		yield return new WaitWhile(() => this.Connector.Animating);
-		this.Connector.TwitchPress(this.correctButton);
+		this.Connector.TwitchPress((int) this.correctButton);
 		yield break;
 	}
 
 	private delegate bool Condition(NotMemory module, KMBombInfo bombInfo);
-	private delegate int ActionCheck(NotMemory module);
+	private delegate ButtonPosition ActionCheck(NotMemory module);
 
 	private class Rule {
 		public Condition Condition { get; private set; }
@@ -166,24 +158,32 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 		}
 	}
 
+	// Button positions are direct array indices (zero-based), but button labels are as displayed (one-based). This enum is used to avoid confusion.
+	private enum ButtonPosition {
+		First,
+		Second,
+		Third,
+		Fourth
+	}
+
 	private static class Conditions {
 		public static Condition DisplayIs(int n) { return (m, i) => m.Display == n; }
-		public static Condition ButtonLabelIs(int pos, int label) { return (m, i) => m.Labels[pos] == label; }
-		public static Condition ButtonLabelIsNot(int pos, int label) { return (m, i) => m.Labels[pos] != label; }
+		public static Condition ButtonLabelIs(ButtonPosition pos, int label) { return (m, i) => m.Labels[(int) pos] == label; }
+		public static Condition ButtonLabelIsNot(ButtonPosition pos, int label) { return (m, i) => m.Labels[(int) pos] != label; }
 		public static Condition SerialNumberIsOdd() { return (m, i) => i.GetSerialNumberNumbers().LastOrDefault() % 2 != 0; }
 		public static Condition NoBatteries() { return (m, i) => i.GetBatteryCount() == 0; }
 		public static Condition NoPorts() { return (m, i) => i.GetPortCount() == 0; }
-		public static Condition ButtonLabelMatchesDisplay(int pos) { return (m, i) => m.Labels[pos] == m.Display; }
+		public static Condition ButtonLabelMatchesDisplay(ButtonPosition pos) { return (m, i) => m.Labels[(int) pos] == m.Display; }
 		public static Condition PortPresent(Port portType) { return (m, i) => i.IsPortPresent(portType); }
 		public static Condition AtLeastNIndicators(int n) { return (m, i) => i.GetIndicators().Count() >= n; }
 	}
 
 	private static class Actions {
-		public static ActionCheck PressPositionFromLabel(int pos) { return m => m.Labels[pos] - 1; }
-		public static ActionCheck PressLabelMatchingDisplay() { return m => m.Labels.IndexOf(m.Display); }
-		public static ActionCheck PressPosition(int pos) { return m => pos; }
-		public static ActionCheck PressLabel(int label) { return m => m.Labels.IndexOf(label); }
-		public static ActionCheck PressPositionFromDisplay() { return m => m.Display - 1; }
-		public static ActionCheck PressLabelMatchingPositionOfLabel(int label) { return m => m.Labels.IndexOf(m.Labels.IndexOf(label) + 1); }
+		public static ActionCheck PressPositionFromLabel(ButtonPosition pos) { return m => (ButtonPosition) (m.Labels[(int) pos] - 1); }
+		public static ActionCheck PressLabelMatchingDisplay() { return m => (ButtonPosition) m.Labels.IndexOf(m.Display); }
+		public static ActionCheck PressPosition(ButtonPosition pos) { return m => pos; }
+		public static ActionCheck PressLabel(int label) { return m => (ButtonPosition) m.Labels.IndexOf(label); }
+		public static ActionCheck PressPositionFromDisplay() { return m => (ButtonPosition) (m.Display - 1); }
+		public static ActionCheck PressLabelMatchingPositionOfLabel(int label) { return m => (ButtonPosition) m.Labels.IndexOf(m.Labels.IndexOf(label) + 1); }
 	}
 }
