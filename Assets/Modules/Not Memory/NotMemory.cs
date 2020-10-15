@@ -53,7 +53,7 @@ public class NotMemory : NotVanillaModule<NotMemoryConnector> {
 			new Rule(Conditions.ButtonLabelIs(ButtonPosition.First, 3), Actions.PressPosition(ButtonPosition.Third)),
 			new Rule(Conditions.ButtonLabelMatchesDisplay(ButtonPosition.Third), Actions.PressPositionFromDisplay()),
 			new Rule(Conditions.ButtonLabelIsNot(ButtonPosition.Second, 2), Actions.PressLabel(2)),
-			new Rule(null, Actions.PressPosition(ButtonPosition.Second))
+			new Rule(null, Actions.PressPosition(ButtonPosition.Third))
 		}
 	};
 
