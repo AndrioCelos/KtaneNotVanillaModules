@@ -61,6 +61,7 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 	private KMBombInfo bombInfo;
 	private Coroutine animationCoroutine;
 	private IEnumerator mashAnimationEnumerator;
+	private bool struckFromMashing;
 
 	private static string SolutionActionPastTense(ButtonAction action) {
 		switch (action) {
@@ -162,31 +163,34 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 		} else if (this.MashCount > 0) {
 			this.InteractionTime += Time.deltaTime;
 			if (this.InteractionTime >= (this.MashCount > 1 ? 3 : 0.7f)) {
-				if (this.Solved) {
-					this.mashAnimationEnumerator = null;
-					this.DisplayBase.localScale = Vector3.one;
-				} else if (this.MashCount == 1) {
-					if (this.SolutionAction == ButtonAction.Press) {
-						this.Log("The button was pressed. That was correct.");
-						this.Disarm();
-					} else {
-						this.Log(string.Format("The button was pressed. That was incorrect: it should have been {0}.", SolutionActionPastTense(this.SolutionAction)));
-						this.Connector.KMBombModule.HandleStrike();
-					}
-				} else {
-					if (this.SolutionAction == ButtonAction.Mash) {
-						if (this.MashCount == this.SolutionMashCount) {
-							this.Log(string.Format("The button was mashed {0} times. That was correct.", this.MashCount));
+				if (!this.struckFromMashing) {
+					if (this.Solved) {
+						this.mashAnimationEnumerator = null;
+						this.DisplayBase.localScale = Vector3.one;
+					} else if (this.MashCount == 1) {
+						if (this.SolutionAction == ButtonAction.Press) {
+							this.Log("The button was pressed. That was correct.");
 							this.Disarm();
 						} else {
-							this.Log(string.Format("The button was mashed {0} times. That was incorrect: it should have been mashed {1} times.", this.MashCount, this.SolutionMashCount));
+							this.Log(string.Format("The button was pressed. That was incorrect: it should have been {0}.", SolutionActionPastTense(this.SolutionAction)));
 							this.Connector.KMBombModule.HandleStrike();
 						}
 					} else {
-						this.Log(string.Format("The button was mashed {0} times. That was incorrect: it should have been {1}.", this.MashCount, SolutionActionPastTense(this.SolutionAction)));
-						this.Connector.KMBombModule.HandleStrike();
+						if (this.SolutionAction == ButtonAction.Mash) {
+							if (this.MashCount == this.SolutionMashCount) {
+								this.Log(string.Format("The button was mashed {0} times. That was correct.", this.MashCount));
+								this.Disarm();
+							} else {
+								this.Log(string.Format("The button was mashed {0} times. That was incorrect: it should have been mashed {1} times.", this.MashCount, this.SolutionMashCount));
+								this.Connector.KMBombModule.HandleStrike();
+							}
+						} else {
+							this.Log(string.Format("The button was mashed {0} times. That was incorrect: it should have been {1}.", this.MashCount, SolutionActionPastTense(this.SolutionAction)));
+							this.Connector.KMBombModule.HandleStrike();
+						}
 					}
 				}
+				this.struckFromMashing = false;
 				this.MashCount = 0;
 				this.DisplayBase.gameObject.SetActive(false);
 			}
@@ -248,9 +252,20 @@ public class NotButton : NotVanillaModule<NotButtonConnector> {
 			}
 		} else {
 			++this.MashCount;
-			if (this.MashCount > 1) {
-				this.DisplayText.text = (this.MashCount % 100).ToString();
-				this.DisplayBase.gameObject.SetActive(true);
+			if (!this.struckFromMashing) {
+				if (this.MashCount > 1) {
+					if (this.MashCount >= 100) {
+						this.Log(string.Format("The button was mashed over 99 times. That was incorrect: it should have been mashed {0} times.", this.SolutionMashCount));
+						this.DisplayText.text = "--";
+						this.struckFromMashing = true;
+						this.Connector.KMBombModule.HandleStrike();
+					} else {
+						this.DisplayText.text = this.MashCount.ToString();
+
+					}
+					this.DisplayBase.gameObject.SetActive(true);
+				}
+
 			}
 		}
 	}
