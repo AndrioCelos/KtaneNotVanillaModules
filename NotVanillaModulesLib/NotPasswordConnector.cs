@@ -22,7 +22,16 @@ namespace NotVanillaModulesLib {
 		protected override void AwakeLive() {
 #if (!DEBUG)
 			using var wrapper = this.InstantiateComponent<PasswordComponent>();
-			this.layout = wrapper.Component.CurrentLayout = wrapper.Component.transform.Find("Layout_DEFAULT").GetComponent<PasswordLayout>();
+
+			// Remove the normal or the touch UI as the vanilla module does.
+			if (KTInputManager.Instance.CurrentControlType == Assets.Scripts.Input.ControlType.Touch) {
+				this.layout = wrapper.Component.TouchLayout;
+				Destroy(wrapper.Component.DefaultLayout.gameObject);
+			} else {
+				this.layout = wrapper.Component.DefaultLayout;
+				Destroy(wrapper.Component.TouchLayout.gameObject);
+			}
+			wrapper.Component.CurrentLayout = this.layout;
 			this.layout.transform.SetParent(this.transform, false);
 			this.spinners = wrapper.Component.Spinners;
 			this.submitButton = wrapper.Component.SubmitButton;

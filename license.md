@@ -1,4 +1,4 @@
-Not Vanilla Modules is © 2020 Andrea Giannone.
+Not Vanilla Modules is © 2020-2021 Andrea Giannone.
 
 _Keep Talking and Nobody Explodes_ and the _Keep Talking and Nobody Explodes_ ModKit are © 2016 Steel Crate Games.
 

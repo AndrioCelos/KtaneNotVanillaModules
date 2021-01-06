@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
+using Assets.Scripts.Components;
+
 using NotVanillaModulesLib.TestModel;
 using UnityEngine;
 
@@ -46,8 +49,18 @@ namespace NotVanillaModulesLib {
 			this.playerIndicator.GetComponent<Renderer>().material = this.DotMaterial;
 			this.GridParent = this.tempModuleClone.Background.transform;
 			this.GridParent.SetParent(this.transform, false);
-			var layout = this.tempModuleClone.transform.Find("Component_Maze");
-			layout.SetParent(this.transform, false);
+
+			// Remove the normal or the touch UI as the vanilla module does.
+			InvisibleWallsLayout layout;
+			if (KTInputManager.Instance.CurrentControlType == Assets.Scripts.Input.ControlType.Touch) {
+				layout = this.tempModuleClone.TouchLayout;
+				Destroy(this.tempModuleClone.DefaultLayout.gameObject);
+			} else {
+				layout = this.tempModuleClone.DefaultLayout;
+				Destroy(this.tempModuleClone.TouchLayout.gameObject);
+			}
+
+			this.tempModuleClone.transform.Find("Component_Maze").SetParent(this.transform, false);  // InvisibleWallsLayout.Awake initialises InvisibleWallsComponent.Buttons here
 
 			// We need to prevent this object from being destroyed as well.
 			this.tempModuleClone.transform.Find("WallSegmentPrefab").parent = null;
