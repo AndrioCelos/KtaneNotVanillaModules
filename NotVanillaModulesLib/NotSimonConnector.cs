@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using NotVanillaModulesLib.TestModel;
+
+using UnityEngine;
 
 namespace NotVanillaModulesLib {
 	public class NotSimonConnector : NotVanillaModuleConnector {
@@ -21,11 +22,10 @@ namespace NotVanillaModulesLib {
 			foreach (var button in this.buttons) button.transform.SetParent(this.transform, false);
 			wrapper.Component.transform.Find("Frame").SetParent(this.transform, false);
 
-			var positions = this.buttons.Select(b => b.ButtonGO.transform.localPosition).ToList();
-			this.buttons[(int) SimonButtons.Red].ButtonGO.transform.localPosition = positions[(int) SimonButtons.Blue];
-			this.buttons[(int) SimonButtons.Blue].ButtonGO.transform.localPosition = positions[(int) SimonButtons.Red];
-			this.buttons[(int) SimonButtons.Green].ButtonGO.transform.localPosition = positions[(int) SimonButtons.Yellow];
-			this.buttons[(int) SimonButtons.Yellow].ButtonGO.transform.localPosition = positions[(int) SimonButtons.Green];
+			this.buttons[(int) SimonButtons.Red].transform.localRotation = Quaternion.Euler(0, 90, 0);
+			this.buttons[(int) SimonButtons.Blue].transform.localRotation = Quaternion.Euler(0, -90, 0);
+			this.buttons[(int) SimonButtons.Green].transform.localRotation = Quaternion.Euler(0, -90, 0);
+			this.buttons[(int) SimonButtons.Yellow].transform.localRotation = Quaternion.Euler(0, 90, 0);
 
 			var keypadEventConnector = new KeypadEventConnector();
 			keypadEventConnector.ButtonPressed += this.KeypadEventConnector_ButtonPressed;
