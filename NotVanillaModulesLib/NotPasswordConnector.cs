@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+
 using NotVanillaModulesLib.TestModel;
 using UnityEngine;
 
@@ -24,12 +26,17 @@ namespace NotVanillaModulesLib {
 			using var wrapper = this.InstantiateComponent<PasswordComponent>();
 
 			// Remove the normal or the touch UI as the vanilla module does.
-			if (KTInputManager.Instance.CurrentControlType == Assets.Scripts.Input.ControlType.Touch) {
-				this.layout = wrapper.Component.TouchLayout;
-				Destroy(wrapper.Component.DefaultLayout.gameObject);
+			if (typeof(PasswordComponent).GetField(nameof(PasswordComponent.TouchLayout), BindingFlags.Public | BindingFlags.Instance) != null) {
+				if (KTInputManager.Instance.CurrentControlType == Assets.Scripts.Input.ControlType.Touch) {
+					this.layout = GetTouchLayout(wrapper.Component);
+					Destroy(GetDefaultLayout(wrapper.Component).gameObject);
+				} else {
+					this.layout = GetDefaultLayout(wrapper.Component);
+					Destroy(GetTouchLayout(wrapper.Component).gameObject);
+				}
 			} else {
-				this.layout = wrapper.Component.DefaultLayout;
-				Destroy(wrapper.Component.TouchLayout.gameObject);
+				// We're running on an old version of the game that lacks the touch layout.
+				this.layout = wrapper.Component.transform.Find("Layout_DEFAULT").GetComponent<PasswordLayout>();
 			}
 			wrapper.Component.CurrentLayout = this.layout;
 			this.layout.transform.SetParent(this.transform, false);
@@ -51,6 +58,10 @@ namespace NotVanillaModulesLib {
 		}
 
 #if (!DEBUG)
+		// This needs to be wrapped into a method so that Awake doesn't throw a MissingFieldException on old versions of the game.
+		private static PasswordLayout GetDefaultLayout(PasswordComponent module) => module.DefaultLayout;
+		private static PasswordLayout GetTouchLayout(PasswordComponent module) => module.TouchLayout;
+
 		private void KeypadEventConnector_ButtonPressed(object sender, KeypadButtonEventArgs e) {
 			this.SubmitPressed?.Invoke(this, EventArgs.Empty);
 			e.SuppressAutomaticRelease = true;

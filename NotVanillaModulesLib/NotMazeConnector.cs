@@ -51,13 +51,12 @@ namespace NotVanillaModulesLib {
 			this.GridParent.SetParent(this.transform, false);
 
 			// Remove the normal or the touch UI as the vanilla module does.
-			InvisibleWallsLayout layout;
-			if (KTInputManager.Instance.CurrentControlType == Assets.Scripts.Input.ControlType.Touch) {
-				layout = this.tempModuleClone.TouchLayout;
-				Destroy(this.tempModuleClone.DefaultLayout.gameObject);
-			} else {
-				layout = this.tempModuleClone.DefaultLayout;
-				Destroy(this.tempModuleClone.TouchLayout.gameObject);
+			if (typeof(InvisibleWallsComponent).GetField(nameof(InvisibleWallsComponent.TouchLayout), BindingFlags.Public | BindingFlags.Instance) != null) {
+				if (KTInputManager.Instance.CurrentControlType == Assets.Scripts.Input.ControlType.Touch) {
+					Destroy(GetDefaultLayout(this.tempModuleClone).gameObject);
+				} else {
+					Destroy(GetTouchLayout(this.tempModuleClone).gameObject);
+				}
 			}
 
 			this.tempModuleClone.transform.Find("Component_Maze").SetParent(this.transform, false);  // InvisibleWallsLayout.Awake initialises InvisibleWallsComponent.Buttons here
@@ -78,6 +77,12 @@ namespace NotVanillaModulesLib {
 			);
 #endif
 		}
+
+#if !DEBUG
+		// This needs to be wrapped into a method so that Awake doesn't throw a MissingFieldException on old versions of the game.
+		private static InvisibleWallsLayout GetDefaultLayout(InvisibleWallsComponent module) => module.DefaultLayout;
+		private static InvisibleWallsLayout GetTouchLayout(InvisibleWallsComponent module) => module.TouchLayout;
+#endif
 
 		protected override void AwakeTest() {
 			this.spaces = new GameObject[6, 6];
