@@ -68,22 +68,11 @@ namespace NotVanillaModulesLib {
 					}
 					this.wire.SetColor(BombGame.WireColor.white);
 
-					var renderer = this.wire.WireWhite.GetComponent<Renderer>();
-					var texture = renderer.sharedMaterial.mainTexture;
-					renderer.sharedMaterial = (this.module.ColourblindMode ? this.module.ColourblindMaterials : this.module.Materials)[(int) value];
-					if (!this.module.ColourblindMode) {
-						renderer.material.mainTexture = texture;
-						InstanceDestroyer.AddObjectToDestroy(this.module.gameObject, renderer.material);
-					}
-					if (this.WireIndex == 5) {
-						// Half of the sixth wire has materials assigned differently from every other segment.
-						// I don't know why...
-						this.wire.WireSnippedWhite.transform.GetChild(0).GetComponent<Renderer>().sharedMaterial = renderer.sharedMaterial;
-						var renderer2 = this.wire.WireSnippedWhite.transform.GetChild(1).GetComponent<Renderer>();
-						renderer2.sharedMaterials = new[] { renderer.sharedMaterial, renderer.sharedMaterial };
-					} else {
-						foreach (Transform transform in this.wire.WireSnippedWhite.transform)
-							transform.GetComponent<Renderer>().sharedMaterial = renderer.sharedMaterial;
+					var material = (this.module.ColourblindMode ? this.module.ColourblindMaterials : this.module.Materials)[(int) value];
+					foreach (var renderer in this.wire.WireWhite.GetComponentsInChildren<Renderer>(true).Concat(this.wire.WireSnippedWhite.GetComponentsInChildren<Renderer>(true))) {
+						var newMaterials = new Material[renderer.sharedMaterials.Length];
+						for (int i = 0; i < newMaterials.Length; ++i) newMaterials[i] = material;
+						renderer.sharedMaterials = newMaterials;
 					}
 				}
 			}

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using Assets.Scripts.Components;
-
 using NotVanillaModulesLib.TestModel;
 using UnityEngine;
+
+#if !DEBUG
+using Assets.Scripts.Components;
+#endif
 
 namespace NotVanillaModulesLib {
 	public class NotMazeConnector : NotVanillaModuleConnector {
